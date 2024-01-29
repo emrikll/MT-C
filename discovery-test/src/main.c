@@ -3,7 +3,6 @@
 
 GPIO_InitTypeDef Gp;//Create GPIO struct
 
-
 //Define LED pins
 #define GreenLED_Pin GPIO_Pin_9
 #define BlueLED_Pin GPIO_Pin_8
@@ -13,8 +12,19 @@ GPIO_InitTypeDef Gp;//Create GPIO struct
 #define PushButton_Pin GPIO_Pin_0
 #define PushButton_GPIO GPIOA   
 
+extern void initialise_monitor_handles(void);
+
+/**
+**===========================================================================
+**
+**  Abstract: SendPacket
+**
+**===========================================================================
+*/
+
 int main(void)
 {
+	initialise_monitor_handles();
 	//Enable clocks to both GPIOA (push button) and GPIOC (output LEDs)
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
@@ -35,11 +45,11 @@ int main(void)
 
 	while(1) //Infiinte loop!
 	{
-		//Read button input
 		ButtonRead = GPIO_ReadInputDataBit(PushButton_GPIO, PushButton_Pin);
 
 		if(ButtonRead){ //If button is pressed, turn green LED on and blue off
 			GPIO_SetBits(LED_GPIO, GreenLED_Pin);
+			printf("test\n");
 			GPIO_ResetBits(LED_GPIO, BlueLED_Pin);
 		}
 		else{ //If button isn't pressed, turn green LED off and blue on

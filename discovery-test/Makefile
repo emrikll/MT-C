@@ -17,7 +17,7 @@ OPENOCD_BOARD_DIR=$(OPENOCD_PATH)/../scripts/			board
 # Configuration (cfg) file containing programming directives for OpenOCD
 OPENOCD_PROC_FILE=extra/stm32f0-openocd.cfg
 
-OPENOCD=$(OPENOCD_PATH)/openocd
+OPENOCD=openocd
 
 # that's it, no need to change anything below this line!
 
@@ -31,7 +31,12 @@ SIZE=arm-none-eabi-size
 CFLAGS  = -Wall -g -std=c99 -Os  
 CFLAGS += -mlittle-endian -mcpu=cortex-m0  -march=armv6-m -mthumb
 CFLAGS += -ffunction-sections -fdata-sections
-CFLAGS += -Wl,--gc-sections -Wl,-Map=$(PROJ_NAME).map
+CFLAGS += -Wl,--gc-sections -Wl,-Map=build/$(PROJ_NAME).map
+#CFLAGS += --specs=nosys.specs
+CFLAGS += -specs=rdimon.specs
+CFLAGS += -lc -lrdimon
+#CFLAGS += -specs=nano.specs -u _printf_float -specs=rdimon.specs -lc -lrdimon
+
 
 ###################################################
 
@@ -60,14 +65,15 @@ lib:
 proj: 	$(PROJ_NAME).elf
 
 $(PROJ_NAME).elf: $(SRCS)
-	$(CC) $(CFLAGS) $^ -o $@ -L$(STD_PERIPH_LIB) -lstm32f0 -L$(LDSCRIPT_INC) -Tstm32f0.ld
-	$(OBJCOPY) -O ihex $(PROJ_NAME).elf $(PROJ_NAME).hex
-	$(OBJCOPY) -O binary $(PROJ_NAME).elf $(PROJ_NAME).bin
-	$(OBJDUMP) -St $(PROJ_NAME).elf >$(PROJ_NAME).lst
-	$(SIZE) $(PROJ_NAME).elf
+	mkdir build
+	$(CC) $(CFLAGS) $^ -o build/$@ -L$(STD_PERIPH_LIB) -lstm32f0 -L$(LDSCRIPT_INC) -Tstm32f0.ld
+	$(OBJCOPY) -O ihex build/$(PROJ_NAME).elf build/$(PROJ_NAME).hex
+	$(OBJCOPY) -O binary build/$(PROJ_NAME).elf build/$(PROJ_NAME).bin
+	$(OBJDUMP) -St build/$(PROJ_NAME).elf > build/$(PROJ_NAME).lst
+	$(SIZE) build/$(PROJ_NAME).elf
 	
-program: $(PROJ_NAME).bin
-	$(OPENOCD) -f $(OPENOCD_BOARD_DIR)/stm32f0discovery.cfg -f $(OPENOCD_PROC_FILE) -c "stm_flash `pwd`/$(PROJ_NAME).bin" -c shutdown
+program: build/$(PROJ_NAME).bin
+	$(OPENOCD) -f ./openocd.cfg -f $(OPENOCD_PROC_FILE) -c "stm_flash `pwd`/build/$(PROJ_NAME).bin"
 
 clean:
 	find ./ -name '*~' | xargs rm -f	
@@ -77,6 +83,7 @@ clean:
 	rm -f $(PROJ_NAME).bin
 	rm -f $(PROJ_NAME).map
 	rm -f $(PROJ_NAME).lst
+	rm -rf build
 
 reallyclean: clean
 	$(MAKE) -C $(STD_PERIPH_LIB) clean
