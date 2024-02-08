@@ -70,14 +70,28 @@ int main(void)
 	GPIO_Init(PushButton_GPIO, &Gp); //Assign struct to LED_GPIO
 
 	//uint8_t ButtonRead = 0; //Initialize ButtonRead variable
-  
-  xTaskCreate(vTask1, 
+  static StackType_t test_task2_stack[128];
+	static StaticTask_t test_task2_buffer;
+  xTaskCreateStatic(vTask1, 
               "ToggleLED", 
               40, 
               NULL, 
               1, 
-              NULL);
+              test_task2_stack,
+              &test_task2_buffer);
 
   vTaskStartScheduler();
 
+}
+
+void vApplicationGetIdleTaskMemory( StaticTask_t **ppxIdleTaskTCBBuffer,
+                                    StackType_t **ppxIdleTaskStackBuffer,
+                                    uint32_t *pulIdleTaskStackSize )
+{
+	static StaticTask_t xIdleTaskTCB;
+	static StackType_t uxIdleTaskStack[ configMINIMAL_STACK_SIZE ];
+
+    *ppxIdleTaskTCBBuffer = &xIdleTaskTCB;
+    *ppxIdleTaskStackBuffer = uxIdleTaskStack;
+    *pulIdleTaskStackSize = configMINIMAL_STACK_SIZE;
 }

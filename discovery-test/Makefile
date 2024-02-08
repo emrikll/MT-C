@@ -48,10 +48,18 @@ ROOT=$(shell pwd)
 CFLAGS += -I inc -I $(STD_PERIPH_LIB) -I $(STD_PERIPH_LIB)/CMSIS/Device/ST/STM32F0xx/Include
 CFLAGS += -I $(STD_PERIPH_LIB)/CMSIS/Include -I $(STD_PERIPH_LIB)/STM32F0xx_StdPeriph_Driver/inc
 CFLAGS += -include $(STD_PERIPH_LIB)/stm32f0xx_conf.h
-CFLAGS += -include $(STD_PERIPH_LIB)/FreeRTOS-Kernel/FreeRTOSConfig.h
+CFLAGS += -I Include/
 CFLAGS += -I $(STD_PERIPH_LIB)/FreeRTOS-Kernel/portable/GCC/ARM_CM0
 CFLAGS += -I $(STD_PERIPH_LIB)/FreeRTOS-Kernel/include
 CFLAGS += -I /usr/include
+
+SRCS += libraries/FreeRTOS-Kernel/tasks.c
+SRCS += libraries/FreeRTOS-Kernel/list.c
+SRCS += libraries/FreeRTOS-Kernel/croutine.c
+SRCS += libraries/FreeRTOS-Kernel/event_groups.c
+SRCS += libraries/FreeRTOS-Kernel/queue.c
+SRCS += libraries/FreeRTOS-Kernel/stream_buffer.c
+SRCS += libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM0/port.c
 
 OBJS = $(SRCS:.c=.o)
 
