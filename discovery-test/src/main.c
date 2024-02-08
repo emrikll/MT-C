@@ -1,5 +1,13 @@
+#include <stdio.h>
 #include <stm32f0xx_gpio.h>
 #include <stm32f0xx_rcc.h>
+#include <FreeRTOS.h>
+#include "FreeRTOSConfig.h"
+#include "portmacro.h"
+#include "task.h"
+#include "queue.h"
+#include "semphr.h"
+#include "croutine.h"
 
 GPIO_InitTypeDef Gp;//Create GPIO struct
 
@@ -22,6 +30,26 @@ extern void initialise_monitor_handles(void);
 **===========================================================================
 */
 
+void vTask1(void *vParameters){
+
+  int toggle = 0;
+  const TickType_t xDelay = 500 / portTICK_PERIOD_MS;
+  for(;;)
+  {
+    if(toggle){
+      //set bit
+      GPIO_SetBits(LED_GPIO, GreenLED_Pin);
+      toggle = 0;
+    }else{
+      //reset bit
+      GPIO_ResetBits(LED_GPIO, GreenLED_Pin);
+      toggle = 1;
+    }
+    vTaskDelay(xDelay);
+  }
+}
+
+
 int main(void)
 {
 	initialise_monitor_handles();
@@ -41,20 +69,15 @@ int main(void)
 	Gp.GPIO_PuPd = GPIO_PuPd_NOPULL; //No pullup required as pullup is external
 	GPIO_Init(PushButton_GPIO, &Gp); //Assign struct to LED_GPIO
 
-	uint8_t ButtonRead = 0; //Initialize ButtonRead variable
+	//uint8_t ButtonRead = 0; //Initialize ButtonRead variable
+  
+  xTaskCreate(vTask1, 
+              "ToggleLED", 
+              40, 
+              NULL, 
+              1, 
+              NULL);
 
-	while(1) //Infiinte loop!
-	{
-		ButtonRead = GPIO_ReadInputDataBit(PushButton_GPIO, PushButton_Pin);
+  vTaskStartScheduler();
 
-		if(ButtonRead){ //If button is pressed, turn green LED on and blue off
-			GPIO_SetBits(LED_GPIO, GreenLED_Pin);
-			printf("test\n");
-			GPIO_ResetBits(LED_GPIO, BlueLED_Pin);
-		}
-		else{ //If button isn't pressed, turn green LED off and blue on
-			GPIO_ResetBits(LED_GPIO, GreenLED_Pin);
-			GPIO_SetBits(LED_GPIO, BlueLED_Pin);
-		}
-	}
 }

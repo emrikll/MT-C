@@ -13,6 +13,7 @@
       "-mthumb",
       "-ffunction-sections",
       "-fdata-sections",
+      "-specs=rdimon.specs",
       "-I",
       "inc",
       "-I",
@@ -24,19 +25,23 @@
       "-I",
       "libraries/STM32F0xx_StdPeriph_Driver/inc",
       "-include",
-      "./FreeRTOSConfig.h",
-      "-include",
       "libraries/stm32f0xx_conf.h",
       "-I",
+      "./Include",
+      "-I",
+      "libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM0",
+      "-I",
       "libraries/FreeRTOS-Kernel/include",
+      "-I",
+      "/usr/include/",
       "-Tstm32f0.ld",
       "-o",
-      "discovery-test.elf",
+      "build/discovery-test.elf",
       "src/main.c"
     ],
     "directory": "/home/emrik/Thesis/repos/MT-C/discovery-test",
     "file": "/home/emrik/Thesis/repos/MT-C/discovery-test/src/main.c",
-    "output": "/home/emrik/Thesis/repos/MT-C/discovery-test/discovery-test.elf"
+    "output": "/home/emrik/Thesis/repos/MT-C/discovery-test/build/discovery-test.elf"
   },
   {
     "arguments": [
@@ -52,6 +57,7 @@
       "-mthumb",
       "-ffunction-sections",
       "-fdata-sections",
+      "-specs=rdimon.specs",
       "-I",
       "inc",
       "-I",
@@ -63,19 +69,23 @@
       "-I",
       "libraries/STM32F0xx_StdPeriph_Driver/inc",
       "-include",
-      "./FreeRTOSConfig.h",
-      "-include",
       "libraries/stm32f0xx_conf.h",
       "-I",
+      "./Include",
+      "-I",
+      "libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM0",
+      "-I",
       "libraries/FreeRTOS-Kernel/include",
+      "-I",
+      "/usr/include/",
       "-Tstm32f0.ld",
       "-o",
-      "discovery-test.elf",
+      "build/discovery-test.elf",
       "src/system_stm32f0xx.c"
     ],
     "directory": "/home/emrik/Thesis/repos/MT-C/discovery-test",
     "file": "/home/emrik/Thesis/repos/MT-C/discovery-test/src/system_stm32f0xx.c",
-    "output": "/home/emrik/Thesis/repos/MT-C/discovery-test/discovery-test.elf"
+    "output": "/home/emrik/Thesis/repos/MT-C/discovery-test/build/discovery-test.elf"
   },
   {
     "arguments": [
@@ -91,6 +101,7 @@
       "-mthumb",
       "-ffunction-sections",
       "-fdata-sections",
+      "-specs=rdimon.specs",
       "-I",
       "inc",
       "-I",
@@ -102,18 +113,22 @@
       "-I",
       "libraries/STM32F0xx_StdPeriph_Driver/inc",
       "-include",
-      "./FreeRTOSConfig.h",
-      "-include",
       "libraries/stm32f0xx_conf.h",
       "-I",
+      "./Include",
+      "-I",
+      "libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM0",
+      "-I",
       "libraries/FreeRTOS-Kernel/include",
+      "-I",
+      "/usr/include/",
       "-Tstm32f0.ld",
       "-o",
-      "discovery-test.elf",
+      "build/discovery-test.elf",
       "device/startup_stm32f0xx.s"
     ],
     "directory": "/home/emrik/Thesis/repos/MT-C/discovery-test",
     "file": "/home/emrik/Thesis/repos/MT-C/discovery-test/device/startup_stm32f0xx.s",
-    "output": "/home/emrik/Thesis/repos/MT-C/discovery-test/discovery-test.elf"
+    "output": "/home/emrik/Thesis/repos/MT-C/discovery-test/build/discovery-test.elf"
   }
 ]
