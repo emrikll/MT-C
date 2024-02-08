@@ -1,7 +1,7 @@
 # STM32f051 FreeRTOS Template
 This is an FreeRTOS example for STM32F051 (ARM Cortex M0 controller). Below are the steps to get it working in Linux (tested on Arch)
 
-It is based of of the template by [bhavink09] (https://github.com/bhavink09/stm32f051_template/tree/master), but made to work more in the terminaland with Neovim and clangd.
+It is based of of the template by [bhavink09][https://github.com/bhavink09/stm32f051_template/tree/master], but made to work more in the terminaland with Neovim and clangd.
 
 ### Installation
 * Arch
