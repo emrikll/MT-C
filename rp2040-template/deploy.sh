@@ -62,6 +62,7 @@ if [[ ${platform} = Darwin ]]; then
 else
     sudo cp ${2} ${pico_path}
     # We're at the command line, so unmount (RPi GUI does this automatically)
+    sleep 3
     sudo umount ${rp2_disk} && echo "Pico unmounted" && sudo rm -rf ${pico_path} && echo "Mountpoint removed"
 fi
 echo Done

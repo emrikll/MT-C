@@ -72,6 +72,14 @@ target_include_directories(FreeRTOS PUBLIC
 
 # Include the apps' source code
 add_subdirectory(${APP_1_SRC_DIRECTORY})
-add_subdirectory(${APP_2_SRC_DIRECTORY})
-add_subdirectory(${APP_3_SRC_DIRECTORY})
-add_subdirectory(${APP_4_SRC_DIRECTORY})
+# add_subdirectory(${APP_2_SRC_DIRECTORY})
+# add_subdirectory(${APP_3_SRC_DIRECTORY})
+# add_subdirectory(${APP_4_SRC_DIRECTORY})
+
+# Enabling debug over usb
+#target_link_libraries(blink_led pico_stdlib)
+
+#pico_enable_stdio_usb(blink_led 1)
+#pico_enable_stdio_uart(blink_led 0)
+
+#pico_add_extra_outputs(blink_led)

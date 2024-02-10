@@ -8,6 +8,7 @@
  */
 #include "main.h"
 
+#define DEBUG
 
 /*
  * GLOBALS
