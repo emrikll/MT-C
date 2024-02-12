@@ -21,3 +21,6 @@ pico_enable_stdio_uart(${APP_1_NAME} 1)
 
 # Enable extra build products
 pico_add_extra_outputs(${APP_1_NAME})
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+

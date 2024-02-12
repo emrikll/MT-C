@@ -7,8 +7,7 @@
  *
  */
 #include "main.h"
-
-#define DEBUG
+#include "pico/stdio.h"
 
 /*
  * GLOBALS
@@ -115,7 +114,7 @@ void log_device_info(void) {
  * RUNTIME START
  */
 int main() {
-
+  stdio_init_all();
     // Enable STDIO
 #ifdef DEBUG
     stdio_usb_init();

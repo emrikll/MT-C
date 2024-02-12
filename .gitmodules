@@ -7,3 +7,6 @@
 [submodule "rp2040-template/FreeRTOS-Kernel"]
 	path = rp2040-template/FreeRTOS-Kernel
 	url = https://github.com/FreeRTOS/FreeRTOS-Kernel/
+[submodule "discovery-template/libraries/FreeRTOS-Kernel"]
+	path = discovery-template/libraries/FreeRTOS-Kernel
+	url = https://github.com/FreeRTOS/FreeRTOS-Kernel/

@@ -77,6 +77,10 @@ Follow both of these commands with the usual
 cmake --build build
 ```
 
+To see the out put use the command below. Switch X with an ACM that shows in the /dev/ directory. 
+```shell
+picocom -b 115200 -r /dev/ttyACMX
+```
 
 ## The Apps
 
