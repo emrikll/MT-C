@@ -5,6 +5,8 @@ project(
   VERSION 1.0
   LANGUAGES C ASM)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Debug)
+set(FREERTOS_SRC_DIRECTORY "${CMAKE_SOURCE_DIR}/libraries/FreeRTOS-Kernel") 
+
 
 add_custom_target(
   Debug ALL
@@ -13,7 +15,13 @@ add_custom_target(
 
 add_executable(
   ${PROJECT_NAME}.elf
-  dispatch.s
+  ${FREERTOS_SRC_DIRECTORY}/event_groups.c
+  ${FREERTOS_SRC_DIRECTORY}/list.c
+  ${FREERTOS_SRC_DIRECTORY}/queue.c
+  ${FREERTOS_SRC_DIRECTORY}/stream_buffer.c
+  ${FREERTOS_SRC_DIRECTORY}/tasks.c
+  ${FREERTOS_SRC_DIRECTORY}/timers.c
+  ${FREERTOS_SRC_DIRECTORY}/portable/GCC/ARM_CM4F/port.c
   driver/src/stm32f4xx_can.c
   driver/src/stm32f4xx_dac.c
   driver/src/stm32f4xx_exti.c
@@ -23,17 +31,28 @@ add_executable(
   driver/src/stm32f4xx_tim.c
   driver/src/stm32f4xx_usart.c
   startup.c
-  TinyTimber.c
-  sciTinyTimber.c
-  canTinyTimber.c
-  application.c)
+  src/main.c)
 
 target_link_libraries(${PROJECT_NAME}.elf PRIVATE m)
 
 target_include_directories(
   ${PROJECT_NAME}.elf
   PRIVATE ${PROJECT_SOURCE_DIR}/driver/inc
-  PRIVATE ${PROJECT_SOURCE_DIR}/device/inc)
+  PRIVATE ${PROJECT_SOURCE_DIR}/device/inc
+  PRIVATE ${PROJECT_SOURCE_DIR}/libraries/cmsis 
+  PRIVATE ${PROJECT_SOURCE_DIR}/include
+  PRIVATE ${FREERTOS_CFG_DIRECTORY}/
+  PRIVATE ${FREERTOS_SRC_DIRECTORY}/include
+  PRIVATE ${FREERTOS_SRC_DIRECTORY}/portable/GCC/ARM_CM4F
+  )
+
+# Add FreeRTOS as library
+#add_library(FreeRTOS STATIC
+#)
+
+# Build FreeRTOS
+#target_include_directories(FreeRTOS PUBLIC
+#)
 
 add_custom_command(
   TARGET ${PROJECT_NAME}.elf
@@ -43,3 +62,5 @@ add_custom_command(
     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.elf
     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.s19
   VERBATIM)
+
+  set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
