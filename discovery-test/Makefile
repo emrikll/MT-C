@@ -11,6 +11,11 @@ STD_PERIPH_LIB=libraries
 # Location of the linker scripts
 LDSCRIPT_INC=device/ldscripts
 
+# Location of FreeRTOS
+FREERTOS_LIB=$(STD_PERIPH_LIB)/FreeRTOS-Kernel
+
+TRACERECORDER_LIB = $(STD_PERIPH_LIB)/TraceRecorder
+
 # location of OpenOCD Board .cfg files (only used with 'make program')
 OPENOCD_BOARD_DIR=$(OPENOCD_PATH)/../scripts/			board
 
@@ -49,17 +54,49 @@ CFLAGS += -I inc -I $(STD_PERIPH_LIB) -I $(STD_PERIPH_LIB)/CMSIS/Device/ST/STM32
 CFLAGS += -I $(STD_PERIPH_LIB)/CMSIS/Include -I $(STD_PERIPH_LIB)/STM32F0xx_StdPeriph_Driver/inc
 CFLAGS += -include $(STD_PERIPH_LIB)/stm32f0xx_conf.h
 CFLAGS += -I Include/
-CFLAGS += -I $(STD_PERIPH_LIB)/FreeRTOS-Kernel/portable/GCC/ARM_CM0
-CFLAGS += -I $(STD_PERIPH_LIB)/FreeRTOS-Kernel/include
+CFLAGS += -I $(FREERTOS_LIB)/portable/GCC/ARM_CM0
+CFLAGS += -I $(FREERTOS_LIB)/include
 CFLAGS += -I /usr/include
+CFLAGS += -I $(TRACERECORDER_LIB)/config
+CFLAGS += -I $(TRACERECORDER_LIB)/include
 
-SRCS += libraries/FreeRTOS-Kernel/tasks.c
-SRCS += libraries/FreeRTOS-Kernel/list.c
-SRCS += libraries/FreeRTOS-Kernel/croutine.c
-SRCS += libraries/FreeRTOS-Kernel/event_groups.c
-SRCS += libraries/FreeRTOS-Kernel/queue.c
-SRCS += libraries/FreeRTOS-Kernel/stream_buffer.c
-SRCS += libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM0/port.c
+SRCS += $(FREERTOS_LIB)/tasks.c
+SRCS += $(FREERTOS_LIB)/list.c
+SRCS += $(FREERTOS_LIB)/croutine.c
+SRCS += $(FREERTOS_LIB)/event_groups.c
+SRCS += $(FREERTOS_LIB)/queue.c
+SRCS += $(FREERTOS_LIB)/stream_buffer.c
+SRCS += $(FREERTOS_LIB)/portable/GCC/ARM_CM0/port.c
+SRCS += $(FREERTOS_LIB)/portable/MemMang/heap_4.c
+
+SRCS += $(TRACERECORDER_LIB)/trcAssert.c
+SRCS += $(TRACERECORDER_LIB)/trcCounter.c
+SRCS += $(TRACERECORDER_LIB)/trcDependency.c
+SRCS += $(TRACERECORDER_LIB)/trcDiagnostics.c
+SRCS += $(TRACERECORDER_LIB)/trcEntryTable.c
+SRCS += $(TRACERECORDER_LIB)/trcError.c
+SRCS += $(TRACERECORDER_LIB)/trcEvent.c
+SRCS += $(TRACERECORDER_LIB)/trcEventBuffer.c
+SRCS += $(TRACERECORDER_LIB)/trcExtension.c
+SRCS += $(TRACERECORDER_LIB)/trcHardwarePort.c
+SRCS += $(TRACERECORDER_LIB)/trcHeap.c
+SRCS += $(TRACERECORDER_LIB)/trcInternalEventBuffer.c
+SRCS += $(TRACERECORDER_LIB)/trcInterval.c
+SRCS += $(TRACERECORDER_LIB)/trcISR.c
+SRCS += $(TRACERECORDER_LIB)/trcKernelPort.c
+SRCS += $(TRACERECORDER_LIB)/trcMultiCoreEventBuffer.c
+SRCS += $(TRACERECORDER_LIB)/trcObject.c
+SRCS += $(TRACERECORDER_LIB)/trcPrint.c
+SRCS += $(TRACERECORDER_LIB)/trcRunnable.c
+SRCS += $(TRACERECORDER_LIB)/trcSnapshotRecorder.c
+SRCS += $(TRACERECORDER_LIB)/trcStackMonitor.c
+SRCS += $(TRACERECORDER_LIB)/trcStateMachine.c
+SRCS += $(TRACERECORDER_LIB)/trcStaticBuffer.c
+SRCS += $(TRACERECORDER_LIB)/trcStreamingRecorder.c
+SRCS += $(TRACERECORDER_LIB)/trcStreamPort.c
+SRCS += $(TRACERECORDER_LIB)/trcString.c
+SRCS += $(TRACERECORDER_LIB)/trcTask.c
+SRCS += $(TRACERECORDER_LIB)/trcTimestamp.c
 
 OBJS = $(SRCS:.c=.o)
 

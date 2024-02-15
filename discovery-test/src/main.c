@@ -53,6 +53,8 @@ void vTask1(void *vParameters){
 int main(void)
 {
 	initialise_monitor_handles();
+  xTraceInitialize();
+  xTraceEnable(TRC_START);
 	//Enable clocks to both GPIOA (push button) and GPIOC (output LEDs)
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
@@ -70,15 +72,13 @@ int main(void)
 	GPIO_Init(PushButton_GPIO, &Gp); //Assign struct to LED_GPIO
 
 	//uint8_t ButtonRead = 0; //Initialize ButtonRead variable
-  static StackType_t test_task2_stack[128];
-	static StaticTask_t test_task2_buffer;
-  xTaskCreateStatic(vTask1, 
+  
+  xTaskCreate(vTask1, 
               "ToggleLED", 
               40, 
               NULL, 
               1, 
-              test_task2_stack,
-              &test_task2_buffer);
+              NULL);
 
   vTaskStartScheduler();
 
