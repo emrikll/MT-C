@@ -240,7 +240,7 @@ static void __sio_init() {
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
 
     GPIO_WriteBit(GPIOB, GPIO_Pin_1, (BitAction) 1); // default red LED Off
-//    GPIO_SetBits(GPIOB, GPIO_Pin_1);
+    //GPIO_SetBits(GPIOB, GPIO_Pin_1);
     GPIO_WriteBit(GPIOB, GPIO_Pin_0, (BitAction) 1); // default green LED Off
 //    GPIO_ResetBits(GPIOB, GPIO_Pin_0);
 

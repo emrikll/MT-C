@@ -14,11 +14,16 @@ set(CMAKE_C_FLAGS
     -mcpu=cortex-m4 \
     -mfloat-abi=hard \
     -mfpu=fpv4-sp-d16 \
-    -fverbose-asm -DSTM32F40_41xxx"
+    -fverbose-asm \
+    -DSTM32F40_41xxx"
     CACHE INTERNAL "")
 set(CMAKE_EXE_LINKER_FLAGS
-    "--specs=nano.specs \
+    "--specs=nano.specs -specs=nosys.specs \
     -nostartfiles \
+    -mfloat-abi=hard \
+    -mfpu=fpv4-sp-d16 \
+    -mcpu=cortex-m4 \
+    -mthumb \
     -T ${PROJECT_SOURCE_DIR}/md407-ram.x \
     -Wl,-Map=${PROJECT_SOURCE_DIR}/Debug/${PROJECT_NAME}.map,--cref"
     CACHE INTERNAL "")

@@ -48,7 +48,7 @@
 
 
 #include "system_stm32f4xx.h"
-
+#define STM32F4XX
 #define SystemCoreClock 168000000 
 #define configUSE_PREEMPTION                     1
 #define configSUPPORT_STATIC_ALLOCATION          1

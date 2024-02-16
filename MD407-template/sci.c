@@ -5,7 +5,7 @@ void sci_init(Serial *self, int unused) {
 
 	USART_ITConfig( USART1, USART_IT_RXNE, ENABLE);
 	USART_ITConfig( USART1, USART_IT_TXE, DISABLE);
-	NVIC_SetPriority( USART1_IRQn, __IRQ_PRIORITY);
+	NVIC_SetPriority( USART1_IRQn, 1);
 	NVIC_EnableIRQ( USART1_IRQn);
   
 }
@@ -43,10 +43,6 @@ int sci_interrupt(Serial *self, int unused) {
 		
 		c = USART_ReceiveData( self->port);
 		
-        if (self->obj) {
-			ASYNC(self->obj, self->meth, c);
-			doIRQSchedule = 1;
-		}
     } 
     
     if (USART_GetFlagStatus(self->port, USART_FLAG_TXE) == SET) {       // Transmit buffer empty

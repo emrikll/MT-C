@@ -7,10 +7,7 @@
 #define SCI_BUFSIZE  1024
 
 typedef struct {
-    Object super;
     USART_TypeDef *port;
-    Object *obj;
-    Method meth;
     int head;
     int tail;
     int count;

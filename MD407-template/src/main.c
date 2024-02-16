@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdarg.h>
 #include <stm32f4xx_gpio.h>
 #include <stm32f4xx_rcc.h>
 #include <FreeRTOS.h>
@@ -8,7 +9,7 @@
 #include "queue.h"
 #include "semphr.h"
 #include "croutine.h"
-
+#include "stm32f4xx_usart.h"
 GPIO_InitTypeDef Gp;//Create GPIO struct
 
 //Define LED pins
@@ -22,7 +23,6 @@ GPIO_InitTypeDef Gp;//Create GPIO struct
 #define PushButton_Pin GPIO_Pin_0
 #define PushButton_GPIO GPIOA   
 
-#define SystemCoreClock 168000000 
 //extern void initialise_monitor_handles(void);
 
 /**
@@ -36,44 +36,159 @@ GPIO_InitTypeDef Gp;//Create GPIO struct
 void vTask1(void *vParameters){
 
   int toggle = 0;
+  GPIO_ResetBits(LED_GPIO, RedLED_Pin);
+
   const TickType_t xDelay = 500 / portTICK_PERIOD_MS;
   for(;;)
   {
-    if(toggle){
       //set bit
-      GPIO_SetBits(LED_GPIO, GreenLED_Pin);
-        toggle = 0;
-      }else{
-        //reset bit
-        GPIO_ResetBits(LED_GPIO, GreenLED_Pin);
-        toggle = 1;
-      }
-      vTaskDelay(xDelay);
     }
   }
 
+  int print(const char* str) {
+    USART_ITConfig( USART1, USART_IT_RXNE, ENABLE);
+    for (int i = 0; str[i] != '\0'; i++){
 
+      USART_SendData( USART1, str[i]);
+      for (int i=1; i<10000; i++) {}
+    }
+    return 0;
+  }
+
+  int printf(const char* str, ...)
+  {
+    // initializing list pointer 
+    va_list ptr; 
+    va_start(ptr, str); 
+  
+    // char array to store token 
+    char token[1000]; 
+    // index of where to store the characters of str in 
+    // token 
+    int k = 0; 
+  
+    // parsing the formatted string 
+    for (int i = 0; str[i] != '\0'; i++) { 
+        token[k++] = str[i]; 
+  
+        if (str[i + 1] == '%' || str[i + 1] == '\0') { 
+            token[k] = '\0'; 
+            k = 0; 
+            if (token[0] != '%') { 
+                char string[64];
+                sprintf(
+                    string, "%s", 
+                    token); // printing the whole token if 
+                            // it is not a format specifier
+                print(string);
+            } 
+            else { 
+                int j = 1; 
+                char ch1 = 0; 
+  
+                // this loop is required when printing 
+                // formatted value like 0.2f, when ch1='f' 
+                // loop ends 
+                while ((ch1 = token[j++]) < 58) { 
+                } 
+                // for integers 
+                if (ch1 == 'i' || ch1 == 'd' || ch1 == 'u'
+                    || ch1 == 'h') {
+                    char string[64];
+                    sprintf(string, token, 
+                            va_arg(ptr, int));
+                    print(string);
+                } 
+                // for characters 
+                else if (ch1 == 'c') {
+                    char string[64];
+                    sprintf(string, token, 
+                            va_arg(ptr, int)); 
+                    print(string);
+                } 
+                // for float values 
+                else if (ch1 == 'f') {
+                    char string[64];
+                    sprintf(string, token, 
+                            va_arg(ptr, double));
+                    print(string);
+                } 
+                else if (ch1 == 'l') { 
+                    char ch2 = token[2]; 
+  
+                    // for long int 
+                    if (ch2 == 'u' || ch2 == 'd'
+                        || ch2 == 'i') {
+                        char string[64];
+                        sprintf(string, token, 
+                                va_arg(ptr, long));
+
+                        print(string);
+                    } 
+  
+                    // for double 
+                    else if (ch2 == 'f') {
+                        char string[64];
+                        sprintf(string, token, 
+                                va_arg(ptr, double));
+                        print(string);
+                    } 
+                } 
+                else if (ch1 == 'L') { 
+                    char ch2 = token[2]; 
+  
+                    // for long long int 
+                    if (ch2 == 'u' || ch2 == 'd'
+                        || ch2 == 'i') { 
+                        char string[64];
+                        sprintf(string, token, 
+                                va_arg(ptr, long long));
+                        print(string);
+                    } 
+  
+                    // for long double 
+                    else if (ch2 == 'f') {
+                        char string[64];
+                        sprintf(string,  token, 
+                                va_arg(ptr, long double));
+                        print(string);
+                    } 
+                } 
+  
+                // for strings 
+                else if (ch1 == 's') {
+                    char string[64];
+                    sprintf(string, token, 
+                            va_arg(ptr, char*)); 
+                    print(string);
+                } 
+  
+                // print the whole token 
+                // if no case is matched 
+                else { 
+                    char string[64];
+                    sprintf(string, "%s", token);
+                    print(string);
+                } 
+            } 
+        } 
+    } 
+  
+    // ending traversal 
+    va_end(ptr); 
+    return 0; 
+  }
   int main(void)
   {
   //Enable clocks to both GPIOA (push button) and GPIOC (output LEDs)
-  RCC_AHB3PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
-	RCC_AHB3PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
-
-	Gp.GPIO_Pin = GreenLED_Pin | RedLED_Pin; //Set pins inside the struct
-	Gp.GPIO_Mode = GPIO_Mode_OUT; //Set GPIO pins as output
-	Gp.GPIO_OType = GPIO_OType_PP; //Ensure output is push-pull vs open drain
-	Gp.GPIO_PuPd = GPIO_PuPd_NOPULL; //No internal pullup resistors required
-	Gp.GPIO_Speed = GPIO_Speed_2MHz;//GPIO_Speed_Level_1; //Set GPIO speed to lowest
-	GPIO_Init(LED_GPIO, &Gp); //Assign struct to LED_GPIO
-
-	Gp.GPIO_Pin = PushButton_Pin; //Set pins inside the struct
-	Gp.GPIO_Mode = GPIO_Mode_IN; //Set GPIO pins as output
-	Gp.GPIO_PuPd = GPIO_PuPd_NOPULL; //No pullup required as pullup is external
-	GPIO_Init(PushButton_GPIO, &Gp); //Assign struct to LED_GPIO
-  //
 	//uint8_t ButtonRead = 0; //Initialize ButtonRead variable
+  //GPIO_ResetBits(LED_GPIO, RedLED_Pin);
   static StackType_t test_task2_stack[128];
 	static StaticTask_t test_task2_buffer;
+
+  USART_ITConfig( USART1, USART_IT_RXNE, ENABLE);
+  print("hello\n");
+  printf("Int: %d", 3);
   xTaskCreateStatic(vTask1, 
               "ToggleLED", 
               40, 
@@ -81,7 +196,7 @@ void vTask1(void *vParameters){
               1, 
               test_task2_stack,
               &test_task2_buffer);
-
+  print("before start");
   vTaskStartScheduler();
 
 }

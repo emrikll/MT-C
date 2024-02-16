@@ -39,7 +39,6 @@ target_include_directories(
   ${PROJECT_NAME}.elf
   PRIVATE ${PROJECT_SOURCE_DIR}/driver/inc
   PRIVATE ${PROJECT_SOURCE_DIR}/device/inc
-  PRIVATE ${PROJECT_SOURCE_DIR}/libraries/cmsis 
   PRIVATE ${PROJECT_SOURCE_DIR}/include
   PRIVATE ${FREERTOS_CFG_DIRECTORY}/
   PRIVATE ${FREERTOS_SRC_DIRECTORY}/include
