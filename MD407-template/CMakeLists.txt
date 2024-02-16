@@ -22,6 +22,7 @@ add_executable(
   ${FREERTOS_SRC_DIRECTORY}/tasks.c
   ${FREERTOS_SRC_DIRECTORY}/timers.c
   ${FREERTOS_SRC_DIRECTORY}/portable/GCC/ARM_CM4F/port.c
+  libraries/io/io.c
   driver/src/stm32f4xx_can.c
   driver/src/stm32f4xx_dac.c
   driver/src/stm32f4xx_exti.c
@@ -40,6 +41,7 @@ target_include_directories(
   PRIVATE ${PROJECT_SOURCE_DIR}/driver/inc
   PRIVATE ${PROJECT_SOURCE_DIR}/device/inc
   PRIVATE ${PROJECT_SOURCE_DIR}/include
+  PRIVATE ${PROJECT_SOURCE_DIR}/libraries/io
   PRIVATE ${FREERTOS_CFG_DIRECTORY}/
   PRIVATE ${FREERTOS_SRC_DIRECTORY}/include
   PRIVATE ${FREERTOS_SRC_DIRECTORY}/portable/GCC/ARM_CM4F

@@ -1,7 +1,7 @@
 Archive member included to satisfy reference by file (symbol)
 
 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
-                              CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj (sprintf)
+                              CMakeFiles/RTS-Lab.elf.dir/libraries/io/io.c.obj (sprintf)
 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memset.o)
                               CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/stream_buffer.c.obj (memset)
 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-impure.o)
@@ -52,6 +52,7 @@ LOAD CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/stream_buffer.c.obj
 LOAD CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/tasks.c.obj
 LOAD CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/timers.c.obj
 LOAD CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM4F/port.c.obj
+LOAD CMakeFiles/RTS-Lab.elf.dir/libraries/io/io.c.obj
 LOAD CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_can.c.obj
 LOAD CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_dac.c.obj
 LOAD CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_exti.c.obj
@@ -79,7 +80,7 @@ LOAD /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m
 LOAD /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libnosys.a
 END GROUP
 
-.text           0x20000000     0xd564
+.text           0x20000000     0xd72c
                 0x20000000                        . = ALIGN (0x4)
  *(.start_section)
  .start_section
@@ -162,7 +163,7 @@ END GROUP
                 0x20002f3a                uxStreamBufferGetStreamBufferNumber
                 0x20002f52                vStreamBufferSetStreamBufferNumber
                 0x20002f6e                ucStreamBufferGetStreamBufferType
- .text          0x20002f8c     0x30d8 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/tasks.c.obj
+ .text          0x20002f8c     0x310c CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/tasks.c.obj
                 0x20003046                xTaskCreateStatic
                 0x200032e0                vTaskDelete
                 0x200033ec                xTaskDelayUntil
@@ -177,683 +178,692 @@ END GROUP
                 0x20003ab8                vTaskResume
                 0x20003bcc                xTaskResumeFromISR
                 0x20003de0                vTaskStartScheduler
-                0x20003e68                vTaskEndScheduler
-                0x20003ecc                vTaskSuspendAll
-                0x20003ee8                xTaskResumeAll
-                0x200040fc                xTaskGetTickCount
-                0x2000411c                xTaskGetTickCountFromISR
-                0x20004140                uxTaskGetNumberOfTasks
-                0x20004158                pcTaskGetName
-                0x200041a4                xTaskGetStaticBuffers
-                0x20004220                uxTaskGetSystemState
-                0x2000433c                xTaskCatchUpTicks
-                0x20004394                xTaskIncrementTick
-                0x200045c8                vTaskSwitchContext
-                0x20004688                vTaskPlaceOnEventList
-                0x200046d4                vTaskPlaceOnUnorderedEventList
-                0x20004784                vTaskPlaceOnEventListRestricted
-                0x20004810                xTaskRemoveFromEventList
-                0x200049c4                vTaskRemoveFromUnorderedEventList
-                0x20004b50                vTaskSetTimeOutState
-                0x20004ba0                vTaskInternalSetTimeOutState
-                0x20004bcc                xTaskCheckForTimeOut
-                0x20004c9c                vTaskMissedYield
-                0x20004cb4                uxTaskGetTaskNumber
-                0x20004ce0                vTaskSetTaskNumber
-                0x20004e10                vTaskGetInfo
-                0x20004ff6                uxTaskGetStackHighWaterMark
-                0x20005078                xTaskGetCurrentTaskHandle
-                0x20005098                xTaskGetCurrentTaskHandleForCore
-                0x200050c8                xTaskGetSchedulerState
-                0x20005104                xTaskPriorityInherit
-                0x20005228                xTaskPriorityDisinherit
-                0x2000535c                vTaskPriorityDisinheritAfterTimeout
-                0x200054b8                uxTaskResetEventItemValue
-                0x200054e8                pvTaskIncrementMutexHeldCount
-                0x20005518                ulTaskGenericNotifyTake
-                0x20005614                xTaskGenericNotifyWait
-                0x20005744                xTaskGenericNotify
-                0x200059a4                xTaskGenericNotifyFromISR
-                0x20005c78                vTaskGenericNotifyGiveFromISR
-                0x20005e94                xTaskGenericNotifyStateClear
-                0x20005f08                ulTaskGenericNotifyValueClear
- .text          0x20006064      0xb6c CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/timers.c.obj
-                0x20006064                xTimerCreateTimerTask
-                0x200060f8                xTimerCreateStatic
-                0x200061ea                xTimerGenericCommandFromTask
-                0x20006290                xTimerGenericCommandFromISR
-                0x20006318                xTimerGetTimerDaemonTaskHandle
-                0x20006354                xTimerGetPeriod
-                0x2000638e                vTimerSetReloadMode
-                0x200063f6                xTimerGetReloadMode
-                0x2000644a                uxTimerGetReloadMode
-                0x20006466                xTimerGetExpiryTime
-                0x200064a4                xTimerGetStaticBuffer
-                0x200064fc                pcTimerGetName
-                0x20006a24                xTimerIsTimerActive
-                0x20006a78                pvTimerGetTimerID
-                0x20006aba                vTimerSetTimerID
-                0x20006afc                xTimerPendFunctionCallFromISR
-                0x20006b3c                xTimerPendFunctionCall
-                0x20006b9c                uxTimerGetTimerNumber
-                0x20006bb4                vTimerSetTimerNumber
- .text          0x20006bd0      0x56c CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM4F/port.c.obj
-                0x20006bd0                pxPortInitialiseStack
-                0x20006c94                SVC_Handler
-                0x20006cde                xPortStartScheduler
-                0x20006ecc                vPortEndScheduler
-                0x20006f04                vPortEnterCritical
-                0x20006f68                vPortExitCritical
-                0x20006fbc                PendSV_Handler
-                0x20007026                SysTick_Handler
-                0x2000706c                vPortSetupTimerInterrupt
-                0x200070ba                vPortValidateInterruptPriority
- .text          0x2000713c     0x11b4 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_can.c.obj
-                0x2000713c                CAN_DeInit
-                0x20007184                CAN_Init
-                0x20007326                CAN_FilterInit
-                0x200074ac                CAN_StructInit
-                0x20007502                CAN_SlaveStartBank
-                0x20007564                CAN_DBGFreeze
-                0x2000759c                CAN_TTComModeCmd
-                0x20007634                CAN_Transmit
-                0x200077d6                CAN_TransmitStatus
-                0x200078dc                CAN_CancelTransmit
-                0x20007934                CAN_Receive
-                0x20007ab0                CAN_FIFORelease
-                0x20007ae8                CAN_MessagePending
-                0x20007b32                CAN_OperatingModeRequest
-                0x20007c2e                CAN_Sleep
-                0x20007c68                CAN_WakeUp
-                0x20007cbe                CAN_GetLastErrorCode
-                0x20007ce4                CAN_GetReceiveErrorCounter
-                0x20007d06                CAN_GetLSBTransmitErrorCounter
-                0x20007d28                CAN_ITConfig
-                0x20007d64                CAN_GetFlagStatus
-                0x20007e32                CAN_ClearFlag
-                0x20007ea4                CAN_GetITStatus
-                0x20008108                CAN_ClearITPendingBit
- .text          0x200082f0      0x450 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_dac.c.obj
-                0x200082f0                DAC_DeInit
-                0x2000830c                DAC_Init
-                0x20008374                DAC_StructInit
-                0x200083a0                DAC_Cmd
-                0x200083ec                DAC_SoftwareTriggerCmd
-                0x2000843c                DAC_DualSoftwareTriggerCmd
-                0x20008478                DAC_WaveGenerationCmd
-                0x200084c4                DAC_SetChannel1Data
-                0x200084fc                DAC_SetChannel2Data
-                0x20008534                DAC_SetDualChannelData
-                0x2000858c                DAC_GetDataOutputValue
-                0x200085c0                DAC_DMACmd
-                0x20008610                DAC_ITConfig
-                0x2000865c                DAC_GetFlagStatus
-                0x20008698                DAC_ClearFlag
-                0x200086c0                DAC_GetITStatus
-                0x20008718                DAC_ClearITPendingBit
- .text          0x20008740      0x210 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_exti.c.obj
-                0x20008740                EXTI_DeInit
-                0x20008774                EXTI_Init
-                0x20008858                EXTI_StructInit
-                0x20008884                EXTI_GenerateSWInterrupt
-                0x200088a8                EXTI_GetFlagStatus
-                0x200088dc                EXTI_ClearFlag
-                0x200088fc                EXTI_GetITStatus
-                0x20008930                EXTI_ClearITPendingBit
- .text          0x20008950      0x4d8 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_gpio.c.obj
-                0x20008950                GPIO_DeInit
-                0x20008ab4                GPIO_Init
-                0x20008bd2                GPIO_StructInit
-                0x20008c06                GPIO_PinLockConfig
-                0x20008c4a                GPIO_ReadInputDataBit
-                0x20008c7e                GPIO_ReadInputData
-                0x20008c98                GPIO_ReadOutputDataBit
-                0x20008ccc                GPIO_ReadOutputData
-                0x20008ce6                GPIO_SetBits
-                0x20008d04                GPIO_ResetBits
-                0x20008d22                GPIO_WriteBit
-                0x20008d52                GPIO_Write
-                0x20008d70                GPIO_ToggleBits
-                0x20008d94                GPIO_PinAFConfig
- .text          0x20008e28      0xcb0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_rcc.c.obj
-                0x20008e28                RCC_DeInit
-                0x20008e98                RCC_HSEConfig
-                0x20008ec0                RCC_WaitForHSEStartUp
-                0x20008f10                RCC_AdjustHSICalibrationValue
-                0x20008f4c                RCC_HSICmd
-                0x20008f6c                RCC_LSEConfig
-                0x20008fb0                RCC_LSICmd
-                0x20008fd0                RCC_PLLConfig
-                0x20009010                RCC_PLLCmd
-                0x20009030                RCC_PLLI2SConfig
-                0x2000905c                RCC_PLLI2SCmd
-                0x2000907c                RCC_PLLSAIConfig
-                0x200090b0                RCC_PLLSAICmd
-                0x200090d0                RCC_ClockSecuritySystemCmd
-                0x200090f0                RCC_MCO1Config
-                0x20009130                RCC_MCO2Config
-                0x20009170                RCC_SYSCLKConfig
-                0x200091a8                RCC_GetSYSCLKSource
-                0x200091c8                RCC_HCLKConfig
-                0x20009200                RCC_PCLK1Config
-                0x20009238                RCC_PCLK2Config
-                0x20009274                RCC_GetClocksFreq
-                0x200093d0                RCC_RTCCLKConfig
-                0x2000942c                RCC_RTCCLKCmd
-                0x2000944c                RCC_BackupResetCmd
-                0x2000946c                RCC_I2SCLKConfig
-                0x2000948c                RCC_SAIPLLI2SClkDivConfig
-                0x200094cc                RCC_SAIPLLSAIClkDivConfig
-                0x2000950c                RCC_SAIBlockACLKConfig
-                0x20009548                RCC_SAIBlockBCLKConfig
-                0x20009584                RCC_LTDCCLKDivConfig
-                0x200095c0                RCC_TIMCLKPresConfig
-                0x200095e0                RCC_AHB1PeriphClockCmd
-                0x20009620                RCC_AHB2PeriphClockCmd
-                0x20009660                RCC_AHB3PeriphClockCmd
-                0x200096a0                RCC_APB1PeriphClockCmd
-                0x200096e0                RCC_APB2PeriphClockCmd
-                0x20009720                RCC_AHB1PeriphResetCmd
-                0x20009760                RCC_AHB2PeriphResetCmd
-                0x200097a0                RCC_AHB3PeriphResetCmd
-                0x200097e0                RCC_APB1PeriphResetCmd
-                0x20009820                RCC_APB2PeriphResetCmd
-                0x20009860                RCC_AHB1PeriphClockLPModeCmd
-                0x200098a0                RCC_AHB2PeriphClockLPModeCmd
-                0x200098e0                RCC_AHB3PeriphClockLPModeCmd
-                0x20009920                RCC_APB1PeriphClockLPModeCmd
-                0x20009960                RCC_APB2PeriphClockLPModeCmd
-                0x200099a0                RCC_ITConfig
-                0x200099ec                RCC_GetFlagStatus
-                0x20009a60                RCC_ClearFlag
-                0x20009a80                RCC_GetITStatus
-                0x20009ab8                RCC_ClearITPendingBit
- .text          0x20009ad8      0x154 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_syscfg.c.obj
-                0x20009ad8                SYSCFG_DeInit
-                0x20009af4                SYSCFG_MemoryRemapConfig
-                0x20009b14                SYSCFG_MemorySwappingBank
-                0x20009b34                SYSCFG_EXTILineConfig
-                0x20009bb8                SYSCFG_ETH_MediaInterfaceConfig
-                0x20009bd8                SYSCFG_CompensationCellCmd
-                0x20009bf8                SYSCFG_GetCompensationCellStatus
- .text          0x20009c2c     0x1c1c CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_tim.c.obj
-                0x20009c2c                TIM_DeInit
-                0x20009dec                TIM_TimeBaseInit
-                0x20009ec4                TIM_TimeBaseStructInit
-                0x20009ef8                TIM_PrescalerConfig
-                0x20009f20                TIM_CounterModeConfig
-                0x20009f58                TIM_SetCounter
-                0x20009f74                TIM_SetAutoreload
-                0x20009f90                TIM_GetCounter
-                0x20009fa8                TIM_GetPrescaler
-                0x20009fc2                TIM_UpdateDisableConfig
-                0x2000a002                TIM_UpdateRequestConfig
-                0x2000a042                TIM_ARRPreloadConfig
-                0x2000a082                TIM_SelectOnePulseMode
-                0x2000a0ba                TIM_SetClockDivision
-                0x2000a0f2                TIM_Cmd
-                0x2000a132                TIM_OC1Init
-                0x2000a228                TIM_OC2Init
-                0x2000a338                TIM_OC3Init
-                0x2000a444                TIM_OC4Init
-                0x2000a514                TIM_OCStructInit
-                0x2000a558                TIM_SelectOCxM
-                0x2000a60e                TIM_SetCompare1
-                0x2000a62a                TIM_SetCompare2
-                0x2000a646                TIM_SetCompare3
-                0x2000a662                TIM_SetCompare4
-                0x2000a67e                TIM_ForcedOC1Config
-                0x2000a6b6                TIM_ForcedOC2Config
-                0x2000a6f2                TIM_ForcedOC3Config
-                0x2000a72a                TIM_ForcedOC4Config
-                0x2000a766                TIM_OC1PreloadConfig
-                0x2000a79e                TIM_OC2PreloadConfig
-                0x2000a7da                TIM_OC3PreloadConfig
-                0x2000a812                TIM_OC4PreloadConfig
-                0x2000a84e                TIM_OC1FastConfig
-                0x2000a886                TIM_OC2FastConfig
-                0x2000a8c2                TIM_OC3FastConfig
-                0x2000a8fa                TIM_OC4FastConfig
-                0x2000a936                TIM_ClearOC1Ref
-                0x2000a96e                TIM_ClearOC2Ref
-                0x2000a9aa                TIM_ClearOC3Ref
-                0x2000a9e2                TIM_ClearOC4Ref
-                0x2000aa1e                TIM_OC1PolarityConfig
-                0x2000aa56                TIM_OC1NPolarityConfig
-                0x2000aa8e                TIM_OC2PolarityConfig
-                0x2000aaca                TIM_OC2NPolarityConfig
-                0x2000ab06                TIM_OC3PolarityConfig
-                0x2000ab42                TIM_OC3NPolarityConfig
-                0x2000ab7e                TIM_OC4PolarityConfig
-                0x2000abba                TIM_CCxCmd
-                0x2000ac10                TIM_CCxNCmd
-                0x2000ac66                TIM_ICInit
-                0x2000ad0e                TIM_ICStructInit
-                0x2000ad40                TIM_PWMIConfig
-                0x2000adf8                TIM_GetCapture1
-                0x2000ae10                TIM_GetCapture2
-                0x2000ae28                TIM_GetCapture3
-                0x2000ae40                TIM_GetCapture4
-                0x2000ae58                TIM_SetIC1Prescaler
-                0x2000ae90                TIM_SetIC2Prescaler
-                0x2000aecc                TIM_SetIC3Prescaler
-                0x2000af04                TIM_SetIC4Prescaler
-                0x2000af40                TIM_BDTRConfig
-                0x2000af90                TIM_BDTRStructInit
-                0x2000afce                TIM_CtrlPWMOutputs
-                0x2000b01a                TIM_SelectCOM
-                0x2000b05a                TIM_CCPreloadControl
-                0x2000b09a                TIM_ITConfig
-                0x2000b0e2                TIM_GenerateEvent
-                0x2000b100                TIM_GetFlagStatus
-                0x2000b138                TIM_ClearFlag
-                0x2000b15a                TIM_GetITStatus
-                0x2000b1ae                TIM_ClearITPendingBit
-                0x2000b1d0                TIM_DMAConfig
-                0x2000b1fa                TIM_DMACmd
-                0x2000b242                TIM_SelectCCDMA
-                0x2000b282                TIM_InternalClockConfig
-                0x2000b2a6                TIM_ITRxExternalClockConfig
-                0x2000b2d4                TIM_TIxExternalClockConfig
-                0x2000b330                TIM_ETRClockMode1Config
-                0x2000b38e                TIM_ETRClockMode2Config
-                0x2000b3cc                TIM_SelectInputTrigger
-                0x2000b404                TIM_SelectOutputTrigger
-                0x2000b43c                TIM_SelectSlaveMode
-                0x2000b474                TIM_SelectMasterSlaveMode
-                0x2000b4ac                TIM_ETRConfig
-                0x2000b500                TIM_EncoderInterfaceConfig
-                0x2000b598                TIM_SelectHallSensor
-                0x2000b5d8                TIM_RemapConfig
- .text          0x2000b848      0x970 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
-                0x2000b848                USART_DeInit
-                0x2000b960                USART_Init
-                0x2000bad4                USART_StructInit
-                0x2000bb0e                USART_ClockInit
-                0x2000bb64                USART_ClockStructInit
-                0x2000bb90                USART_Cmd
-                0x2000bbd0                USART_SetPrescaler
-                0x2000bc0a                USART_OverSampling8Cmd
-                0x2000bc4e                USART_OneBitMethodCmd
-                0x2000bc8e                USART_SendData
-                0x2000bcb2                USART_ReceiveData
-                0x2000bcd2                USART_SetAddress
-                0x2000bd0c                USART_ReceiverWakeUpCmd
-                0x2000bd4c                USART_WakeUpConfig
-                0x2000bd84                USART_LINBreakDetectLengthConfig
-                0x2000bdbc                USART_LINCmd
-                0x2000bdfc                USART_SendBreak
-                0x2000be20                USART_HalfDuplexCmd
-                0x2000be60                USART_SetGuardTime
-                0x2000be9c                USART_SmartCardCmd
-                0x2000bedc                USART_SmartCardNACKCmd
-                0x2000bf1c                USART_IrDAConfig
-                0x2000bf54                USART_IrDACmd
-                0x2000bf94                USART_DMACmd
-                0x2000bfdc                USART_ITConfig
-                0x2000c06c                USART_GetFlagStatus
-                0x2000c0a4                USART_ClearFlag
-                0x2000c0c6                USART_GetITStatus
-                0x2000c17c                USART_ClearITPendingBit
- .text          0x2000c1b8      0x32c CMakeFiles/RTS-Lab.elf.dir/startup.c.obj
- .text          0x2000c4e4      0x448 CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
-                0x2000c4e4                vTask1
-                0x2000c508                print
-                0x2000c568                printf
-                0x2000c858                main
-                0x2000c8c4                vApplicationGetIdleTaskMemory
-                0x2000c8f8                vApplicationGetTimerTaskMemory
- .text          0x2000c92c        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
- .text          0x2000c92c        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memset.o)
- .text          0x2000c92c        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-impure.o)
- .text          0x2000c92c        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memcpy-stub.o)
- .text          0x2000c92c        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
- .text          0x2000c92c        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
- .text          0x2000c92c        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memmove.o)
- *fill*         0x2000c92c        0x4 
- .text          0x2000c930       0xa0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memchr.o)
-                0x2000c930                memchr
- .text          0x2000c9d0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-freer.o)
- .text          0x2000c9d0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
- .text          0x2000c9d0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mlock.o)
- .text          0x2000c9d0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reallocr.o)
- .text          0x2000c9d0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sbrkr.o)
- .text          0x2000c9d0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
- .text          0x2000c9d0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-msizer.o)
- .text          0x2000c9d0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reent.o)
- .text          0x2000c9d0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libnosys.a(sbrk.o)
+                0x20003e9c                vTaskEndScheduler
+                0x20003f00                vTaskSuspendAll
+                0x20003f1c                xTaskResumeAll
+                0x20004130                xTaskGetTickCount
+                0x20004150                xTaskGetTickCountFromISR
+                0x20004174                uxTaskGetNumberOfTasks
+                0x2000418c                pcTaskGetName
+                0x200041d8                xTaskGetStaticBuffers
+                0x20004254                uxTaskGetSystemState
+                0x20004370                xTaskCatchUpTicks
+                0x200043c8                xTaskIncrementTick
+                0x200045fc                vTaskSwitchContext
+                0x200046bc                vTaskPlaceOnEventList
+                0x20004708                vTaskPlaceOnUnorderedEventList
+                0x200047b8                vTaskPlaceOnEventListRestricted
+                0x20004844                xTaskRemoveFromEventList
+                0x200049f8                vTaskRemoveFromUnorderedEventList
+                0x20004b84                vTaskSetTimeOutState
+                0x20004bd4                vTaskInternalSetTimeOutState
+                0x20004c00                xTaskCheckForTimeOut
+                0x20004cd0                vTaskMissedYield
+                0x20004ce8                uxTaskGetTaskNumber
+                0x20004d14                vTaskSetTaskNumber
+                0x20004e44                vTaskGetInfo
+                0x2000502a                uxTaskGetStackHighWaterMark
+                0x200050ac                xTaskGetCurrentTaskHandle
+                0x200050cc                xTaskGetCurrentTaskHandleForCore
+                0x200050fc                xTaskGetSchedulerState
+                0x20005138                xTaskPriorityInherit
+                0x2000525c                xTaskPriorityDisinherit
+                0x20005390                vTaskPriorityDisinheritAfterTimeout
+                0x200054ec                uxTaskResetEventItemValue
+                0x2000551c                pvTaskIncrementMutexHeldCount
+                0x2000554c                ulTaskGenericNotifyTake
+                0x20005648                xTaskGenericNotifyWait
+                0x20005778                xTaskGenericNotify
+                0x200059d8                xTaskGenericNotifyFromISR
+                0x20005cac                vTaskGenericNotifyGiveFromISR
+                0x20005ec8                xTaskGenericNotifyStateClear
+                0x20005f3c                ulTaskGenericNotifyValueClear
+ .text          0x20006098      0xb6c CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/timers.c.obj
+                0x20006098                xTimerCreateTimerTask
+                0x2000612c                xTimerCreateStatic
+                0x2000621e                xTimerGenericCommandFromTask
+                0x200062c4                xTimerGenericCommandFromISR
+                0x2000634c                xTimerGetTimerDaemonTaskHandle
+                0x20006388                xTimerGetPeriod
+                0x200063c2                vTimerSetReloadMode
+                0x2000642a                xTimerGetReloadMode
+                0x2000647e                uxTimerGetReloadMode
+                0x2000649a                xTimerGetExpiryTime
+                0x200064d8                xTimerGetStaticBuffer
+                0x20006530                pcTimerGetName
+                0x20006a58                xTimerIsTimerActive
+                0x20006aac                pvTimerGetTimerID
+                0x20006aee                vTimerSetTimerID
+                0x20006b30                xTimerPendFunctionCallFromISR
+                0x20006b70                xTimerPendFunctionCall
+                0x20006bd0                uxTimerGetTimerNumber
+                0x20006be8                vTimerSetTimerNumber
+ *fill*         0x20006c04        0xc 
+ .text          0x20006c10      0x5ec CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM4F/port.c.obj
+                0x20006c10                pxPortInitialiseStack
+                0x20006cd4                SVC_Handler
+                0x20006d1e                xPortStartScheduler
+                0x20006f90                vPortEndScheduler
+                0x20006fc8                vPortEnterCritical
+                0x2000702c                vPortExitCritical
+                0x20007080                PendSV_Handler
+                0x200070e6                SysTick_Handler
+                0x2000712c                vPortSetupTimerInterrupt
+                0x2000717a                vPortValidateInterruptPriority
+ .text          0x200071fc      0x350 CMakeFiles/RTS-Lab.elf.dir/libraries/io/io.c.obj
+                0x200071fc                print
+                0x2000725c                printf
+ .text          0x2000754c     0x11b4 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_can.c.obj
+                0x2000754c                CAN_DeInit
+                0x20007594                CAN_Init
+                0x20007736                CAN_FilterInit
+                0x200078bc                CAN_StructInit
+                0x20007912                CAN_SlaveStartBank
+                0x20007974                CAN_DBGFreeze
+                0x200079ac                CAN_TTComModeCmd
+                0x20007a44                CAN_Transmit
+                0x20007be6                CAN_TransmitStatus
+                0x20007cec                CAN_CancelTransmit
+                0x20007d44                CAN_Receive
+                0x20007ec0                CAN_FIFORelease
+                0x20007ef8                CAN_MessagePending
+                0x20007f42                CAN_OperatingModeRequest
+                0x2000803e                CAN_Sleep
+                0x20008078                CAN_WakeUp
+                0x200080ce                CAN_GetLastErrorCode
+                0x200080f4                CAN_GetReceiveErrorCounter
+                0x20008116                CAN_GetLSBTransmitErrorCounter
+                0x20008138                CAN_ITConfig
+                0x20008174                CAN_GetFlagStatus
+                0x20008242                CAN_ClearFlag
+                0x200082b4                CAN_GetITStatus
+                0x20008518                CAN_ClearITPendingBit
+ .text          0x20008700      0x450 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_dac.c.obj
+                0x20008700                DAC_DeInit
+                0x2000871c                DAC_Init
+                0x20008784                DAC_StructInit
+                0x200087b0                DAC_Cmd
+                0x200087fc                DAC_SoftwareTriggerCmd
+                0x2000884c                DAC_DualSoftwareTriggerCmd
+                0x20008888                DAC_WaveGenerationCmd
+                0x200088d4                DAC_SetChannel1Data
+                0x2000890c                DAC_SetChannel2Data
+                0x20008944                DAC_SetDualChannelData
+                0x2000899c                DAC_GetDataOutputValue
+                0x200089d0                DAC_DMACmd
+                0x20008a20                DAC_ITConfig
+                0x20008a6c                DAC_GetFlagStatus
+                0x20008aa8                DAC_ClearFlag
+                0x20008ad0                DAC_GetITStatus
+                0x20008b28                DAC_ClearITPendingBit
+ .text          0x20008b50      0x210 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_exti.c.obj
+                0x20008b50                EXTI_DeInit
+                0x20008b84                EXTI_Init
+                0x20008c68                EXTI_StructInit
+                0x20008c94                EXTI_GenerateSWInterrupt
+                0x20008cb8                EXTI_GetFlagStatus
+                0x20008cec                EXTI_ClearFlag
+                0x20008d0c                EXTI_GetITStatus
+                0x20008d40                EXTI_ClearITPendingBit
+ .text          0x20008d60      0x4d8 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_gpio.c.obj
+                0x20008d60                GPIO_DeInit
+                0x20008ec4                GPIO_Init
+                0x20008fe2                GPIO_StructInit
+                0x20009016                GPIO_PinLockConfig
+                0x2000905a                GPIO_ReadInputDataBit
+                0x2000908e                GPIO_ReadInputData
+                0x200090a8                GPIO_ReadOutputDataBit
+                0x200090dc                GPIO_ReadOutputData
+                0x200090f6                GPIO_SetBits
+                0x20009114                GPIO_ResetBits
+                0x20009132                GPIO_WriteBit
+                0x20009162                GPIO_Write
+                0x20009180                GPIO_ToggleBits
+                0x200091a4                GPIO_PinAFConfig
+ .text          0x20009238      0xcb0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_rcc.c.obj
+                0x20009238                RCC_DeInit
+                0x200092a8                RCC_HSEConfig
+                0x200092d0                RCC_WaitForHSEStartUp
+                0x20009320                RCC_AdjustHSICalibrationValue
+                0x2000935c                RCC_HSICmd
+                0x2000937c                RCC_LSEConfig
+                0x200093c0                RCC_LSICmd
+                0x200093e0                RCC_PLLConfig
+                0x20009420                RCC_PLLCmd
+                0x20009440                RCC_PLLI2SConfig
+                0x2000946c                RCC_PLLI2SCmd
+                0x2000948c                RCC_PLLSAIConfig
+                0x200094c0                RCC_PLLSAICmd
+                0x200094e0                RCC_ClockSecuritySystemCmd
+                0x20009500                RCC_MCO1Config
+                0x20009540                RCC_MCO2Config
+                0x20009580                RCC_SYSCLKConfig
+                0x200095b8                RCC_GetSYSCLKSource
+                0x200095d8                RCC_HCLKConfig
+                0x20009610                RCC_PCLK1Config
+                0x20009648                RCC_PCLK2Config
+                0x20009684                RCC_GetClocksFreq
+                0x200097e0                RCC_RTCCLKConfig
+                0x2000983c                RCC_RTCCLKCmd
+                0x2000985c                RCC_BackupResetCmd
+                0x2000987c                RCC_I2SCLKConfig
+                0x2000989c                RCC_SAIPLLI2SClkDivConfig
+                0x200098dc                RCC_SAIPLLSAIClkDivConfig
+                0x2000991c                RCC_SAIBlockACLKConfig
+                0x20009958                RCC_SAIBlockBCLKConfig
+                0x20009994                RCC_LTDCCLKDivConfig
+                0x200099d0                RCC_TIMCLKPresConfig
+                0x200099f0                RCC_AHB1PeriphClockCmd
+                0x20009a30                RCC_AHB2PeriphClockCmd
+                0x20009a70                RCC_AHB3PeriphClockCmd
+                0x20009ab0                RCC_APB1PeriphClockCmd
+                0x20009af0                RCC_APB2PeriphClockCmd
+                0x20009b30                RCC_AHB1PeriphResetCmd
+                0x20009b70                RCC_AHB2PeriphResetCmd
+                0x20009bb0                RCC_AHB3PeriphResetCmd
+                0x20009bf0                RCC_APB1PeriphResetCmd
+                0x20009c30                RCC_APB2PeriphResetCmd
+                0x20009c70                RCC_AHB1PeriphClockLPModeCmd
+                0x20009cb0                RCC_AHB2PeriphClockLPModeCmd
+                0x20009cf0                RCC_AHB3PeriphClockLPModeCmd
+                0x20009d30                RCC_APB1PeriphClockLPModeCmd
+                0x20009d70                RCC_APB2PeriphClockLPModeCmd
+                0x20009db0                RCC_ITConfig
+                0x20009dfc                RCC_GetFlagStatus
+                0x20009e70                RCC_ClearFlag
+                0x20009e90                RCC_GetITStatus
+                0x20009ec8                RCC_ClearITPendingBit
+ .text          0x20009ee8      0x154 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_syscfg.c.obj
+                0x20009ee8                SYSCFG_DeInit
+                0x20009f04                SYSCFG_MemoryRemapConfig
+                0x20009f24                SYSCFG_MemorySwappingBank
+                0x20009f44                SYSCFG_EXTILineConfig
+                0x20009fc8                SYSCFG_ETH_MediaInterfaceConfig
+                0x20009fe8                SYSCFG_CompensationCellCmd
+                0x2000a008                SYSCFG_GetCompensationCellStatus
+ .text          0x2000a03c     0x1c1c CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_tim.c.obj
+                0x2000a03c                TIM_DeInit
+                0x2000a1fc                TIM_TimeBaseInit
+                0x2000a2d4                TIM_TimeBaseStructInit
+                0x2000a308                TIM_PrescalerConfig
+                0x2000a330                TIM_CounterModeConfig
+                0x2000a368                TIM_SetCounter
+                0x2000a384                TIM_SetAutoreload
+                0x2000a3a0                TIM_GetCounter
+                0x2000a3b8                TIM_GetPrescaler
+                0x2000a3d2                TIM_UpdateDisableConfig
+                0x2000a412                TIM_UpdateRequestConfig
+                0x2000a452                TIM_ARRPreloadConfig
+                0x2000a492                TIM_SelectOnePulseMode
+                0x2000a4ca                TIM_SetClockDivision
+                0x2000a502                TIM_Cmd
+                0x2000a542                TIM_OC1Init
+                0x2000a638                TIM_OC2Init
+                0x2000a748                TIM_OC3Init
+                0x2000a854                TIM_OC4Init
+                0x2000a924                TIM_OCStructInit
+                0x2000a968                TIM_SelectOCxM
+                0x2000aa1e                TIM_SetCompare1
+                0x2000aa3a                TIM_SetCompare2
+                0x2000aa56                TIM_SetCompare3
+                0x2000aa72                TIM_SetCompare4
+                0x2000aa8e                TIM_ForcedOC1Config
+                0x2000aac6                TIM_ForcedOC2Config
+                0x2000ab02                TIM_ForcedOC3Config
+                0x2000ab3a                TIM_ForcedOC4Config
+                0x2000ab76                TIM_OC1PreloadConfig
+                0x2000abae                TIM_OC2PreloadConfig
+                0x2000abea                TIM_OC3PreloadConfig
+                0x2000ac22                TIM_OC4PreloadConfig
+                0x2000ac5e                TIM_OC1FastConfig
+                0x2000ac96                TIM_OC2FastConfig
+                0x2000acd2                TIM_OC3FastConfig
+                0x2000ad0a                TIM_OC4FastConfig
+                0x2000ad46                TIM_ClearOC1Ref
+                0x2000ad7e                TIM_ClearOC2Ref
+                0x2000adba                TIM_ClearOC3Ref
+                0x2000adf2                TIM_ClearOC4Ref
+                0x2000ae2e                TIM_OC1PolarityConfig
+                0x2000ae66                TIM_OC1NPolarityConfig
+                0x2000ae9e                TIM_OC2PolarityConfig
+                0x2000aeda                TIM_OC2NPolarityConfig
+                0x2000af16                TIM_OC3PolarityConfig
+                0x2000af52                TIM_OC3NPolarityConfig
+                0x2000af8e                TIM_OC4PolarityConfig
+                0x2000afca                TIM_CCxCmd
+                0x2000b020                TIM_CCxNCmd
+                0x2000b076                TIM_ICInit
+                0x2000b11e                TIM_ICStructInit
+                0x2000b150                TIM_PWMIConfig
+                0x2000b208                TIM_GetCapture1
+                0x2000b220                TIM_GetCapture2
+                0x2000b238                TIM_GetCapture3
+                0x2000b250                TIM_GetCapture4
+                0x2000b268                TIM_SetIC1Prescaler
+                0x2000b2a0                TIM_SetIC2Prescaler
+                0x2000b2dc                TIM_SetIC3Prescaler
+                0x2000b314                TIM_SetIC4Prescaler
+                0x2000b350                TIM_BDTRConfig
+                0x2000b3a0                TIM_BDTRStructInit
+                0x2000b3de                TIM_CtrlPWMOutputs
+                0x2000b42a                TIM_SelectCOM
+                0x2000b46a                TIM_CCPreloadControl
+                0x2000b4aa                TIM_ITConfig
+                0x2000b4f2                TIM_GenerateEvent
+                0x2000b510                TIM_GetFlagStatus
+                0x2000b548                TIM_ClearFlag
+                0x2000b56a                TIM_GetITStatus
+                0x2000b5be                TIM_ClearITPendingBit
+                0x2000b5e0                TIM_DMAConfig
+                0x2000b60a                TIM_DMACmd
+                0x2000b652                TIM_SelectCCDMA
+                0x2000b692                TIM_InternalClockConfig
+                0x2000b6b6                TIM_ITRxExternalClockConfig
+                0x2000b6e4                TIM_TIxExternalClockConfig
+                0x2000b740                TIM_ETRClockMode1Config
+                0x2000b79e                TIM_ETRClockMode2Config
+                0x2000b7dc                TIM_SelectInputTrigger
+                0x2000b814                TIM_SelectOutputTrigger
+                0x2000b84c                TIM_SelectSlaveMode
+                0x2000b884                TIM_SelectMasterSlaveMode
+                0x2000b8bc                TIM_ETRConfig
+                0x2000b910                TIM_EncoderInterfaceConfig
+                0x2000b9a8                TIM_SelectHallSensor
+                0x2000b9e8                TIM_RemapConfig
+ .text          0x2000bc58      0x970 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
+                0x2000bc58                USART_DeInit
+                0x2000bd70                USART_Init
+                0x2000bee4                USART_StructInit
+                0x2000bf1e                USART_ClockInit
+                0x2000bf74                USART_ClockStructInit
+                0x2000bfa0                USART_Cmd
+                0x2000bfe0                USART_SetPrescaler
+                0x2000c01a                USART_OverSampling8Cmd
+                0x2000c05e                USART_OneBitMethodCmd
+                0x2000c09e                USART_SendData
+                0x2000c0c2                USART_ReceiveData
+                0x2000c0e2                USART_SetAddress
+                0x2000c11c                USART_ReceiverWakeUpCmd
+                0x2000c15c                USART_WakeUpConfig
+                0x2000c194                USART_LINBreakDetectLengthConfig
+                0x2000c1cc                USART_LINCmd
+                0x2000c20c                USART_SendBreak
+                0x2000c230                USART_HalfDuplexCmd
+                0x2000c270                USART_SetGuardTime
+                0x2000c2ac                USART_SmartCardCmd
+                0x2000c2ec                USART_SmartCardNACKCmd
+                0x2000c32c                USART_IrDAConfig
+                0x2000c364                USART_IrDACmd
+                0x2000c3a4                USART_DMACmd
+                0x2000c3ec                USART_ITConfig
+                0x2000c47c                USART_GetFlagStatus
+                0x2000c4b4                USART_ClearFlag
+                0x2000c4d6                USART_GetITStatus
+                0x2000c58c                USART_ClearITPendingBit
+ .text          0x2000c5c8      0x32c CMakeFiles/RTS-Lab.elf.dir/startup.c.obj
+ .text          0x2000c8f4       0xe8 CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
+                0x2000c8f4                vTask1
+                0x2000c918                main
+                0x2000c974                vApplicationGetIdleTaskMemory
+                0x2000c9a8                vApplicationGetTimerTaskMemory
+ .text          0x2000c9dc        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
+ .text          0x2000c9dc        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memset.o)
+ .text          0x2000c9dc        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-impure.o)
+ .text          0x2000c9dc        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memcpy-stub.o)
+ .text          0x2000c9dc        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
+ .text          0x2000c9dc        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
+ .text          0x2000c9dc        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memmove.o)
+ *fill*         0x2000c9dc        0x4 
+ .text          0x2000c9e0       0xa0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memchr.o)
+                0x2000c9e0                memchr
+ .text          0x2000ca80        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-freer.o)
+ .text          0x2000ca80        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
+ .text          0x2000ca80        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mlock.o)
+ .text          0x2000ca80        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reallocr.o)
+ .text          0x2000ca80        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sbrkr.o)
+ .text          0x2000ca80        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+ .text          0x2000ca80        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-msizer.o)
+ .text          0x2000ca80        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reent.o)
+ .text          0x2000ca80        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libnosys.a(sbrk.o)
  *(.text.*)
  .text._sprintf_r
-                0x2000c9d0       0x38 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
-                0x2000c9d0                _siprintf_r
-                0x2000c9d0                _sprintf_r
- .text.sprintf  0x2000ca08       0x40 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
-                0x2000ca08                sprintf
-                0x2000ca08                siprintf
- .text.memset   0x2000ca48       0x10 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memset.o)
-                0x2000ca48                memset
- .text.memcpy   0x2000ca58       0x1c /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memcpy-stub.o)
-                0x2000ca58                memcpy
+                0x2000ca80       0x38 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
+                0x2000ca80                _siprintf_r
+                0x2000ca80                _sprintf_r
+ .text.sprintf  0x2000cab8       0x40 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
+                0x2000cab8                sprintf
+                0x2000cab8                siprintf
+ .text.memset   0x2000caf8       0x10 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memset.o)
+                0x2000caf8                memset
+ .text.memcpy   0x2000cb08       0x1c /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memcpy-stub.o)
+                0x2000cb08                memcpy
  .text.__ssputs_r
-                0x2000ca74       0xb6 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
-                0x2000ca74                __ssputs_r
+                0x2000cb24       0xb6 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
+                0x2000cb24                __ssputs_r
  .text.__ssprint_r
-                0x2000cb2a       0xfa /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
-                0x2000cb2a                __ssprint_r
+                0x2000cbda       0xfa /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
+                0x2000cbda                __ssprint_r
  .text._svfprintf_r
-                0x2000cc24      0x1f8 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
-                0x2000cc24                _svfprintf_r
-                0x2000cc24                _svfiprintf_r
+                0x2000ccd4      0x1f8 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
+                0x2000ccd4                _svfprintf_r
+                0x2000ccd4                _svfiprintf_r
  .text._printf_common
-                0x2000ce1c       0xda /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
-                0x2000ce1c                _printf_common
- *fill*         0x2000cef6        0x2 
+                0x2000cecc       0xda /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
+                0x2000cecc                _printf_common
+ *fill*         0x2000cfa6        0x2 
  .text._printf_i
-                0x2000cef8      0x25c /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
-                0x2000cef8                _printf_i
- .text.memmove  0x2000d154       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memmove.o)
-                0x2000d154                memmove
- .text._free_r  0x2000d188       0x94 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-freer.o)
-                0x2000d188                _free_r
+                0x2000cfa8      0x25c /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
+                0x2000cfa8                _printf_i
+ .text.memmove  0x2000d204       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memmove.o)
+                0x2000d204                memmove
+ .text._free_r  0x2000d238       0x94 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-freer.o)
+                0x2000d238                _free_r
  .text.sbrk_aligned
-                0x2000d21c       0x44 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
+                0x2000d2cc       0x44 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
  .text._malloc_r
-                0x2000d260       0xf0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
-                0x2000d260                _malloc_r
+                0x2000d310       0xf0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
+                0x2000d310                _malloc_r
  .text.__malloc_lock
-                0x2000d350        0xc /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mlock.o)
-                0x2000d350                __malloc_lock
+                0x2000d400        0xc /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mlock.o)
+                0x2000d400                __malloc_lock
  .text.__malloc_unlock
-                0x2000d35c        0xc /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mlock.o)
-                0x2000d35c                __malloc_unlock
+                0x2000d40c        0xc /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mlock.o)
+                0x2000d40c                __malloc_unlock
  .text._realloc_r
-                0x2000d368       0x5c /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reallocr.o)
-                0x2000d368                _realloc_r
- .text._sbrk_r  0x2000d3c4       0x20 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sbrkr.o)
-                0x2000d3c4                _sbrk_r
+                0x2000d418       0x5c /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reallocr.o)
+                0x2000d418                _realloc_r
+ .text._sbrk_r  0x2000d474       0x20 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sbrkr.o)
+                0x2000d474                _sbrk_r
  .text.__retarget_lock_init
-                0x2000d3e4        0x2 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
-                0x2000d3e4                __retarget_lock_init
+                0x2000d494        0x2 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+                0x2000d494                __retarget_lock_init
  .text.__retarget_lock_init_recursive
-                0x2000d3e6        0x2 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
-                0x2000d3e6                __retarget_lock_init_recursive
+                0x2000d496        0x2 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+                0x2000d496                __retarget_lock_init_recursive
  .text.__retarget_lock_close
-                0x2000d3e8        0x2 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
-                0x2000d3e8                __retarget_lock_close
+                0x2000d498        0x2 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+                0x2000d498                __retarget_lock_close
  .text.__retarget_lock_close_recursive
-                0x2000d3ea        0x2 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
-                0x2000d3ea                __retarget_lock_close_recursive
+                0x2000d49a        0x2 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+                0x2000d49a                __retarget_lock_close_recursive
  .text.__retarget_lock_acquire
-                0x2000d3ec        0x2 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
-                0x2000d3ec                __retarget_lock_acquire
+                0x2000d49c        0x2 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+                0x2000d49c                __retarget_lock_acquire
  .text.__retarget_lock_acquire_recursive
-                0x2000d3ee        0x2 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
-                0x2000d3ee                __retarget_lock_acquire_recursive
+                0x2000d49e        0x2 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+                0x2000d49e                __retarget_lock_acquire_recursive
  .text.__retarget_lock_try_acquire
-                0x2000d3f0        0x4 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
-                0x2000d3f0                __retarget_lock_try_acquire
+                0x2000d4a0        0x4 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+                0x2000d4a0                __retarget_lock_try_acquire
  .text.__retarget_lock_try_acquire_recursive
-                0x2000d3f4        0x4 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
-                0x2000d3f4                __retarget_lock_try_acquire_recursive
+                0x2000d4a4        0x4 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+                0x2000d4a4                __retarget_lock_try_acquire_recursive
  .text.__retarget_lock_release
-                0x2000d3f8        0x2 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
-                0x2000d3f8                __retarget_lock_release
+                0x2000d4a8        0x2 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+                0x2000d4a8                __retarget_lock_release
  .text.__retarget_lock_release_recursive
-                0x2000d3fa        0x2 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
-                0x2000d3fa                __retarget_lock_release_recursive
+                0x2000d4aa        0x2 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+                0x2000d4aa                __retarget_lock_release_recursive
  .text._malloc_usable_size_r
-                0x2000d3fc       0x10 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-msizer.o)
-                0x2000d3fc                _malloc_usable_size_r
+                0x2000d4ac       0x10 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-msizer.o)
+                0x2000d4ac                _malloc_usable_size_r
  .text._reclaim_reent
-                0x2000d40c       0xac /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reent.o)
-                0x2000d40c                _reclaim_reent
- .text._sbrk    0x2000d4b8       0x1c /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libnosys.a(sbrk.o)
-                0x2000d4b8                _sbrk
+                0x2000d4bc       0xac /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reent.o)
+                0x2000d4bc                _reclaim_reent
+ .text._sbrk    0x2000d568       0x1c /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libnosys.a(sbrk.o)
+                0x2000d568                _sbrk
  *(.rodata)
- .rodata        0x2000d4d4        0x9 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/tasks.c.obj
- *fill*         0x2000d4dd        0x3 
- .rodata        0x2000d4e0        0xd CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/timers.c.obj
- *fill*         0x2000d4ed        0x3 
- .rodata        0x2000d4f0        0x4 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM4F/port.c.obj
- .rodata        0x2000d4f4       0x10 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_rcc.c.obj
- .rodata        0x2000d504       0x2d CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
+ .rodata        0x2000d584       0x69 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/tasks.c.obj
+ *fill*         0x2000d5ed        0x3 
+ .rodata        0x2000d5f0        0xd CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/timers.c.obj
+ *fill*         0x2000d5fd        0x3 
+ .rodata        0x2000d600       0xba CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM4F/port.c.obj
+ *fill*         0x2000d6ba        0x2 
+ .rodata        0x2000d6bc        0x3 CMakeFiles/RTS-Lab.elf.dir/libraries/io/io.c.obj
+ *fill*         0x2000d6bf        0x1 
+ .rodata        0x2000d6c0       0x10 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_rcc.c.obj
+ .rodata        0x2000d6d0       0x29 CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
  *(.rodata*)
  .rodata._svfprintf_r.str1.1
-                0x2000d531       0x33 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
+                0x2000d6f9       0x33 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
                                  0x11 (size before relaxing)
  .rodata._printf_i.str1.1
-                0x2000d564       0x22 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
+                0x2000d72c       0x22 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
  *(.glue_7)
- .glue_7        0x2000d564        0x0 linker stubs
+ .glue_7        0x2000d72c        0x0 linker stubs
  *(.glue_7t)
- .glue_7t       0x2000d564        0x0 linker stubs
-                0x2000d588                        . = ALIGN (0x4)
+ .glue_7t       0x2000d72c        0x0 linker stubs
+                0x2000d750                        . = ALIGN (0x4)
 
-.ARM.extab      0x2000d564        0x0
- .ARM.extab     0x2000d564        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memchr.o)
+.ARM.extab      0x2000d72c        0x0
+ .ARM.extab     0x2000d72c        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memchr.o)
 
-.ARM.exidx      0x2000d564        0x8
- .ARM.exidx     0x2000d564        0x8 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memchr.o)
+.ARM.exidx      0x2000d72c        0x8
+ .ARM.exidx     0x2000d72c        0x8 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memchr.o)
 
-.eh_frame       0x2000d56c       0x50
- .eh_frame      0x2000d56c       0x50 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memchr.o)
+.eh_frame       0x2000d734       0x50
+ .eh_frame      0x2000d734       0x50 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memchr.o)
 
-.vfp11_veneer   0x2000d5bc        0x0
- .vfp11_veneer  0x2000d5bc        0x0 linker stubs
+.vfp11_veneer   0x2000d784        0x0
+ .vfp11_veneer  0x2000d784        0x0 linker stubs
 
-.v4_bx          0x2000d5bc        0x0
- .v4_bx         0x2000d5bc        0x0 linker stubs
+.v4_bx          0x2000d784        0x0
+ .v4_bx         0x2000d784        0x0 linker stubs
 
-.iplt           0x2000d5bc        0x0
- .iplt          0x2000d5bc        0x0 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/event_groups.c.obj
+.iplt           0x2000d784        0x0
+ .iplt          0x2000d784        0x0 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/event_groups.c.obj
 
-.rel.dyn        0x2000d5bc        0x0
- .rel.iplt      0x2000d5bc        0x0 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/event_groups.c.obj
+.rel.dyn        0x2000d784        0x0
+ .rel.iplt      0x2000d784        0x0 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/event_groups.c.obj
 
-.data           0x2000d5bc       0x54
-                0x2000d5bc                        . = ALIGN (0x4)
+.data           0x2000d784       0x54
+                0x2000d784                        . = ALIGN (0x4)
  *(.data)
- .data          0x2000d5bc        0x0 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/event_groups.c.obj
- .data          0x2000d5bc        0x0 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/list.c.obj
- .data          0x2000d5bc        0x0 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/queue.c.obj
- .data          0x2000d5bc        0x0 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/stream_buffer.c.obj
- .data          0x2000d5bc        0x0 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/tasks.c.obj
- .data          0x2000d5bc        0x0 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/timers.c.obj
- .data          0x2000d5bc        0x4 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM4F/port.c.obj
- .data          0x2000d5c0        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_can.c.obj
- .data          0x2000d5c0        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_dac.c.obj
- .data          0x2000d5c0        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_exti.c.obj
- .data          0x2000d5c0        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_gpio.c.obj
- .data          0x2000d5c0        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_rcc.c.obj
- .data          0x2000d5c0        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_syscfg.c.obj
- .data          0x2000d5c0        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_tim.c.obj
- .data          0x2000d5c0        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
- .data          0x2000d5c0        0x0 CMakeFiles/RTS-Lab.elf.dir/startup.c.obj
- .data          0x2000d5c0        0x0 CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
- .data          0x2000d5c0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
- .data          0x2000d5c0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memset.o)
- .data          0x2000d5c0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-impure.o)
- .data          0x2000d5c0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memcpy-stub.o)
- .data          0x2000d5c0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
- .data          0x2000d5c0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
- .data          0x2000d5c0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memmove.o)
- .data          0x2000d5c0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memchr.o)
- .data          0x2000d5c0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-freer.o)
- .data          0x2000d5c0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
- .data          0x2000d5c0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mlock.o)
- .data          0x2000d5c0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reallocr.o)
- .data          0x2000d5c0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sbrkr.o)
- .data          0x2000d5c0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
- .data          0x2000d5c0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-msizer.o)
- .data          0x2000d5c0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reent.o)
- .data          0x2000d5c0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libnosys.a(sbrk.o)
+ .data          0x2000d784        0x0 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/event_groups.c.obj
+ .data          0x2000d784        0x0 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/list.c.obj
+ .data          0x2000d784        0x0 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/queue.c.obj
+ .data          0x2000d784        0x0 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/stream_buffer.c.obj
+ .data          0x2000d784        0x0 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/tasks.c.obj
+ .data          0x2000d784        0x0 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/timers.c.obj
+ .data          0x2000d784        0x4 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM4F/port.c.obj
+ .data          0x2000d788        0x0 CMakeFiles/RTS-Lab.elf.dir/libraries/io/io.c.obj
+ .data          0x2000d788        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_can.c.obj
+ .data          0x2000d788        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_dac.c.obj
+ .data          0x2000d788        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_exti.c.obj
+ .data          0x2000d788        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_gpio.c.obj
+ .data          0x2000d788        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_rcc.c.obj
+ .data          0x2000d788        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_syscfg.c.obj
+ .data          0x2000d788        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_tim.c.obj
+ .data          0x2000d788        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
+ .data          0x2000d788        0x0 CMakeFiles/RTS-Lab.elf.dir/startup.c.obj
+ .data          0x2000d788        0x0 CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
+ .data          0x2000d788        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
+ .data          0x2000d788        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memset.o)
+ .data          0x2000d788        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-impure.o)
+ .data          0x2000d788        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memcpy-stub.o)
+ .data          0x2000d788        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
+ .data          0x2000d788        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
+ .data          0x2000d788        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memmove.o)
+ .data          0x2000d788        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memchr.o)
+ .data          0x2000d788        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-freer.o)
+ .data          0x2000d788        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
+ .data          0x2000d788        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mlock.o)
+ .data          0x2000d788        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reallocr.o)
+ .data          0x2000d788        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sbrkr.o)
+ .data          0x2000d788        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+ .data          0x2000d788        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-msizer.o)
+ .data          0x2000d788        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reent.o)
+ .data          0x2000d788        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libnosys.a(sbrk.o)
  *(.data.*)
  .data._impure_ptr
-                0x2000d5c0        0x4 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-impure.o)
-                0x2000d5c0                _impure_ptr
+                0x2000d788        0x4 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-impure.o)
+                0x2000d788                _impure_ptr
  .data._impure_data
-                0x2000d5c4       0x4c /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-impure.o)
-                0x2000d5c4                _impure_data
-                0x2000d610                        . = ALIGN (0x4)
+                0x2000d78c       0x4c /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-impure.o)
+                0x2000d78c                _impure_data
+                0x2000d7d8                        . = ALIGN (0x4)
 
-.igot.plt       0x2000d610        0x0
- .igot.plt      0x2000d610        0x0 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/event_groups.c.obj
+.igot.plt       0x2000d7d8        0x0
+ .igot.plt      0x2000d7d8        0x0 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/event_groups.c.obj
 
-.bss            0x2000d610      0xfa8
-                0x2000d610                        . = ALIGN (0x4)
-                0x2000d610                        _sbss = .
+.bss            0x2000d7d8      0xfa8
+                0x2000d7d8                        . = ALIGN (0x4)
+                0x2000d7d8                        _sbss = .
  *(.bss)
- .bss           0x2000d610        0x0 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/event_groups.c.obj
- .bss           0x2000d610        0x0 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/list.c.obj
- .bss           0x2000d610       0x40 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/queue.c.obj
-                0x2000d610                xQueueRegistry
- .bss           0x2000d650        0x0 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/stream_buffer.c.obj
- .bss           0x2000d650      0x500 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/tasks.c.obj
-                0x2000d650                pxCurrentTCB
- .bss           0x2000db50      0x12c CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/timers.c.obj
- .bss           0x2000dc7c        0x8 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM4F/port.c.obj
- .bss           0x2000dc84        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_can.c.obj
- .bss           0x2000dc84        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_dac.c.obj
- .bss           0x2000dc84        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_exti.c.obj
- .bss           0x2000dc84        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_gpio.c.obj
- .bss           0x2000dc84        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_rcc.c.obj
- .bss           0x2000dc84        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_syscfg.c.obj
- .bss           0x2000dc84        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_tim.c.obj
- .bss           0x2000dc84        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
- .bss           0x2000dc84        0x0 CMakeFiles/RTS-Lab.elf.dir/startup.c.obj
- .bss           0x2000dc84      0x91c CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
-                0x2000dc84                Gp
- .bss           0x2000e5a0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
- .bss           0x2000e5a0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memset.o)
- .bss           0x2000e5a0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-impure.o)
- .bss           0x2000e5a0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memcpy-stub.o)
- .bss           0x2000e5a0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
- .bss           0x2000e5a0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
- .bss           0x2000e5a0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memmove.o)
- .bss           0x2000e5a0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memchr.o)
- .bss           0x2000e5a0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-freer.o)
- .bss           0x2000e5a0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
- .bss           0x2000e5a0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mlock.o)
- .bss           0x2000e5a0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reallocr.o)
- .bss           0x2000e5a0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sbrkr.o)
- .bss           0x2000e5a0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
- .bss           0x2000e5a0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-msizer.o)
- .bss           0x2000e5a0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reent.o)
- .bss           0x2000e5a0        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libnosys.a(sbrk.o)
+ .bss           0x2000d7d8        0x0 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/event_groups.c.obj
+ .bss           0x2000d7d8        0x0 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/list.c.obj
+ .bss           0x2000d7d8       0x40 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/queue.c.obj
+                0x2000d7d8                xQueueRegistry
+ .bss           0x2000d818        0x0 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/stream_buffer.c.obj
+ .bss           0x2000d818      0x500 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/tasks.c.obj
+                0x2000d818                pxCurrentTCB
+ .bss           0x2000dd18      0x12c CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/timers.c.obj
+ .bss           0x2000de44        0x8 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM4F/port.c.obj
+ .bss           0x2000de4c        0x0 CMakeFiles/RTS-Lab.elf.dir/libraries/io/io.c.obj
+ .bss           0x2000de4c        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_can.c.obj
+ .bss           0x2000de4c        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_dac.c.obj
+ .bss           0x2000de4c        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_exti.c.obj
+ .bss           0x2000de4c        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_gpio.c.obj
+ .bss           0x2000de4c        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_rcc.c.obj
+ .bss           0x2000de4c        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_syscfg.c.obj
+ .bss           0x2000de4c        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_tim.c.obj
+ .bss           0x2000de4c        0x0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
+ .bss           0x2000de4c        0x0 CMakeFiles/RTS-Lab.elf.dir/startup.c.obj
+ .bss           0x2000de4c      0x91c CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
+                0x2000de4c                Gp
+ .bss           0x2000e768        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
+ .bss           0x2000e768        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memset.o)
+ .bss           0x2000e768        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-impure.o)
+ .bss           0x2000e768        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memcpy-stub.o)
+ .bss           0x2000e768        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
+ .bss           0x2000e768        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
+ .bss           0x2000e768        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memmove.o)
+ .bss           0x2000e768        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memchr.o)
+ .bss           0x2000e768        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-freer.o)
+ .bss           0x2000e768        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
+ .bss           0x2000e768        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mlock.o)
+ .bss           0x2000e768        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reallocr.o)
+ .bss           0x2000e768        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sbrkr.o)
+ .bss           0x2000e768        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+ .bss           0x2000e768        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-msizer.o)
+ .bss           0x2000e768        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reent.o)
+ .bss           0x2000e768        0x0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libnosys.a(sbrk.o)
  *(.bss.*)
  .bss.__malloc_sbrk_start
-                0x2000e5a0        0x4 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
-                0x2000e5a0                __malloc_sbrk_start
+                0x2000e768        0x4 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
+                0x2000e768                __malloc_sbrk_start
  .bss.__malloc_free_list
-                0x2000e5a4        0x4 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
-                0x2000e5a4                __malloc_free_list
+                0x2000e76c        0x4 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
+                0x2000e76c                __malloc_free_list
  .bss.__lock___arc4random_mutex
-                0x2000e5a8        0x1 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
-                0x2000e5a8                __lock___arc4random_mutex
+                0x2000e770        0x1 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+                0x2000e770                __lock___arc4random_mutex
  .bss.__lock___dd_hash_mutex
-                0x2000e5a9        0x1 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
-                0x2000e5a9                __lock___dd_hash_mutex
+                0x2000e771        0x1 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+                0x2000e771                __lock___dd_hash_mutex
  .bss.__lock___tz_mutex
-                0x2000e5aa        0x1 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
-                0x2000e5aa                __lock___tz_mutex
+                0x2000e772        0x1 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+                0x2000e772                __lock___tz_mutex
  .bss.__lock___env_recursive_mutex
-                0x2000e5ab        0x1 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
-                0x2000e5ab                __lock___env_recursive_mutex
+                0x2000e773        0x1 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+                0x2000e773                __lock___env_recursive_mutex
  .bss.__lock___malloc_recursive_mutex
-                0x2000e5ac        0x1 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
-                0x2000e5ac                __lock___malloc_recursive_mutex
+                0x2000e774        0x1 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+                0x2000e774                __lock___malloc_recursive_mutex
  .bss.__lock___at_quick_exit_mutex
-                0x2000e5ad        0x1 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
-                0x2000e5ad                __lock___at_quick_exit_mutex
+                0x2000e775        0x1 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+                0x2000e775                __lock___at_quick_exit_mutex
  .bss.__lock___atexit_recursive_mutex
-                0x2000e5ae        0x1 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
-                0x2000e5ae                __lock___atexit_recursive_mutex
+                0x2000e776        0x1 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+                0x2000e776                __lock___atexit_recursive_mutex
  .bss.__lock___sfp_recursive_mutex
-                0x2000e5af        0x1 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
-                0x2000e5af                __lock___sfp_recursive_mutex
- .bss.errno     0x2000e5b0        0x4 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reent.o)
-                0x2000e5b0                errno
+                0x2000e777        0x1 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+                0x2000e777                __lock___sfp_recursive_mutex
+ .bss.errno     0x2000e778        0x4 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reent.o)
+                0x2000e778                errno
  .bss.heap_end.0
-                0x2000e5b4        0x4 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libnosys.a(sbrk.o)
+                0x2000e77c        0x4 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libnosys.a(sbrk.o)
  *(COMMON)
-                0x2000e5b8                        . = ALIGN (0x4)
-                0x2000e5b8                        _ebss = .
-                0x2000e5b8                        PROVIDE (end = _ebss)
+                0x2000e780                        . = ALIGN (0x4)
+                0x2000e780                        _ebss = .
+                0x2000e780                        PROVIDE (end = _ebss)
                 [!provide]                        PROVIDE (_end = _ebss)
 OUTPUT(/home/simon/MT-C/MD407-template/Debug/RTS-Lab.elf elf32-littlearm)
 LOAD linker stubs
 
-.debug_info     0x00000000    0x157d2
+.debug_info     0x00000000    0x158f8
  .debug_info    0x00000000      0xbfa CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/event_groups.c.obj
  .debug_info    0x00000bfa      0x2ab CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/list.c.obj
  .debug_info    0x00000ea5     0x1ba7 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/queue.c.obj
  .debug_info    0x00002a4c     0x1544 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/stream_buffer.c.obj
- .debug_info    0x00003f90     0x2a04 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/tasks.c.obj
- .debug_info    0x00006994     0x1518 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/timers.c.obj
- .debug_info    0x00007eac      0x58e CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM4F/port.c.obj
- .debug_info    0x0000843a      0xb71 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_can.c.obj
- .debug_info    0x00008fab      0x61b CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_dac.c.obj
- .debug_info    0x000095c6      0x31b CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_exti.c.obj
- .debug_info    0x000098e1      0x608 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_gpio.c.obj
- .debug_info    0x00009ee9      0xda3 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_rcc.c.obj
- .debug_info    0x0000ac8c      0x284 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_syscfg.c.obj
- .debug_info    0x0000af10     0x1bf1 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_tim.c.obj
- .debug_info    0x0000cb01      0x9be CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
- .debug_info    0x0000d4bf      0xc29 CMakeFiles/RTS-Lab.elf.dir/startup.c.obj
- .debug_info    0x0000e0e8      0x9d8 CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
- .debug_info    0x0000eac0      0x87f /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
- .debug_info    0x0000f33f       0xe0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memset.o)
- .debug_info    0x0000f41f      0x715 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-impure.o)
- .debug_info    0x0000fb34      0x121 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memcpy-stub.o)
- .debug_info    0x0000fc55     0x10c5 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
- .debug_info    0x00010d1a      0xde2 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
- .debug_info    0x00011afc      0x10f /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memmove.o)
- .debug_info    0x00011c0b       0x25 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memchr.o)
- .debug_info    0x00011c30      0x84b /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-freer.o)
- .debug_info    0x0001247b      0x9b6 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
- .debug_info    0x00012e31      0x76b /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mlock.o)
- .debug_info    0x0001359c      0x8c7 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reallocr.o)
- .debug_info    0x00013e63      0x77c /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sbrkr.o)
- .debug_info    0x000145df      0x20a /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
- .debug_info    0x000147e9      0x794 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-msizer.o)
- .debug_info    0x00014f7d      0x855 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reent.o)
+ .debug_info    0x00003f90     0x2a1a CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/tasks.c.obj
+ .debug_info    0x000069aa     0x1518 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/timers.c.obj
+ .debug_info    0x00007ec2      0x5be CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM4F/port.c.obj
+ .debug_info    0x00008480      0x474 CMakeFiles/RTS-Lab.elf.dir/libraries/io/io.c.obj
+ .debug_info    0x000088f4      0xb71 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_can.c.obj
+ .debug_info    0x00009465      0x61b CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_dac.c.obj
+ .debug_info    0x00009a80      0x31b CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_exti.c.obj
+ .debug_info    0x00009d9b      0x608 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_gpio.c.obj
+ .debug_info    0x0000a3a3      0xda3 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_rcc.c.obj
+ .debug_info    0x0000b146      0x284 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_syscfg.c.obj
+ .debug_info    0x0000b3ca     0x1bf1 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_tim.c.obj
+ .debug_info    0x0000cfbb      0x9be CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
+ .debug_info    0x0000d979      0xc29 CMakeFiles/RTS-Lab.elf.dir/startup.c.obj
+ .debug_info    0x0000e5a2      0x644 CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
+ .debug_info    0x0000ebe6      0x87f /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
+ .debug_info    0x0000f465       0xe0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memset.o)
+ .debug_info    0x0000f545      0x715 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-impure.o)
+ .debug_info    0x0000fc5a      0x121 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memcpy-stub.o)
+ .debug_info    0x0000fd7b     0x10c5 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
+ .debug_info    0x00010e40      0xde2 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
+ .debug_info    0x00011c22      0x10f /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memmove.o)
+ .debug_info    0x00011d31       0x25 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memchr.o)
+ .debug_info    0x00011d56      0x84b /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-freer.o)
+ .debug_info    0x000125a1      0x9b6 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
+ .debug_info    0x00012f57      0x76b /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mlock.o)
+ .debug_info    0x000136c2      0x8c7 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reallocr.o)
+ .debug_info    0x00013f89      0x77c /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sbrkr.o)
+ .debug_info    0x00014705      0x20a /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+ .debug_info    0x0001490f      0x794 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-msizer.o)
+ .debug_info    0x000150a3      0x855 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reent.o)
 
-.debug_abbrev   0x00000000     0x40e1
+.debug_abbrev   0x00000000     0x425f
  .debug_abbrev  0x00000000      0x2f3 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/event_groups.c.obj
  .debug_abbrev  0x000002f3       0xf3 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/list.c.obj
  .debug_abbrev  0x000003e6      0x370 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/queue.c.obj
  .debug_abbrev  0x00000756      0x301 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/stream_buffer.c.obj
  .debug_abbrev  0x00000a57      0x38e CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/tasks.c.obj
  .debug_abbrev  0x00000de5      0x326 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/timers.c.obj
- .debug_abbrev  0x0000110b      0x233 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM4F/port.c.obj
- .debug_abbrev  0x0000133e      0x240 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_can.c.obj
- .debug_abbrev  0x0000157e      0x1c0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_dac.c.obj
- .debug_abbrev  0x0000173e      0x1d1 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_exti.c.obj
- .debug_abbrev  0x0000190f      0x1ec CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_gpio.c.obj
- .debug_abbrev  0x00001afb      0x1df CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_rcc.c.obj
- .debug_abbrev  0x00001cda      0x161 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_syscfg.c.obj
- .debug_abbrev  0x00001e3b      0x1cc CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_tim.c.obj
- .debug_abbrev  0x00002007      0x1af CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
- .debug_abbrev  0x000021b6      0x2c3 CMakeFiles/RTS-Lab.elf.dir/startup.c.obj
- .debug_abbrev  0x00002479      0x270 CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
- .debug_abbrev  0x000026e9      0x21c /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
- .debug_abbrev  0x00002905       0x9e /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memset.o)
- .debug_abbrev  0x000029a3      0x149 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-impure.o)
- .debug_abbrev  0x00002aec       0xc1 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memcpy-stub.o)
- .debug_abbrev  0x00002bad      0x31e /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
- .debug_abbrev  0x00002ecb      0x28e /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
- .debug_abbrev  0x00003159       0xac /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memmove.o)
- .debug_abbrev  0x00003205       0x14 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memchr.o)
- .debug_abbrev  0x00003219      0x236 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-freer.o)
- .debug_abbrev  0x0000344f      0x24a /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
- .debug_abbrev  0x00003699      0x1bf /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mlock.o)
- .debug_abbrev  0x00003858      0x217 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reallocr.o)
- .debug_abbrev  0x00003a6f      0x1da /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sbrkr.o)
- .debug_abbrev  0x00003c49      0x115 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
- .debug_abbrev  0x00003d5e      0x196 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-msizer.o)
- .debug_abbrev  0x00003ef4      0x1ed /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reent.o)
+ .debug_abbrev  0x0000110b      0x250 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM4F/port.c.obj
+ .debug_abbrev  0x0000135b      0x1ac CMakeFiles/RTS-Lab.elf.dir/libraries/io/io.c.obj
+ .debug_abbrev  0x00001507      0x240 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_can.c.obj
+ .debug_abbrev  0x00001747      0x1c0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_dac.c.obj
+ .debug_abbrev  0x00001907      0x1d1 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_exti.c.obj
+ .debug_abbrev  0x00001ad8      0x1ec CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_gpio.c.obj
+ .debug_abbrev  0x00001cc4      0x1df CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_rcc.c.obj
+ .debug_abbrev  0x00001ea3      0x161 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_syscfg.c.obj
+ .debug_abbrev  0x00002004      0x1cc CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_tim.c.obj
+ .debug_abbrev  0x000021d0      0x1af CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
+ .debug_abbrev  0x0000237f      0x2c3 CMakeFiles/RTS-Lab.elf.dir/startup.c.obj
+ .debug_abbrev  0x00002642      0x225 CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
+ .debug_abbrev  0x00002867      0x21c /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
+ .debug_abbrev  0x00002a83       0x9e /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memset.o)
+ .debug_abbrev  0x00002b21      0x149 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-impure.o)
+ .debug_abbrev  0x00002c6a       0xc1 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memcpy-stub.o)
+ .debug_abbrev  0x00002d2b      0x31e /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
+ .debug_abbrev  0x00003049      0x28e /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
+ .debug_abbrev  0x000032d7       0xac /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memmove.o)
+ .debug_abbrev  0x00003383       0x14 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memchr.o)
+ .debug_abbrev  0x00003397      0x236 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-freer.o)
+ .debug_abbrev  0x000035cd      0x24a /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
+ .debug_abbrev  0x00003817      0x1bf /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mlock.o)
+ .debug_abbrev  0x000039d6      0x217 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reallocr.o)
+ .debug_abbrev  0x00003bed      0x1da /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sbrkr.o)
+ .debug_abbrev  0x00003dc7      0x115 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+ .debug_abbrev  0x00003edc      0x196 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-msizer.o)
+ .debug_abbrev  0x00004072      0x1ed /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reent.o)
 
-.debug_aranges  0x00000000      0x498
+.debug_aranges  0x00000000      0x4b8
  .debug_aranges
                 0x00000000       0x20 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/event_groups.c.obj
  .debug_aranges
@@ -869,128 +879,132 @@ LOAD linker stubs
  .debug_aranges
                 0x000000c0       0x20 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM4F/port.c.obj
  .debug_aranges
-                0x000000e0       0x20 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_can.c.obj
+                0x000000e0       0x20 CMakeFiles/RTS-Lab.elf.dir/libraries/io/io.c.obj
  .debug_aranges
-                0x00000100       0x20 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_dac.c.obj
+                0x00000100       0x20 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_can.c.obj
  .debug_aranges
-                0x00000120       0x20 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_exti.c.obj
+                0x00000120       0x20 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_dac.c.obj
  .debug_aranges
-                0x00000140       0x20 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_gpio.c.obj
+                0x00000140       0x20 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_exti.c.obj
  .debug_aranges
-                0x00000160       0x20 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_rcc.c.obj
+                0x00000160       0x20 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_gpio.c.obj
  .debug_aranges
-                0x00000180       0x20 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_syscfg.c.obj
+                0x00000180       0x20 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_rcc.c.obj
  .debug_aranges
-                0x000001a0       0x20 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_tim.c.obj
+                0x000001a0       0x20 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_syscfg.c.obj
  .debug_aranges
-                0x000001c0       0x20 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
+                0x000001c0       0x20 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_tim.c.obj
  .debug_aranges
-                0x000001e0       0x28 CMakeFiles/RTS-Lab.elf.dir/startup.c.obj
+                0x000001e0       0x20 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
  .debug_aranges
-                0x00000208       0x20 CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
+                0x00000200       0x28 CMakeFiles/RTS-Lab.elf.dir/startup.c.obj
  .debug_aranges
-                0x00000228       0x28 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
+                0x00000228       0x20 CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
  .debug_aranges
-                0x00000250       0x20 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memset.o)
+                0x00000248       0x28 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
  .debug_aranges
-                0x00000270       0x18 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-impure.o)
+                0x00000270       0x20 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memset.o)
  .debug_aranges
-                0x00000288       0x20 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memcpy-stub.o)
+                0x00000290       0x18 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-impure.o)
  .debug_aranges
-                0x000002a8       0x30 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
+                0x000002a8       0x20 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memcpy-stub.o)
  .debug_aranges
-                0x000002d8       0x28 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
+                0x000002c8       0x30 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
  .debug_aranges
-                0x00000300       0x20 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memmove.o)
+                0x000002f8       0x28 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
  .debug_aranges
-                0x00000320       0x20 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memchr.o)
+                0x00000320       0x20 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memmove.o)
  .debug_aranges
-                0x00000340       0x20 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-freer.o)
+                0x00000340       0x20 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memchr.o)
  .debug_aranges
-                0x00000360       0x28 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
+                0x00000360       0x20 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-freer.o)
  .debug_aranges
-                0x00000388       0x28 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mlock.o)
+                0x00000380       0x28 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
  .debug_aranges
-                0x000003b0       0x20 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reallocr.o)
+                0x000003a8       0x28 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mlock.o)
  .debug_aranges
-                0x000003d0       0x20 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sbrkr.o)
+                0x000003d0       0x20 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reallocr.o)
  .debug_aranges
-                0x000003f0       0x68 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+                0x000003f0       0x20 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sbrkr.o)
  .debug_aranges
-                0x00000458       0x20 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-msizer.o)
+                0x00000410       0x68 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
  .debug_aranges
-                0x00000478       0x20 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reent.o)
+                0x00000478       0x20 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-msizer.o)
+ .debug_aranges
+                0x00000498       0x20 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reent.o)
 
-.debug_line     0x00000000     0xa38a
+.debug_line     0x00000000     0xa596
  .debug_line    0x00000000      0x5f7 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/event_groups.c.obj
  .debug_line    0x000005f7      0x248 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/list.c.obj
  .debug_line    0x0000083f     0x103a CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/queue.c.obj
  .debug_line    0x00001879      0xa5b CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/stream_buffer.c.obj
- .debug_line    0x000022d4     0x17a2 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/tasks.c.obj
- .debug_line    0x00003a76      0x7bf CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/timers.c.obj
- .debug_line    0x00004235      0x3ee CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM4F/port.c.obj
- .debug_line    0x00004623      0x940 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_can.c.obj
- .debug_line    0x00004f63      0x36c CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_dac.c.obj
- .debug_line    0x000052cf      0x283 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_exti.c.obj
- .debug_line    0x00005552      0x3af CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_gpio.c.obj
- .debug_line    0x00005901      0x753 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_rcc.c.obj
- .debug_line    0x00006054      0x1dc CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_syscfg.c.obj
- .debug_line    0x00006230      0xbd0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_tim.c.obj
- .debug_line    0x00006e00      0x561 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
- .debug_line    0x00007361      0x32b CMakeFiles/RTS-Lab.elf.dir/startup.c.obj
- .debug_line    0x0000768c      0x412 CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
- .debug_line    0x00007a9e      0x24d /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
- .debug_line    0x00007ceb      0x123 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memset.o)
- .debug_line    0x00007e0e      0x108 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-impure.o)
- .debug_line    0x00007f16      0x191 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memcpy-stub.o)
- .debug_line    0x000080a7      0x800 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
- .debug_line    0x000088a7      0x6ec /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
- .debug_line    0x00008f93      0x161 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memmove.o)
- .debug_line    0x000090f4       0x84 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memchr.o)
- .debug_line    0x00009178      0x2b2 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-freer.o)
- .debug_line    0x0000942a      0x47a /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
- .debug_line    0x000098a4      0x18a /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mlock.o)
- .debug_line    0x00009a2e      0x211 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reallocr.o)
- .debug_line    0x00009c3f      0x1b8 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sbrkr.o)
- .debug_line    0x00009df7      0x17d /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
- .debug_line    0x00009f74      0x1a2 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-msizer.o)
- .debug_line    0x0000a116      0x274 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reent.o)
+ .debug_line    0x000022d4     0x17e3 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/tasks.c.obj
+ .debug_line    0x00003ab7      0x7bf CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/timers.c.obj
+ .debug_line    0x00004276      0x46e CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM4F/port.c.obj
+ .debug_line    0x000046e4      0x306 CMakeFiles/RTS-Lab.elf.dir/libraries/io/io.c.obj
+ .debug_line    0x000049ea      0x940 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_can.c.obj
+ .debug_line    0x0000532a      0x36c CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_dac.c.obj
+ .debug_line    0x00005696      0x283 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_exti.c.obj
+ .debug_line    0x00005919      0x3af CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_gpio.c.obj
+ .debug_line    0x00005cc8      0x753 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_rcc.c.obj
+ .debug_line    0x0000641b      0x1dc CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_syscfg.c.obj
+ .debug_line    0x000065f7      0xbd0 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_tim.c.obj
+ .debug_line    0x000071c7      0x561 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
+ .debug_line    0x00007728      0x32b CMakeFiles/RTS-Lab.elf.dir/startup.c.obj
+ .debug_line    0x00007a53      0x257 CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
+ .debug_line    0x00007caa      0x24d /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
+ .debug_line    0x00007ef7      0x123 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memset.o)
+ .debug_line    0x0000801a      0x108 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-impure.o)
+ .debug_line    0x00008122      0x191 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memcpy-stub.o)
+ .debug_line    0x000082b3      0x800 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
+ .debug_line    0x00008ab3      0x6ec /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
+ .debug_line    0x0000919f      0x161 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memmove.o)
+ .debug_line    0x00009300       0x84 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memchr.o)
+ .debug_line    0x00009384      0x2b2 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-freer.o)
+ .debug_line    0x00009636      0x47a /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
+ .debug_line    0x00009ab0      0x18a /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mlock.o)
+ .debug_line    0x00009c3a      0x211 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reallocr.o)
+ .debug_line    0x00009e4b      0x1b8 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sbrkr.o)
+ .debug_line    0x0000a003      0x17d /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+ .debug_line    0x0000a180      0x1a2 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-msizer.o)
+ .debug_line    0x0000a322      0x274 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reent.o)
 
-.debug_str      0x00000000     0x62ae
- .debug_str     0x00000000     0x62ae CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/event_groups.c.obj
+.debug_str      0x00000000     0x62e0
+ .debug_str     0x00000000     0x62e0 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/event_groups.c.obj
                                 0x7b1 (size before relaxing)
- .debug_str     0x000062ae      0x2b3 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/list.c.obj
- .debug_str     0x000062ae      0xcce CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/queue.c.obj
- .debug_str     0x000062ae      0xa6d CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/stream_buffer.c.obj
- .debug_str     0x000062ae     0x13fe CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/tasks.c.obj
- .debug_str     0x000062ae      0xc26 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/timers.c.obj
- .debug_str     0x000062ae      0x44d CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM4F/port.c.obj
- .debug_str     0x000062ae      0x72d CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_can.c.obj
- .debug_str     0x000062ae      0x442 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_dac.c.obj
- .debug_str     0x000062ae      0x324 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_exti.c.obj
- .debug_str     0x000062ae      0x4a2 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_gpio.c.obj
- .debug_str     0x000062ae      0x96d CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_rcc.c.obj
- .debug_str     0x000062ae      0x2fd CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_syscfg.c.obj
- .debug_str     0x000062ae      0xdd6 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_tim.c.obj
- .debug_str     0x000062ae      0x6a7 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
- .debug_str     0x000062ae      0x8aa CMakeFiles/RTS-Lab.elf.dir/startup.c.obj
- .debug_str     0x000062ae      0x657 CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
- .debug_str     0x000062ae      0x51e /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
- .debug_str     0x000062ae      0x1bf /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memset.o)
- .debug_str     0x000062ae      0x4df /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-impure.o)
- .debug_str     0x000062ae      0x1dd /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memcpy-stub.o)
- .debug_str     0x000062ae      0x828 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
- .debug_str     0x000062ae      0x7be /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
- .debug_str     0x000062ae      0x1da /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memmove.o)
- .debug_str     0x000062ae       0xa9 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memchr.o)
- .debug_str     0x000062ae      0x55f /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-freer.o)
- .debug_str     0x000062ae      0x5c0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
- .debug_str     0x000062ae      0x561 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mlock.o)
- .debug_str     0x000062ae      0x555 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reallocr.o)
- .debug_str     0x000062ae      0x4e8 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sbrkr.o)
- .debug_str     0x000062ae      0x332 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
- .debug_str     0x000062ae      0x528 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-msizer.o)
- .debug_str     0x000062ae      0x4fe /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reent.o)
+ .debug_str     0x000062e0      0x2b3 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/list.c.obj
+ .debug_str     0x000062e0      0xcce CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/queue.c.obj
+ .debug_str     0x000062e0      0xa6d CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/stream_buffer.c.obj
+ .debug_str     0x000062e0     0x1404 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/tasks.c.obj
+ .debug_str     0x000062e0      0xc26 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/timers.c.obj
+ .debug_str     0x000062e0      0x45a CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM4F/port.c.obj
+ .debug_str     0x000062e0      0x257 CMakeFiles/RTS-Lab.elf.dir/libraries/io/io.c.obj
+ .debug_str     0x000062e0      0x72d CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_can.c.obj
+ .debug_str     0x000062e0      0x442 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_dac.c.obj
+ .debug_str     0x000062e0      0x324 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_exti.c.obj
+ .debug_str     0x000062e0      0x4a2 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_gpio.c.obj
+ .debug_str     0x000062e0      0x96d CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_rcc.c.obj
+ .debug_str     0x000062e0      0x2fd CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_syscfg.c.obj
+ .debug_str     0x000062e0      0xdd6 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_tim.c.obj
+ .debug_str     0x000062e0      0x6a7 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
+ .debug_str     0x000062e0      0x8aa CMakeFiles/RTS-Lab.elf.dir/startup.c.obj
+ .debug_str     0x000062e0      0x586 CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
+ .debug_str     0x000062e0      0x51e /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
+ .debug_str     0x000062e0      0x1bf /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memset.o)
+ .debug_str     0x000062e0      0x4df /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-impure.o)
+ .debug_str     0x000062e0      0x1dd /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memcpy-stub.o)
+ .debug_str     0x000062e0      0x828 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
+ .debug_str     0x000062e0      0x7be /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
+ .debug_str     0x000062e0      0x1da /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memmove.o)
+ .debug_str     0x000062e0       0xa9 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memchr.o)
+ .debug_str     0x000062e0      0x55f /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-freer.o)
+ .debug_str     0x000062e0      0x5c0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
+ .debug_str     0x000062e0      0x561 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mlock.o)
+ .debug_str     0x000062e0      0x555 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reallocr.o)
+ .debug_str     0x000062e0      0x4e8 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sbrkr.o)
+ .debug_str     0x000062e0      0x332 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+ .debug_str     0x000062e0      0x528 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-msizer.o)
+ .debug_str     0x000062e0      0x4fe /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reent.o)
 
 .comment        0x00000000       0x3c
  .comment       0x00000000       0x3c CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/event_groups.c.obj
@@ -1001,6 +1015,7 @@ LOAD linker stubs
  .comment       0x0000003c       0x1f CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/tasks.c.obj
  .comment       0x0000003c       0x1f CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/timers.c.obj
  .comment       0x0000003c       0x1f CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM4F/port.c.obj
+ .comment       0x0000003c       0x1f CMakeFiles/RTS-Lab.elf.dir/libraries/io/io.c.obj
  .comment       0x0000003c       0x1f CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_can.c.obj
  .comment       0x0000003c       0x1f CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_dac.c.obj
  .comment       0x0000003c       0x1f CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_exti.c.obj
@@ -1044,93 +1059,96 @@ LOAD linker stubs
  .ARM.attributes
                 0x00000138       0x34 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM4F/port.c.obj
  .ARM.attributes
-                0x0000016c       0x34 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_can.c.obj
+                0x0000016c       0x34 CMakeFiles/RTS-Lab.elf.dir/libraries/io/io.c.obj
  .ARM.attributes
-                0x000001a0       0x34 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_dac.c.obj
+                0x000001a0       0x34 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_can.c.obj
  .ARM.attributes
-                0x000001d4       0x34 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_exti.c.obj
+                0x000001d4       0x34 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_dac.c.obj
  .ARM.attributes
-                0x00000208       0x34 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_gpio.c.obj
+                0x00000208       0x34 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_exti.c.obj
  .ARM.attributes
-                0x0000023c       0x34 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_rcc.c.obj
+                0x0000023c       0x34 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_gpio.c.obj
  .ARM.attributes
-                0x00000270       0x34 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_syscfg.c.obj
+                0x00000270       0x34 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_rcc.c.obj
  .ARM.attributes
-                0x000002a4       0x34 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_tim.c.obj
+                0x000002a4       0x34 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_syscfg.c.obj
  .ARM.attributes
-                0x000002d8       0x34 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
+                0x000002d8       0x34 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_tim.c.obj
  .ARM.attributes
-                0x0000030c       0x34 CMakeFiles/RTS-Lab.elf.dir/startup.c.obj
+                0x0000030c       0x34 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
  .ARM.attributes
-                0x00000340       0x34 CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
+                0x00000340       0x34 CMakeFiles/RTS-Lab.elf.dir/startup.c.obj
  .ARM.attributes
-                0x00000374       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
+                0x00000374       0x34 CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
  .ARM.attributes
-                0x000003a8       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memset.o)
+                0x000003a8       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
  .ARM.attributes
-                0x000003dc       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-impure.o)
+                0x000003dc       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memset.o)
  .ARM.attributes
-                0x00000410       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memcpy-stub.o)
+                0x00000410       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-impure.o)
  .ARM.attributes
-                0x00000444       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
+                0x00000444       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memcpy-stub.o)
  .ARM.attributes
-                0x00000478       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
+                0x00000478       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
  .ARM.attributes
-                0x000004ac       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memmove.o)
+                0x000004ac       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
  .ARM.attributes
-                0x000004e0       0x1c /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memchr.o)
+                0x000004e0       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memmove.o)
  .ARM.attributes
-                0x000004fc       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-freer.o)
+                0x00000514       0x1c /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memchr.o)
  .ARM.attributes
-                0x00000530       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
+                0x00000530       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-freer.o)
  .ARM.attributes
-                0x00000564       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mlock.o)
+                0x00000564       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
  .ARM.attributes
-                0x00000598       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reallocr.o)
+                0x00000598       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mlock.o)
  .ARM.attributes
-                0x000005cc       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sbrkr.o)
+                0x000005cc       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reallocr.o)
  .ARM.attributes
-                0x00000600       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+                0x00000600       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sbrkr.o)
  .ARM.attributes
-                0x00000634       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-msizer.o)
+                0x00000634       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
  .ARM.attributes
-                0x00000668       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reent.o)
+                0x00000668       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-msizer.o)
  .ARM.attributes
-                0x0000069c       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libnosys.a(sbrk.o)
+                0x0000069c       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reent.o)
+ .ARM.attributes
+                0x000006d0       0x34 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libnosys.a(sbrk.o)
 
-.debug_frame    0x00000000     0x4998
+.debug_frame    0x00000000     0x49ac
  .debug_frame   0x00000000      0x240 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/event_groups.c.obj
  .debug_frame   0x00000240       0xd8 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/list.c.obj
  .debug_frame   0x00000318      0x5f4 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/queue.c.obj
  .debug_frame   0x0000090c      0x424 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/stream_buffer.c.obj
  .debug_frame   0x00000d30      0x9bc CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/tasks.c.obj
  .debug_frame   0x000016ec      0x464 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/timers.c.obj
- .debug_frame   0x00001b50      0x1a8 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM4F/port.c.obj
- .debug_frame   0x00001cf8      0x3f8 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_can.c.obj
- .debug_frame   0x000020f0      0x2ac CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_dac.c.obj
- .debug_frame   0x0000239c      0x148 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_exti.c.obj
- .debug_frame   0x000024e4      0x23c CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_gpio.c.obj
- .debug_frame   0x00002720      0x814 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_rcc.c.obj
- .debug_frame   0x00002f34      0x11c CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_syscfg.c.obj
- .debug_frame   0x00003050      0xe54 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_tim.c.obj
- .debug_frame   0x00003ea4      0x490 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
- .debug_frame   0x00004334      0x14c CMakeFiles/RTS-Lab.elf.dir/startup.c.obj
- .debug_frame   0x00004480      0x108 CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
- .debug_frame   0x00004588       0x6c /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
- .debug_frame   0x000045f4       0x20 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memset.o)
- .debug_frame   0x00004614       0x28 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memcpy-stub.o)
- .debug_frame   0x0000463c       0x90 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
- .debug_frame   0x000046cc       0x60 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
- .debug_frame   0x0000472c       0x28 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memmove.o)
- .debug_frame   0x00004754       0x38 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-freer.o)
- .debug_frame   0x0000478c       0x4c /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
- .debug_frame   0x000047d8       0x30 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mlock.o)
- .debug_frame   0x00004808       0x3c /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reallocr.o)
- .debug_frame   0x00004844       0x2c /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sbrkr.o)
- .debug_frame   0x00004870       0xb0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
- .debug_frame   0x00004920       0x20 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-msizer.o)
- .debug_frame   0x00004940       0x38 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reent.o)
- .debug_frame   0x00004978       0x20 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libnosys.a(sbrk.o)
+ .debug_frame   0x00001b50      0x1ac CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM4F/port.c.obj
+ .debug_frame   0x00001cfc       0x74 CMakeFiles/RTS-Lab.elf.dir/libraries/io/io.c.obj
+ .debug_frame   0x00001d70      0x3f8 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_can.c.obj
+ .debug_frame   0x00002168      0x2ac CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_dac.c.obj
+ .debug_frame   0x00002414      0x148 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_exti.c.obj
+ .debug_frame   0x0000255c      0x23c CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_gpio.c.obj
+ .debug_frame   0x00002798      0x814 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_rcc.c.obj
+ .debug_frame   0x00002fac      0x11c CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_syscfg.c.obj
+ .debug_frame   0x000030c8      0xe54 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_tim.c.obj
+ .debug_frame   0x00003f1c      0x490 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
+ .debug_frame   0x000043ac      0x14c CMakeFiles/RTS-Lab.elf.dir/startup.c.obj
+ .debug_frame   0x000044f8       0xa4 CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
+ .debug_frame   0x0000459c       0x6c /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
+ .debug_frame   0x00004608       0x20 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memset.o)
+ .debug_frame   0x00004628       0x28 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memcpy-stub.o)
+ .debug_frame   0x00004650       0x90 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
+ .debug_frame   0x000046e0       0x60 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
+ .debug_frame   0x00004740       0x28 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-memmove.o)
+ .debug_frame   0x00004768       0x38 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-freer.o)
+ .debug_frame   0x000047a0       0x4c /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mallocr.o)
+ .debug_frame   0x000047ec       0x30 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-mlock.o)
+ .debug_frame   0x0000481c       0x3c /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reallocr.o)
+ .debug_frame   0x00004858       0x2c /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sbrkr.o)
+ .debug_frame   0x00004884       0xb0 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-lock.o)
+ .debug_frame   0x00004934       0x20 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-msizer.o)
+ .debug_frame   0x00004954       0x38 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-reent.o)
+ .debug_frame   0x0000498c       0x20 /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libnosys.a(sbrk.o)
 
 .debug_rnglists
                 0x00000000      0x24d
@@ -1465,7 +1483,7 @@ USART_GetFlagStatus                               CMakeFiles/RTS-Lab.elf.dir/dri
 USART_GetITStatus                                 CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
 USART_HalfDuplexCmd                               CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
 USART_ITConfig                                    CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
-                                                  CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
+                                                  CMakeFiles/RTS-Lab.elf.dir/libraries/io/io.c.obj
 USART_Init                                        CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
 USART_IrDACmd                                     CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
 USART_IrDAConfig                                  CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
@@ -1477,7 +1495,7 @@ USART_ReceiveData                                 CMakeFiles/RTS-Lab.elf.dir/dri
 USART_ReceiverWakeUpCmd                           CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
 USART_SendBreak                                   CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
 USART_SendData                                    CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
-                                                  CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
+                                                  CMakeFiles/RTS-Lab.elf.dir/libraries/io/io.c.obj
 USART_SetAddress                                  CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
 USART_SetGuardTime                                CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
 USART_SetPrescaler                                CMakeFiles/RTS-Lab.elf.dir/driver/src/stm32f4xx_usart.c.obj
@@ -1571,8 +1589,13 @@ memset                                            /usr/lib/gcc/arm-none-eabi/13.
 pcQueueGetName                                    CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/queue.c.obj
 pcTaskGetName                                     CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/tasks.c.obj
 pcTimerGetName                                    CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/timers.c.obj
-print                                             CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
-printf                                            CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
+print                                             CMakeFiles/RTS-Lab.elf.dir/libraries/io/io.c.obj
+                                                  CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
+                                                  CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM4F/port.c.obj
+                                                  CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/tasks.c.obj
+printf                                            CMakeFiles/RTS-Lab.elf.dir/libraries/io/io.c.obj
+                                                  CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
+                                                  CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM4F/port.c.obj
 pvTaskIncrementMutexHeldCount                     CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/tasks.c.obj
                                                   CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/queue.c.obj
 pvTimerGetTimerID                                 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/timers.c.obj
@@ -1582,7 +1605,7 @@ pxPortInitialiseStack                             CMakeFiles/RTS-Lab.elf.dir/lib
                                                   CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/tasks.c.obj
 siprintf                                          /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
 sprintf                                           /usr/lib/gcc/arm-none-eabi/13.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libg_nano.a(libc_a-sprintf.o)
-                                                  CMakeFiles/RTS-Lab.elf.dir/src/main.c.obj
+                                                  CMakeFiles/RTS-Lab.elf.dir/libraries/io/io.c.obj
 startup                                           CMakeFiles/RTS-Lab.elf.dir/startup.c.obj
 ucQueueGetQueueType                               CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/queue.c.obj
 ucStreamBufferGetStreamBufferType                 CMakeFiles/RTS-Lab.elf.dir/libraries/FreeRTOS-Kernel/stream_buffer.c.obj
