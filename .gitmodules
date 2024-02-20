@@ -10,3 +10,6 @@
 [submodule "MD407-template/libraries/FreeRTOS-Kernel"]
 	path = MD407-template/libraries/FreeRTOS-Kernel
 	url = https://github.com/FreeRTOS/FreeRTOS-Kernel.git
+[submodule "rp2040-reaction/FreeRTOS-Kernel"]
+	path = rp2040-reaction/FreeRTOS-Kernel
+	url = https://github.com/FreeRTOS/FreeRTOS-Kernel.git

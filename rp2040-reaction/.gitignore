@@ -1,0 +1,21 @@
+*.xcworkspace/xcuserdata/*.xcuserdatad
+build
+
+#cmake stuff
+#App-Template/compile_commands.json
+#App-Template/Makefile
+#App-Template/.chache/
+#App-Template/CMakeFiles
+#App-Template/cmake_install.cmake
+#App-Template/elf2uf2
+#CMakeFiles
+#Makefile
+#cmake_install
+compile_commands.json
+#elf2uf2
+#generated
+#libFreeRTOS.a
+#piosam
+.chache
+
+
