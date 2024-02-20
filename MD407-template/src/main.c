@@ -2,12 +2,14 @@
 #include <stm32f4xx_gpio.h>
 #include <stm32f4xx_rcc.h>
 #include <FreeRTOS.h>
+#include "system_stm32f4xx.h"
 #include "FreeRTOSConfig.h"
 #include "portmacro.h"
 #include "task.h"
 #include "queue.h"
 #include "semphr.h"
 #include "croutine.h"
+
 GPIO_InitTypeDef Gp;//Create GPIO struct
 
 //Define LED pins
@@ -39,7 +41,14 @@ void vTask1(void *vParameters){
   const TickType_t xDelay = 500 / portTICK_PERIOD_MS;
   for(;;)
   {
-      //set bit
+      if (toggle) {
+        GPIO_ResetBits(LED_GPIO, RedLED_Pin);
+      } else {
+        GPIO_SetBits(LED_GPIO, RedLED_Pin);
+      }
+
+      toggle = ~toggle;
+      vTaskDelay(xDelay);
     }
   }
 
@@ -49,10 +58,14 @@ void vTask1(void *vParameters){
   //Enable clocks to both GPIOA (push button) and GPIOC (output LEDs)
 	//uint8_t ButtonRead = 0; //Initialize ButtonRead variable
   //GPIO_ResetBits(LED_GPIO, RedLED_Pin);
+
+
   static StackType_t test_task2_stack[128];
 	static StaticTask_t test_task2_buffer;
 
-  print("hello\n");
+  
+    
+  print("lmao\n");
   printf("Int: %d", 3);
   xTaskCreateStatic(vTask1, 
               "ToggleLED", 

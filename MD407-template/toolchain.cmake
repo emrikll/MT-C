@@ -19,7 +19,6 @@ set(CMAKE_C_FLAGS
     CACHE INTERNAL "")
 set(CMAKE_EXE_LINKER_FLAGS
     "--specs=nano.specs -specs=nosys.specs \
-    -nostartfiles \
     -mfloat-abi=hard \
     -mfpu=fpv4-sp-d16 \
     -mcpu=cortex-m4 \

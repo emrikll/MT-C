@@ -44,6 +44,7 @@ SECTIONS
 	    . = ALIGN(4);
         /* This is used by the startup in order to initialize the .bss secion */
         _sbss = .;
+        __bss_start__ = .;
         
         *(.bss)
 		*(.bss.*)
@@ -52,6 +53,7 @@ SECTIONS
 	    . = ALIGN(4);
 	    /* This is used by the startup in order to initialize the .bss secion */
 		_ebss = . ;
+        __bss_end__ = .;
     } >RAM
     
     PROVIDE ( end = _ebss );
