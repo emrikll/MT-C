@@ -32,6 +32,8 @@
 #define xPortPendSVHandler      isr_pendsv
 #define xPortSysTickHandler     isr_systick
 
+#define configKERNEL_PROVIDED_STATIC_MEMORY     1
+
 #define configUSE_PREEMPTION                    1           // Allow tasks to be pre-empted
 #define configUSE_TIME_SLICING                  1           // Allow FreeRTOS to switch tasks at each tick
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION 0
@@ -60,7 +62,7 @@
                                                             // than the number of bytes in a size_t.
 
 /* Memory allocation related definitions. */
-#define configSUPPORT_STATIC_ALLOCATION         0
+#define configSUPPORT_STATIC_ALLOCATION         1
 #define configSUPPORT_DYNAMIC_ALLOCATION        1           // Get FreeRTOS to allocation task memory
 #define configAPPLICATION_ALLOCATED_HEAP        1
 
