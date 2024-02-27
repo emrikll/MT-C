@@ -41,7 +41,7 @@
 #define configCPU_CLOCK_HZ                      133000000   // 133MHz for RP2040
 #define configTICK_RATE_HZ                      1000        // FreeRTOS beats per second
 #define configMAX_PRIORITIES                    5           // Max number of priority values (0-24)
-#define configMINIMAL_STACK_SIZE                128
+#define configMINIMAL_STACK_SIZE                512
 #define configMAX_TASK_NAME_LEN                 16
 #define configUSE_16_BIT_TICKS                  0
 #define configIDLE_SHOULD_YIELD                 1

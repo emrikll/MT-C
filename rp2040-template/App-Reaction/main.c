@@ -22,6 +22,9 @@ TimerHandle_t alert_timer = NULL;
 // Semaphores
 SemaphoreHandle_t semaphore_irq = NULL;
 
+//Tick counters
+uint64_t xStart, xEnd, xStartISR, xDifference, xDifferenceISR = 0;
+
 //Function declarations
 void gpio_isr(uint gpio, uint32_t events);
 void enable_irq(bool state);
@@ -178,6 +181,8 @@ void gpio_isr(uint gpio, uint32_t events) {
     
     /* ISR FUNCTION BODY USING A SEMAPHORE */
     
+    xStartISR = time_us_64();
+
     // Signal the alert clearance task
     static BaseType_t higher_priority_task_woken = pdFALSE;
     xSemaphoreGiveFromISR(semaphore_irq, &higher_priority_task_woken);
@@ -199,14 +204,20 @@ void gpio_isr(uint gpio, uint32_t events) {
  */
 
 /**
- * @brief Repeatedly flash the Pico's built-in LED.
+ * @brief Turn the Pico's built-in LED on or off based on LED_STATE.
  */
 void task_led_pico(void* unused_arg) {
 
-        
-
     while(true){
         if (xSemaphoreTake(semaphore_irq, portMAX_DELAY) == pdPASS) {
+            xEnd = time_us_64();
+            char str[64];
+            xDifference = xEnd - xStart;
+            xDifferenceISR = xStartISR - xStart;
+            
+            sprintf(str, "DifferenceISR: %lu", xDifferenceISR);
+            log_debug(str);
+            xStart, xEnd, xDifference = 0;
             if (LED_STATE) {
                 led_on();
                 LED_STATE = false;
@@ -219,7 +230,6 @@ void task_led_pico(void* unused_arg) {
         }else{
             log_debug("Could not take semaphore");
         }
-        log_debug("In led pico");
     }
 }
 
@@ -230,11 +240,12 @@ void task_led_pico(void* unused_arg) {
  */
 void timer_fired_callback(TimerHandle_t timer) {
 
-    log_debug("Timer callback fired\n\r");
+    log_debug("Timer callback fired");
 
-
+    xStart = time_us_64();
+    // Create EDGE_RISE on Software interrupt pin to trigger LED 
     gpio_put(SW_IRQ_PIN, 1);
-
+    
     gpio_put(SW_IRQ_PIN, 0);
     
 }
@@ -262,7 +273,7 @@ int main() {
     #endif
     
     // Set up four tasks
-    TaskHandle_t handle_task_pico = xTaskCreateStatic(task_led_pico, 
+    handle_task_pico = xTaskCreateStatic(task_led_pico, 
                                         "PICO_LED_TASK",  
                                         128, 
                                         NULL, 
@@ -289,11 +300,6 @@ int main() {
         
     // Start the FreeRTOS scheduler if any of the tasks are good
     if (handle_task_pico != NULL) {
-        // Set up the event queues: one for flips, one for IRQs
-        //flip_queue = xQueueCreate(4, sizeof(uint8_t));
-        //irq_queue = xQueueCreate(1, sizeof(uint8_t));
-        log_debug("In first if");
-        
         // Create a binary semaphore to signal IRQs
         semaphore_irq = xSemaphoreCreateBinary();
         assert(semaphore_irq != NULL);

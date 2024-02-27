@@ -33,7 +33,7 @@
 #define         LED_OFF                     0
         
 #define         LED_ERROR_FLASHES           5
-#define         LED_FLASH_PERIOD_MS         5000
+#define         LED_FLASH_PERIOD_MS         2000
 #define         SW_IRQ_PIN                  21
 
 #define         TIMER_ID_LED_ON             0
