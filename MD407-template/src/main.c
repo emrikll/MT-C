@@ -3,12 +3,12 @@
 #include <stm32f4xx_rcc.h>
 #include <FreeRTOS.h>
 #include "system_stm32f4xx.h"
-#include "FreeRTOSConfig.h"
 #include "portmacro.h"
 #include "task.h"
 #include "queue.h"
 #include "semphr.h"
 #include "croutine.h"
+#include "FreeRTOSConfig.h"
 
 GPIO_InitTypeDef Gp;//Create GPIO struct
 
@@ -21,7 +21,9 @@ GPIO_InitTypeDef Gp;//Create GPIO struct
 
 //Define Push button
 #define PushButton_Pin GPIO_Pin_0
-#define PushButton_GPIO GPIOA   
+#define PushButton_GPIO GPIOA
+
+#define SCB_VTOR_CUSTOM ((volatile unsigned long *) 0xE000ED08)
 
 //extern void initialise_monitor_handles(void);
 
