@@ -18,6 +18,7 @@
 #include <semphr.h>
 // Pico SDK
 #include "pico/stdlib.h"            // Includes `hardware_gpio.h`
+#include "pico/rand.h"
 // C
 #include <stdbool.h>
 #include <stdlib.h>
@@ -38,9 +39,7 @@
 
 #define         TIMER_ID_LED_ON             0
 
-
-
-bool LED_STATE = true;
+#define         AVERAGE_USAGE_INTERVAL_MS   5000
 
 /**
  * PROTOTYPES
@@ -56,6 +55,10 @@ void led_off();
 void led_set(bool state);
 
 void task_led_pico(void* unused_arg);
+
+void gpio_isr(uint gpio, uint32_t events);
+
+void task_sleep(void* unused_arg);
 
 
 #endif      // MAIN_H

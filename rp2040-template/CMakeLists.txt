@@ -24,7 +24,7 @@ set(APP_3_SRC_DIRECTORY "${CMAKE_SOURCE_DIR}/App-Reaction")
 set(APP_4_SRC_DIRECTORY "${CMAKE_SOURCE_DIR}/App-Timers")
 
 # FROM 1.3.0 -- Move common source code to a separate directory
-# set(COMMON_CODE_DIRECTORY "${CMAKE_SOURCE_DIR}/Common")
+set(COMMON_CODE_DIRECTORY "${CMAKE_SOURCE_DIR}/Common")
 
 # FROM 1.4.2 -- Set app-side debugging on debug builds
 # Now uses CMake generator expression to extract config type
@@ -68,6 +68,7 @@ target_include_directories(FreeRTOS PUBLIC
     ${FREERTOS_CFG_DIRECTORY}/
     ${FREERTOS_SRC_DIRECTORY}/include
     ${FREERTOS_SRC_DIRECTORY}/portable/GCC/ARM_CM0
+    ${APP_3_SRC_DIRECTORY}/
 )
 
 # Include the apps' source code

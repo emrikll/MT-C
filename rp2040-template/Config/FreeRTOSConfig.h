@@ -26,7 +26,6 @@
 #ifndef FREERTOS_CONFIG_H
 #define FREERTOS_CONFIG_H
 
-
 /* Use Pico SDK ISR handlers */
 #define vPortSVCHandler         isr_svcall
 #define xPortPendSVHandler      isr_pendsv
@@ -47,7 +46,7 @@
 #define configIDLE_SHOULD_YIELD                 1
 #define configUSE_TASK_NOTIFICATIONS            1
 #define configTASK_NOTIFICATION_ARRAY_ENTRIES   3
-#define configUSE_MUTEXES                       0
+#define configUSE_MUTEXES                       1
 #define configUSE_RECURSIVE_MUTEXES             0
 #define configUSE_COUNTING_SEMAPHORES           0
 #define configQUEUE_REGISTRY_SIZE               10
@@ -102,14 +101,21 @@
 #define INCLUDE_xTaskGetSchedulerState          1
 #define INCLUDE_xTaskGetCurrentTaskHandle       1
 #define INCLUDE_uxTaskGetStackHighWaterMark     0
-#define INCLUDE_xTaskGetIdleTaskHandle          0
+#define INCLUDE_xTaskGetIdleTaskHandle          1
 #define INCLUDE_eTaskGetState                   0
 #define INCLUDE_xEventGroupSetBitFromISR        1
 #define INCLUDE_xTimerPendFunctionCall          0
 #define INCLUDE_xTaskAbortDelay                 0
-#define INCLUDE_xTaskGetHandle                  0
+#define INCLUDE_xTaskGetHandle                  1
 #define INCLUDE_xTaskResumeFromISR              1
 
 /* A header file that defines trace macro can be included here. */
+
+extern void log_debug(const char* msg);
+extern void handle_switched_in(int* pxCurrentTCB);
+extern void handle_switched_out(int* pxCurrentTCB);
+
+#define traceTASK_SWITCHED_IN() handle_switched_in(&pxCurrentTCB);
+#define traceTASK_SWITCHED_OUT() handle_switched_out(&pxCurrentTCB);
 
 #endif /* FREERTOS_CONFIG_H */
