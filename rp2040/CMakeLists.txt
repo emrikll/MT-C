@@ -23,9 +23,6 @@ set(APP_2_SRC_DIRECTORY "${CMAKE_SOURCE_DIR}/App-Scheduling")
 set(APP_3_SRC_DIRECTORY "${CMAKE_SOURCE_DIR}/App-Reaction")
 set(APP_4_SRC_DIRECTORY "${CMAKE_SOURCE_DIR}/App-Timers")
 
-# FROM 1.3.0 -- Move common source code to a separate directory
-set(COMMON_CODE_DIRECTORY "${CMAKE_SOURCE_DIR}/Common")
-
 # FROM 1.4.2 -- Set app-side debugging on debug builds
 # Now uses CMake generator expression to extract config type
 add_compile_definitions($<$<CONFIG:Debug>:DEBUG=1>)

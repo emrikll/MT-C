@@ -111,11 +111,14 @@
 
 /* A header file that defines trace macro can be included here. */
 
-extern void log_debug(const char* msg);
-extern void handle_switched_in(int* pxCurrentTCB);
-extern void handle_switched_out(int* pxCurrentTCB);
+#ifdef REACTION
+    extern void log_debug(const char* msg);
+    extern void handle_switched_in(int* pxCurrentTCB);
+    extern void handle_switched_out(int* pxCurrentTCB);
+    
+    #define traceTASK_SWITCHED_IN() handle_switched_in(&pxCurrentTCB);
+    #define traceTASK_SWITCHED_OUT() handle_switched_out(&pxCurrentTCB);
+#endif
 
-#define traceTASK_SWITCHED_IN() handle_switched_in(&pxCurrentTCB);
-#define traceTASK_SWITCHED_OUT() handle_switched_out(&pxCurrentTCB);
 
 #endif /* FREERTOS_CONFIG_H */

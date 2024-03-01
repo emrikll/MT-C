@@ -10,6 +10,8 @@ add_executable(${APP_3_NAME}
     ${APP_3_SRC_DIRECTORY}/main.c
 )
 
+target_compile_definitions(${APP_3_NAME} PRIVATE REACTION=1)
+
 # Link to built librariespico_stdlib
 target_link_libraries(${APP_3_NAME} LINK_PUBLIC
     pico_stdlib
