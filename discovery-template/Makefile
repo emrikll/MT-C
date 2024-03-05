@@ -51,6 +51,7 @@ CFLAGS += -include $(STD_PERIPH_LIB)/stm32f0xx_conf.h
 CFLAGS += -I Include/
 CFLAGS += -I $(STD_PERIPH_LIB)/FreeRTOS-Kernel/portable/GCC/ARM_CM0
 CFLAGS += -I $(STD_PERIPH_LIB)/FreeRTOS-Kernel/include
+CFLAGS += -I libraries/io
 CFLAGS += -I /usr/include
 
 SRCS += libraries/FreeRTOS-Kernel/tasks.c
@@ -60,6 +61,7 @@ SRCS += libraries/FreeRTOS-Kernel/event_groups.c
 SRCS += libraries/FreeRTOS-Kernel/queue.c
 SRCS += libraries/FreeRTOS-Kernel/stream_buffer.c
 SRCS += libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM0/port.c
+SRCS += libraries/io/io.c
 
 OBJS = $(SRCS:.c=.o)
 
@@ -67,7 +69,7 @@ OBJS = $(SRCS:.c=.o)
 
 .PHONY: lib proj
 
-all: lib proj
+all: lib proj program
 
 lib:
 	$(MAKE) -C $(STD_PERIPH_LIB)
@@ -75,7 +77,7 @@ lib:
 proj: 	$(PROJ_NAME).elf
 
 $(PROJ_NAME).elf: $(SRCS)
-	mkdir build
+	mkdir -p build
 	$(CC) $(CFLAGS) $^ -o build/$@ -L$(STD_PERIPH_LIB) -lstm32f0 -L$(LDSCRIPT_INC) -Tstm32f0.ld
 	$(OBJCOPY) -O ihex build/$(PROJ_NAME).elf build/$(PROJ_NAME).hex
 	$(OBJCOPY) -O binary build/$(PROJ_NAME).elf build/$(PROJ_NAME).bin
@@ -84,6 +86,9 @@ $(PROJ_NAME).elf: $(SRCS)
 	
 program: build/$(PROJ_NAME).bin
 	$(OPENOCD) -f ./openocd.cfg -f $(OPENOCD_PROC_FILE) -c "stm_flash `pwd`/build/$(PROJ_NAME).bin"
+
+stop:
+	$(OPENOCD) -f ./openocd.cfg -f $(OPENOCD_PROC_FILE) -c "stm_stop"
 
 clean:
 	find ./ -name '*~' | xargs rm -f	
