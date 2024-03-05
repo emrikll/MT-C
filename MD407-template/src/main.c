@@ -43,6 +43,7 @@ void vTask1(void *vParameters){
   const TickType_t xDelay = 500 / portTICK_PERIOD_MS;
   for(;;)
   {
+      print("woo task!\n");
       if (toggle) {
         GPIO_ResetBits(LED_GPIO, RedLED_Pin);
       } else {
