@@ -2,13 +2,14 @@
 #include <stm32f0xx_rcc.h>
 #include <FreeRTOS.h>
 #include "FreeRTOSConfig.h"
+#include "bits/stdint-uintn.h"
 #include "portmacro.h"
 #include "task.h"
 #include "queue.h"
 #include "semphr.h"
 #include "croutine.h"
-#include "io.h"
-#include "stm32f0xx_usart.h"
+#include "usart.h"
+#include "timer.h"
 #include "stm32f0xx.h"
 #include "stm32f0xx_gpio.h"
 #include "stm32f0xx_rcc.h"
@@ -34,10 +35,10 @@ GPIO_InitTypeDef Gp;//Create GPIO struct
 void vTask1(void *vParameters){
 
   int toggle = 0;
-  const TickType_t xDelay = 500 / portTICK_PERIOD_MS;
+  const TickType_t xDelay = 1000 / portTICK_PERIOD_MS - 1;
   for(;;)
   {
-    printf("test");
+    
     if(toggle){
       //set bit
       GPIO_SetBits(LED_GPIO, GreenLED_Pin);
@@ -47,69 +48,19 @@ void vTask1(void *vParameters){
       GPIO_ResetBits(LED_GPIO, GreenLED_Pin);
       toggle = 1;
     }
+    uint32_t tim_value = time_us();
+
+    printf("Timer value: %u\n\r", tim_value);
     vTaskDelay(xDelay);
   }
 }
 
-void enable_usart(void) {
-  GPIO_InitTypeDef GPIO_InitStructure;
-	USART_ClockInitTypeDef USART_ClockInitStructure;
-	USART_InitTypeDef USART_InitStructure;
-
-	GPIO_DeInit( GPIOA );
-	USART_DeInit( USART1 );
-	RCC_APB2PeriphClockCmd( RCC_APB2Periph_USART1, ENABLE );
-	RCC_AHBPeriphClockCmd( RCC_AHBPeriph_GPIOA, ENABLE);
-
-	/* Connect USART pins to AF */
-	/* PA9 - USART1 TX  */
-	/* PA10 - USART1 RX */
-	GPIO_PinAFConfig(GPIOA, GPIO_PinSource9, GPIO_AF_1);  
-	GPIO_PinAFConfig(GPIOA, GPIO_PinSource10, GPIO_AF_1);  
-	/* PA11 - USART CTS not used */
-	/* PA12 - USART RTS not used */
-
-	GPIO_StructInit( &GPIO_InitStructure );
-
-
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10 |  GPIO_Pin_9;	
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP; // should really be GPIO_OType_PP?
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;	
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOA, &GPIO_InitStructure);
-
-  USART_StructInit( &USART_InitStructure );
-
-   /* USARTx configured as follow:
-         - BaudRate = 115200 baud  
-         - Word Length = 8 Bits
-         - One Stop Bit
-         - No parity
-         - Hardware flow control disabled (RTS and CTS signals)
-         - Receive and transmit enabled
-   */
-	USART_InitStructure.USART_BaudRate = 115200;
-	USART_InitStructure.USART_WordLength = USART_WordLength_8b;
-	USART_InitStructure.USART_StopBits = USART_StopBits_1;
-	USART_InitStructure.USART_Parity = USART_Parity_No;
-	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
-	USART_Init( USART1, &USART_InitStructure);
-
-	USART_ClockStructInit(&USART_ClockInitStructure);	
-	USART_ClockInit(USART1, &USART_ClockInitStructure);
-
-	USART_Cmd( USART1, ENABLE);	
-
-  USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
-
-}
 
 int main(void)
 {
 	//Enable clocks to both GPIOA (push button) and GPIOC (output LEDs)
-  enable_usart();
+    enable_usart();
+    enable_timer();
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
 
 	Gp.GPIO_Pin = GreenLED_Pin | BlueLED_Pin; //Set pins inside the struct

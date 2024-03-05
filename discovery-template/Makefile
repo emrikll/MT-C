@@ -51,7 +51,7 @@ CFLAGS += -include $(STD_PERIPH_LIB)/stm32f0xx_conf.h
 CFLAGS += -I Include/
 CFLAGS += -I $(STD_PERIPH_LIB)/FreeRTOS-Kernel/portable/GCC/ARM_CM0
 CFLAGS += -I $(STD_PERIPH_LIB)/FreeRTOS-Kernel/include
-CFLAGS += -I libraries/io
+CFLAGS += -I libraries/utils
 CFLAGS += -I /usr/include
 
 SRCS += libraries/FreeRTOS-Kernel/tasks.c
@@ -61,8 +61,8 @@ SRCS += libraries/FreeRTOS-Kernel/event_groups.c
 SRCS += libraries/FreeRTOS-Kernel/queue.c
 SRCS += libraries/FreeRTOS-Kernel/stream_buffer.c
 SRCS += libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM0/port.c
-SRCS += libraries/io/io.c
-
+SRCS += libraries/utils/usart.c
+SRCS += libraries/utils/timer.c
 OBJS = $(SRCS:.c=.o)
 
 ###################################################
