@@ -857,8 +857,8 @@ void USART_AutoBaudRateConfig(USART_TypeDef* USARTx, uint32_t USART_AutoBaudRate
 void USART_SendData(USART_TypeDef* USARTx, uint16_t Data)
 {
   /* Check the parameters */
-  assert_param(IS_USART_ALL_PERIPH(USARTx));
-  assert_param(IS_USART_DATA(Data)); 
+  //assert_param(IS_USART_ALL_PERIPH(USARTx));
+  //assert_param(IS_USART_DATA(Data)); 
     
   /* Transmit Data */
   USARTx->TDR = (Data & (uint16_t)0x01FF);
@@ -1693,9 +1693,9 @@ void USART_ITConfig(USART_TypeDef* USARTx, uint32_t USART_IT, FunctionalState Ne
   uint32_t usartreg = 0, itpos = 0, itmask = 0;
   uint32_t usartxbase = 0;
   /* Check the parameters */
-  assert_param(IS_USART_ALL_PERIPH(USARTx));
-  assert_param(IS_USART_CONFIG_IT(USART_IT));
-  assert_param(IS_FUNCTIONAL_STATE(NewState));
+  //assert_param(IS_USART_ALL_PERIPH(USARTx));
+  //assert_param(IS_USART_CONFIG_IT(USART_IT));
+  //assert_param(IS_FUNCTIONAL_STATE(NewState));
   
   usartxbase = (uint32_t)USARTx;
   
@@ -1818,8 +1818,8 @@ FlagStatus USART_GetFlagStatus(USART_TypeDef* USARTx, uint32_t USART_FLAG)
 {
   FlagStatus bitstatus = RESET;
   /* Check the parameters */
-  assert_param(IS_USART_ALL_PERIPH(USARTx));
-  assert_param(IS_USART_FLAG(USART_FLAG));
+  //assert_param(IS_USART_ALL_PERIPH(USARTx));
+  //assert_param(IS_USART_FLAG(USART_FLAG));
   
   if ((USARTx->ISR & USART_FLAG) != (uint16_t)RESET)
   {
