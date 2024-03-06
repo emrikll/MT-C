@@ -1,6 +1,8 @@
 #include "main.h"
+#include "FreeRTOSConfig.h"
 #include "stm32f4xx_exti.h"
 #include "stm32f4xx_gpio.h"
+#include "stm32f4xx_rng.h"
 
 GPIO_InitTypeDef Gp;//Create GPIO struct
 GPIO_InitTypeDef gpioStructure;
@@ -191,10 +193,10 @@ void EXTI0_IRQHandler(void) {
     /* ISR FUNCTION BODY USING A SEMAPHORE */
     
     //xStartISR = time_us_64();
-    print("IRQ");
+
     // Signal the alert clearance task
     xSemaphoreGiveFromISR(semaphore_irq, &higher_priority_task_woken);
-    print("After sem");
+
     // Exit to context switch if necessary
     portYIELD_FROM_ISR(higher_priority_task_woken);
     /* Clear interrupt flag */
@@ -210,10 +212,9 @@ void task_led(void *vParameters){
     int toggle = 0;
     GPIO_ResetBits(LED_GPIO, RedLED_Pin);
     vTaskDelay(1000);
-    //const TickType_t xDelay = 500 / portTICK_PERIOD_MS;
+    
     for(;;)
     {
-        print("in for loop\n");
         if(xSemaphoreTake(semaphore_irq, portMAX_DELAY) == pdPASS) {
             print("woo task!\n");
             if (toggle) {
@@ -226,16 +227,30 @@ void task_led(void *vParameters){
         }else{
             print("Could not take Semaphore\n");
         }
-        //vTaskDelay(xDelay); 
+    }
+}
+
+void task_cpu_average(TimerHandle_t timer) {
+    
+}
+
+void task_sleep(void *vParameters) {
+    uint32_t rand_nr = RNG_GetRandomNumber(); 
+
+    const TickType_t xDelay = 500 / portTICK_PERIOD_MS;
+    TickType_t xLastWakeTime;
+
+    xLastWakeTime = xTaskGetTickCount();
+
+    for(;;){
+        vTaskDelayUntil(&xLastWakeTime, xDelay);
+        rand_nr = RNG_GetRandomNumber() % 10;
+        //TODO add sleep function
     }
 }
 
 void led_timer_callback(TimerHandle_t timer) {
     print("In LED callback\n");
-    
-    //GPIO_WriteBit(EXTI0_GPIO, EXTI0_Pin, Bit_SET);
-
-    //GPIO_WriteBit(EXTI0_GPIO, EXTI0_Pin, Bit_RESET);
     
     EXTI_GenerateSWInterrupt(EXTI_Line0);
 }
@@ -255,7 +270,7 @@ int main(void) {
     TimerHandle_t task_timer = xTimerCreate("LED_ON_TIMER", pdMS_TO_TICKS(LED_FLASH_PERIOD_MS), pdTRUE, (void*)TIMER_ID_LED_ON, led_timer_callback);
 
     semaphore_irq = xSemaphoreCreateBinary();
-    assert(semaphore_irq != NULL);
+    configASSERT(semaphore_irq != NULL);
 
     if( task_timer == NULL ){
         /* The timer was not created. */

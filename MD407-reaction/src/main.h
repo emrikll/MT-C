@@ -16,6 +16,7 @@
 #include <stm32f4xx_tim.h>
 #include <stm32f4xx_exti.h>
 #include <stm32f4xx_syscfg.h>
+#include <stm32f4xx_rng.h>
 #include "misc.h"
 #include "system_stm32f4xx.h"
 // FreeRTOS
