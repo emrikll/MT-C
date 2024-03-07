@@ -82,32 +82,6 @@ SemaphoreHandle_t mutex_sleep_capacity;
  ** Startup 
  */
 
-void InitializeLEDs()
-{
-    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
-  
-    gpioStructure.GPIO_Pin = GPIO_Pin_12 | GPIO_Pin_13;
-    gpioStructure.GPIO_Mode = GPIO_Mode_OUT;
-    gpioStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOD, &gpioStructure);
- 
-    GPIO_WriteBit(GPIOD, GPIO_Pin_12 | GPIO_Pin_13, Bit_RESET);
-}
- 
-void InitializeTimer()
-{
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
- 
-    TIM_TimeBaseInitTypeDef timerInitStructure; 
-    timerInitStructure.TIM_Prescaler = 40000;
-    timerInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
-    timerInitStructure.TIM_Period = 500;
-    timerInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
-    timerInitStructure.TIM_RepetitionCounter = 0;
-    TIM_TimeBaseInit(TIM2, &timerInitStructure);
-    TIM_Cmd(TIM2, ENABLE);
-}
-
 void EnableInterruptEXTI0()
 {    
     /* Enable clock for GPIOD */
@@ -152,19 +126,7 @@ void EnableInterruptEXTI0()
     NVIC_SetPriority(EXTI0_IRQn, 2);
 }
 
-void EnableTimerInterrupt()
-{
-    NVIC_InitTypeDef nvicStructure;
-    nvicStructure.NVIC_IRQChannel = TIM2_IRQn;
-    nvicStructure.NVIC_IRQChannelPreemptionPriority = 0;
-    nvicStructure.NVIC_IRQChannelSubPriority = 1;
-    nvicStructure.NVIC_IRQChannelCmd = ENABLE;
-    NVIC_Init(&nvicStructure);
-}
-
 void hardware_init(){
-    //InitializeLEDs();
-    //InitializeTimer(); 
     NVIC_PriorityGroupConfig( NVIC_PriorityGroup_4 );
     EnableInterruptEXTI0();
     enable_timer();
@@ -191,6 +153,7 @@ void hardware_init(){
 /* Handle PD0 interrupt */
 void EXTI0_IRQHandler(void) {
     print("In IRQ handler\n");
+    xStartISR = time_us();
     BaseType_t higher_priority_task_woken = pdFALSE;
     /* Make sure that interrupt flag is set */
     /* ISR FUNCTION BODY USING A SEMAPHORE */
@@ -236,6 +199,12 @@ void task_led(void *vParameters){
     {
         if(xSemaphoreTake(semaphore_irq, portMAX_DELAY) == pdPASS) {
             print("woo task!\n");
+            xEnd = time_us();
+            char str[64];
+            xDifference = xEnd - xStart;
+            xDifferenceISR = xStartISR - xStart;
+            print("HERE INTERRUPT STATISTICS SHOULD BE PRINTED\n");
+            xStart, xEnd, xDifference = 0;
             if (toggle) {
                 GPIO_ResetBits(LED_GPIO, RedLED_Pin);
             } else {
@@ -296,6 +265,8 @@ void handle_switched_out(int* pxCurrentTCB) {
 
 void led_timer_callback(TimerHandle_t timer) {
     print("In LED callback\n");
+
+    xStart = time_us();
     
     EXTI_GenerateSWInterrupt(EXTI_Line0);
 }
