@@ -35,7 +35,9 @@ add_executable(
     driver/src/stm32f4xx_syscfg.c
     driver/src/stm32f4xx_tim.c
     driver/src/stm32f4xx_usart.c
+    driver/src/stm32f4xx_rng.c
     driver/src/misc.c
+    libraries/utils/timer.c
     startup.c
     src/main.c)
 
@@ -48,6 +50,7 @@ target_include_directories(
     PRIVATE ${PROJECT_SOURCE_DIR}/include
     PRIVATE ${PROJECT_SOURCE_DIR}/libraries/io
     PRIVATE ${PROJECT_SOURCE_DIR}/src
+    PRIVATE ${PROJECT_SOURCE_DIR}/libraries/utils
     PRIVATE ${FREERTOS_CFG_DIRECTORY}/
     PRIVATE ${FREERTOS_SRC_DIRECTORY}/include
     PRIVATE ${FREERTOS_SRC_DIRECTORY}/portable/GCC/ARM_CM4F

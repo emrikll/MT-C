@@ -49,26 +49,27 @@
 
 #include "system_stm32f4xx.h"
 #define STM32F4XX
-#define SystemCoreClock 168000000 
-#define configUSE_PREEMPTION                     1
-#define configSUPPORT_STATIC_ALLOCATION          1
-#define configSUPPORT_DYNAMIC_ALLOCATION         1
-#define configUSE_IDLE_HOOK                      0
-#define configUSE_TICK_HOOK                      0
-#define configCPU_CLOCK_HZ                       ( SystemCoreClock )
-#define configTICK_RATE_HZ                       ((TickType_t)1000)
-#define configMAX_PRIORITIES                     ( 56 )
-#define configMINIMAL_STACK_SIZE                 ((uint16_t)128)
-#define configTOTAL_HEAP_SIZE                    ((size_t)3072)
-#define configMAX_TASK_NAME_LEN                  ( 16 )
-#define configUSE_TRACE_FACILITY                 1
-#define configUSE_16_BIT_TICKS                   0
-#define configUSE_MUTEXES                        1
-#define configQUEUE_REGISTRY_SIZE                8
-#define configUSE_RECURSIVE_MUTEXES              1
-#define configUSE_COUNTING_SEMAPHORES            1
-#define configUSE_PORT_OPTIMISED_TASK_SELECTION  0
-#define configMAX_SYSCALL_INTERRUPT_PRIORITY     16
+#define SystemCoreClock                             168000000 
+#define configUSE_PREEMPTION                        1
+#define configSUPPORT_STATIC_ALLOCATION             1
+#define configSUPPORT_DYNAMIC_ALLOCATION            1
+#define configUSE_IDLE_HOOK                         0
+#define configUSE_TICK_HOOK                         0
+#define configCPU_CLOCK_HZ                          ( SystemCoreClock )
+#define configTICK_RATE_HZ                          ((TickType_t)1000)
+#define configMAX_PRIORITIES                        ( 56 )
+#define configMINIMAL_STACK_SIZE                    ((uint16_t)128)
+#define configTOTAL_HEAP_SIZE                       ((size_t)3072)
+#define configMAX_TASK_NAME_LEN                     ( 16 )
+#define configUSE_TRACE_FACILITY                    1
+#define configUSE_16_BIT_TICKS                      0
+#define configUSE_MUTEXES                           1
+#define configQUEUE_REGISTRY_SIZE                   8
+#define configUSE_RECURSIVE_MUTEXES                 1
+#define configUSE_COUNTING_SEMAPHORES               1
+#define configUSE_PORT_OPTIMISED_TASK_SELECTION     0
+#define configMAX_SYSCALL_INTERRUPT_PRIORITY        16
+#define configUSE_TICKLESS_IDLE                     0
 
 /* Co-routine definitions. */
 #define configUSE_CO_ROUTINES                    0
@@ -94,6 +95,7 @@ to exclude the API function. */
 #define INCLUDE_xQueueGetMutexHolder        1
 #define INCLUDE_uxTaskGetStackHighWaterMark 1
 #define INCLUDE_eTaskGetState               1
+#define INCLUDE_xTaskGetIdleTaskHandle      1
 
 /*
  * The CMSIS-RTOS V2 FreeRTOS wrapper is dependent on the heap implementation used
@@ -119,6 +121,11 @@ standard names. */
 
 /* USER CODE BEGIN Defines */
 /* Section where parameter definitions can be added (for instance, to override default ones in FreeRTOS.h) */
+extern void handle_switched_in(int* pxCurrentTCB);
+extern void handle_switched_out(int* pxCurrentTCB);
+
+#define traceTASK_SWITCHED_IN() handle_switched_in(&pxCurrentTCB);
+#define traceTASK_SWITCHED_OUT() handle_switched_out(&pxCurrentTCB);
 /* USER CODE END Defines */
 
 #endif /* FREERTOS_CONFIG_H */

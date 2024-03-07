@@ -27,10 +27,10 @@
 #include "semphr.h"
 #include "croutine.h"
 #include "timers.h"
-#include "FreeRTOSConfig.h"
 // Misc
 #include "io.h"
-#include "assert.h"
+#include "timer.h"
+
 /**
  * CONSTANTS
  */
@@ -42,7 +42,7 @@
 #define         LED_FLASH_PERIOD_MS         2000
 #define         SW_IRQ_PIN                  21
 
-#define         TIMER_ID_LED_ON             0
+#define         TIMER_ID                    0
 
 #define         AVERAGE_USAGE_INTERVAL_MS   5000
 

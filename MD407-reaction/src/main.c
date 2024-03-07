@@ -1,8 +1,9 @@
 #include "main.h"
-#include "FreeRTOSConfig.h"
+#include "projdefs.h"
+#include "stm32f4xx_rng.h"
 #include "stm32f4xx_exti.h"
 #include "stm32f4xx_gpio.h"
-#include "stm32f4xx_rng.h"
+#include <stdint.h>
 
 GPIO_InitTypeDef Gp;//Create GPIO struct
 GPIO_InitTypeDef gpioStructure;
@@ -29,11 +30,14 @@ NVIC_InitTypeDef NVIC_InitStruct;
 
 // Semaphores
 static SemaphoreHandle_t semaphore_irq = NULL;
+StaticSemaphore_t xMutexBuffer;
+SemaphoreHandle_t mutex_sleep_capacity;
 
-// Tick counters IRQ
+//Tick counters IRQ
+uint64_t xStart, xEnd, xStartISR, xDifference, xDifferenceISR = 0;
 
-// Tick counter IDLE
-
+//Tick counters IDLE
+uint64_t xTimeInCPU, xTimeOutCPU, xDifferenceCPU, xTotalCPU = 0;
 
 // FreeRTOS static allocation
 
@@ -162,9 +166,8 @@ void hardware_init(){
     //InitializeLEDs();
     //InitializeTimer(); 
     NVIC_PriorityGroupConfig( NVIC_PriorityGroup_4 );
-    print("Enabling interrupts\n");
     EnableInterruptEXTI0();
-    print("Interrupts enabled\n");
+    enable_timer();
 }
 
 /*
@@ -206,6 +209,22 @@ void EXTI0_IRQHandler(void) {
 /*
  ** Tasks 
  */
+void task_sleep(void *vParameters) {
+    uint32_t rand_nr = RNG_GetRandomNumber();
+    uint32_t start = time_us();
+
+    const TickType_t xDelay = 500 / portTICK_PERIOD_MS;
+    TickType_t xLastWakeTime;
+
+    xLastWakeTime = xTaskGetTickCount();
+
+    for(;;){
+        vTaskDelayUntil(&xLastWakeTime, xDelay);
+        rand_nr = RNG_GetRandomNumber() % 10;
+        start = time_us();
+        while ((rand_nr * 1000000) < (time_us() - start) );
+    }
+}
 
 void task_led(void *vParameters){
 
@@ -224,29 +243,55 @@ void task_led(void *vParameters){
             }
 
             toggle = ~toggle;
+            if (xSemaphoreTake(mutex_sleep_capacity, portMAX_DELAY) == pdPASS){
+                if (capacity_task_sleep < CAPACITY){
+                    print("capacity added\n");
+                    xTaskCreateStatic(task_sleep, "SLEEP_TASK", 128, NULL,  1, xStack[capacity_task_sleep], &xTaskBuffer[capacity_task_sleep]);
+                    capacity_task_sleep++;
+                    xSemaphoreGive(mutex_sleep_capacity);
+                }
+            }
         }else{
             print("Could not take Semaphore\n");
         }
+        
     }
 }
 
 void task_cpu_average(TimerHandle_t timer) {
-    
+    char str[64];
+    int average_time = (AVERAGE_USAGE_INTERVAL_MS*1000);
+    float usage = ( (float)average_time - (float)xTotalCPU) / (float)average_time;
+
+    xTotalCPU = 0;
+
+    print("HERE SHOULD CPU USAGE BE PRINTED\n");
 }
 
-void task_sleep(void *vParameters) {
-    uint32_t rand_nr = RNG_GetRandomNumber(); 
+/**
+ * @brief Handler for when tasks switch in.
+ */
+void handle_switched_in(int* pxCurrentTCB) {
+    TaskHandle_t handle = (TaskHandle_t)*pxCurrentTCB;
+     if (handle == xTaskGetIdleTaskHandle()) {
+        xTimeInCPU = time_us();
+        print("Switched in to IDLE\n");
+     }
+}
 
-    const TickType_t xDelay = 500 / portTICK_PERIOD_MS;
-    TickType_t xLastWakeTime;
-
-    xLastWakeTime = xTaskGetTickCount();
-
-    for(;;){
-        vTaskDelayUntil(&xLastWakeTime, xDelay);
-        rand_nr = RNG_GetRandomNumber() % 10;
-        //TODO add sleep function
-    }
+/**
+ * @brief Handler for when tasks switch out.
+ */
+void handle_switched_out(int* pxCurrentTCB) {
+    TaskHandle_t handle = (TaskHandle_t)*pxCurrentTCB;
+     if (handle == xTaskGetIdleTaskHandle()) {
+        char str[64];
+        xTimeOutCPU = time_us();
+        xDifferenceCPU = xTimeOutCPU - xTimeInCPU;
+        xTotalCPU = xTotalCPU + xDifferenceCPU;
+        print("Switched out\n");
+        xTimeInCPU, xTimeOutCPU, xDifferenceCPU = 0;
+     }
 }
 
 void led_timer_callback(TimerHandle_t timer) {
@@ -267,19 +312,22 @@ int main(void) {
 
 
     TaskHandle_t led_task = xTaskCreateStatic(task_led, "ToggleLED", 128, NULL, 1, xStackLed,&xTaskBufferLed);
-    TimerHandle_t task_timer = xTimerCreate("LED_ON_TIMER", pdMS_TO_TICKS(LED_FLASH_PERIOD_MS), pdTRUE, (void*)TIMER_ID_LED_ON, led_timer_callback);
+    TimerHandle_t task_timer = xTimerCreate("LED_ON_TIMER", pdMS_TO_TICKS(LED_FLASH_PERIOD_MS), pdTRUE, (void*)TIMER_ID, led_timer_callback);
+    TimerHandle_t usage_timer = xTimerCreate("CPU_UUSAGE_TIMER", pdMS_TO_TICKS(AVERAGE_USAGE_INTERVAL_MS), pdTRUE, (void*)TIMER_ID, task_cpu_average);
 
     semaphore_irq = xSemaphoreCreateBinary();
     configASSERT(semaphore_irq != NULL);
+    mutex_sleep_capacity = xSemaphoreCreateMutexStatic( &xMutexBuffer );
+    configASSERT(mutex_sleep_capacity != NULL);
 
-    if( task_timer == NULL ){
+    if( task_timer == NULL || usage_timer == NULL ){
         /* The timer was not created. */
         print("Timers was not created\n");
     }else{
     /* Start the timer.  No block time is specified, and
     even if one was it would be ignored because the RTOS
     scheduler has not yet been started. */
-        if( xTimerStart( task_timer, 0 ) != pdPASS )
+        if( xTimerStart( task_timer, 0 ) != pdPASS || xTimerStart(usage_timer,0) != pdPASS)
         {
             /* The timer could not be set into the Active
             state. */
