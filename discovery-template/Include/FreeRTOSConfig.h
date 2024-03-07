@@ -75,7 +75,7 @@
 #define configMAX_CO_ROUTINE_PRIORITIES          ( 2 )
 
 /* Software timer definitions. */
-#define configUSE_TIMERS                         0
+#define configUSE_TIMERS                         1
 #define configTIMER_TASK_PRIORITY                ( 2 )
 #define configTIMER_QUEUE_LENGTH                 10
 #define configTIMER_TASK_STACK_DEPTH             256
@@ -94,7 +94,7 @@ to exclude the API function. */
 #define INCLUDE_xQueueGetMutexHolder        1
 #define INCLUDE_uxTaskGetStackHighWaterMark 1
 #define INCLUDE_eTaskGetState               1
-
+#define INCLUDE_xTaskGetIdleTaskHandle      1
 /*
  * The CMSIS-RTOS V2 FreeRTOS wrapper is dependent on the heap implementation used
  * by the application thus the correct define need to be enabled below
@@ -120,5 +120,9 @@ standard names. */
 /* USER CODE BEGIN Defines */
 /* Section where parameter definitions can be added (for instance, to override default ones in FreeRTOS.h) */
 /* USER CODE END Defines */
+extern void handle_switched_in(int* pxCurrentTCB);
+extern void handle_switched_out(int* pxCurrentTCB);
 
+#define traceTASK_SWITCHED_IN() handle_switched_in(&pxCurrentTCB);
+#define traceTASK_SWITCHED_OUT() handle_switched_out(&pxCurrentTCB);
 #endif /* FREERTOS_CONFIG_H */

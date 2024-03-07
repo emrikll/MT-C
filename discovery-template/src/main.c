@@ -2,17 +2,16 @@
 #include <stm32f0xx_rcc.h>
 #include <FreeRTOS.h>
 #include "FreeRTOSConfig.h"
-#include "bits/stdint-uintn.h"
 #include "portmacro.h"
 #include "task.h"
-#include "queue.h"
-#include "semphr.h"
-#include "croutine.h"
 #include "usart.h"
 #include "timer.h"
 #include "stm32f0xx.h"
 #include "stm32f0xx_gpio.h"
 #include "stm32f0xx_rcc.h"
+#include "utils/idle.h"
+#include "rng.h"
+#include "print.h"
 GPIO_InitTypeDef Gp;//Create GPIO struct
 
 //Define LED pins
@@ -32,6 +31,26 @@ GPIO_InitTypeDef Gp;//Create GPIO struct
 **
 **===========================================================================
 */
+
+/*
+ ** Tasks 
+ 
+void task_sleep(void *vParameters) {
+    uint32_t rand_nr = RNG_GetRandomNumber();
+    uint32_t start = time_us();
+
+    const TickType_t xDelay = 500 / portTICK_PERIOD_MS;
+    TickType_t xLastWakeTime;
+
+    xLastWakeTime = xTaskGetTickCount();
+
+    for(;;){
+        vTaskDelayUntil(&xLastWakeTime, xDelay);
+        rand_nr = RNG_GetRandomNumber() % 10;
+        start = time_us();
+        while ((rand_nr * 1000000) < (time_us() - start) );
+    }
+}*/
 void vTask1(void *vParameters){
 
   int toggle = 0;
@@ -49,8 +68,11 @@ void vTask1(void *vParameters){
       toggle = 1;
     }
     uint32_t tim_value = time_us();
-
-    printf("Timer value: %u\n\r", tim_value);
+    float cpu_usage = cpu_usage_percent();
+    printf("CPU usage: %f",cpu_usage);
+    print("\n\r");
+    uint16_t rand = get_random_byte();
+    printf("Random byte: %u \n\r", rand);
     vTaskDelay(xDelay);
   }
 }
@@ -61,6 +83,8 @@ int main(void)
 	//Enable clocks to both GPIOA (push button) and GPIOC (output LEDs)
     enable_usart();
     enable_timer();
+    adc_init();
+
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
 
 	Gp.GPIO_Pin = GreenLED_Pin | BlueLED_Pin; //Set pins inside the struct
