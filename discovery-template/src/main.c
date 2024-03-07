@@ -11,7 +11,6 @@
 #include "stm32f0xx_rcc.h"
 #include "utils/idle.h"
 #include "rng.h"
-#include "print.h"
 GPIO_InitTypeDef Gp;//Create GPIO struct
 
 //Define LED pins

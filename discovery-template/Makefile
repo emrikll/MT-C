@@ -65,7 +65,7 @@ SRCS += libraries/utils/usart.c
 SRCS += libraries/utils/timer.c
 SRCS += libraries/utils/idle.c
 SRCS += libraries/utils/rng.c
-SRCS += libraries/utils/print.c
+SRCS += libraries/utils/printf.c
 OBJS = $(SRCS:.c=.o)
 
 ###################################################
