@@ -182,7 +182,7 @@ void task_led(void *vParameters){
             xEnd = time_us();
             xDifference = xEnd - xStart;
             xDifferenceISR = xStartISR - xStart;
-            printf_("xDifferenceISR: %lu, xDifference: %lu \n\r", (long unsigned int)xDifferenceISR, (long unsigned int)xDifference);
+        printf_("xDifferenceISR: %lu, xDifference: %lu \n\r", (long unsigned int)xDifferenceISR, (long unsigned int)xDifference);
             xStart = 0; 
             xEnd = 0;
             xDifference = 0;
@@ -202,7 +202,7 @@ void task_led(void *vParameters){
                 xSemaphoreGive(mutex_sleep_capacity);
             }
         }else{
-            print("Could not take Semaphore\n");
+            printf_("Could not take Semaphore\n");
         }
         
     }
@@ -219,13 +219,13 @@ void task_cpu_average(TimerHandle_t timer) {
     float usage = cpu_usage_percent();
 
     printf_("CPU usage: %f \n\r", usage);
-    print("\n\r");
+    printf_("\n\r");
 }
 
 int main(void)
 {
 	//Enable clocks to both GPIOA (push button) and GPIOC (output LEDs)
-    print("Init\n\r");
+    printf_("Init\n\r");
     enable_usart();
     enable_timer();
     adc_init();
@@ -245,28 +245,28 @@ int main(void)
 	Gp.GPIO_PuPd = GPIO_PuPd_NOPULL; //No pullup required as pullup is external
 	GPIO_Init(PushButton_GPIO, &Gp); //Assign struct to LED_GPIO
     
-    print("Before timers\n\r");
+    printf_("Before timers\n\r");
     TaskHandle_t led_task = xTaskCreateStatic(task_led, "ToggleLED", 128, NULL, 1, xStackLed,&xTaskBufferLed);
     TimerHandle_t task_timer = xTimerCreateStatic("LED_ON_TIMER", pdMS_TO_TICKS(LED_FLASH_PERIOD_MS), pdTRUE, (void*)TIMER_ID, led_timer_callback, &tasktimerbuffer);
     TimerHandle_t usage_timer = xTimerCreateStatic("CPU_UUSAGE_TIMER", pdMS_TO_TICKS(AVERAGE_USAGE_INTERVAL_MS), pdTRUE, (void*)TIMER_ID, task_cpu_average, &usageTimerBuffer);
-    print("AFter timers\n\r");
+    printf_("AFter timers\n\r");
 	//uint8_t ButtonRead = 0; //Initialize ButtonRead variable
     semaphore_irq = xSemaphoreCreateBinaryStatic(&pxSemaphoreBuffer);
     configASSERT(semaphore_irq != NULL);
     mutex_sleep_capacity = xSemaphoreCreateMutexStatic( &xMutexBuffer );
     configASSERT(mutex_sleep_capacity != NULL);
 
-    print("After asserts\n\r");
+    printf_("After asserts\n\r");
 
     if( task_timer == NULL || usage_timer == NULL ){
-        print("Timers was not created\n");
+        printf_("Timers was not created\n");
     }else{
         if( xTimerStart( task_timer, 0 ) != pdPASS || xTimerStart(usage_timer,0) != pdPASS)
         {
-            print("Timer could not be started\n");
+            printf_("Timer could not be started\n");
         }
     }
-    print("Starting scheduler\n\r");
+    printf_("Starting scheduler\n\r");
     vTaskStartScheduler();
 
 }
