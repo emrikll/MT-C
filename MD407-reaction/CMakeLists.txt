@@ -26,7 +26,6 @@ add_executable(
     ${FREERTOS_SRC_DIRECTORY}/timers.c
     ${FREERTOS_SRC_DIRECTORY}/portable/MemMang/heap_3.c
     ${FREERTOS_SRC_DIRECTORY}/portable/GCC/ARM_CM4F/port.c
-    libraries/io/io.c
     driver/src/stm32f4xx_can.c
     driver/src/stm32f4xx_dac.c
     driver/src/stm32f4xx_exti.c
@@ -38,6 +37,8 @@ add_executable(
     driver/src/stm32f4xx_rng.c
     driver/src/misc.c
     libraries/utils/timer.c
+    libraries/utils/usart.c
+    libraries/utils/printf.c
     startup.c
     src/main.c)
 

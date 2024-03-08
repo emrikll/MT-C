@@ -28,7 +28,8 @@
 #include "croutine.h"
 #include "timers.h"
 // Misc
-#include "io.h"
+#include "usart.h"
+#include "printf.h"
 #include "timer.h"
 
 /**

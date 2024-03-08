@@ -1,10 +1,8 @@
-#include "stm32f0xx_rcc.h"
-#include "stm32f0xx_gpio.h"
-#include "stm32f0xx_usart.h"
-#include <stdio.h>
+#include "stm32f4xx_rcc.h"
+#include "stm32f4xx_gpio.h"
+#include "stm32f4xx_usart.h"
 #include <stdarg.h>
 
-int printf(const char* str, ...);
-int print(const char* str);
+void _putchar(char c); 
 
 void enable_usart(void);
