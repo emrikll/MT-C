@@ -30,10 +30,13 @@ NVIC_InitTypeDef NVIC_InitStruct;
 
 // Init variables
 
-// Task Handles
+// Timer variables
+StaticTimer_t TimerBufferLed;
+StaticTimer_t TimerBufferUsage;
 
 // Semaphores
 static SemaphoreHandle_t semaphore_irq = NULL;
+StaticSemaphore_t xSemaphoreBuffer;
 StaticSemaphore_t xMutexBuffer;
 SemaphoreHandle_t mutex_sleep_capacity;
 
@@ -75,9 +78,6 @@ an array of StackType_t variables.  The size of StackType_t is dependent on
 the RTOS port. */
 StackType_t xStack[CAPACITY][ STACK_SIZE ];
 
-// Semaphores
-StaticSemaphore_t xMutexBuffer;
-SemaphoreHandle_t mutex_sleep_capacity;
 
 // Custom vector to get IRQ working
 #define SCB_VTOR_CUSTOM ((volatile unsigned long *) 0xE000ED08)
@@ -290,10 +290,10 @@ int main(void) {
 
 
     TaskHandle_t led_task = xTaskCreateStatic(task_led, "ToggleLED", 128, NULL, 1, xStackLed,&xTaskBufferLed);
-    TimerHandle_t task_timer = xTimerCreate("LED_ON_TIMER", pdMS_TO_TICKS(LED_FLASH_PERIOD_MS), pdTRUE, (void*)TIMER_ID, led_timer_callback);
-    TimerHandle_t usage_timer = xTimerCreate("CPU_UUSAGE_TIMER", pdMS_TO_TICKS(AVERAGE_USAGE_INTERVAL_MS), pdTRUE, (void*)TIMER_ID, task_cpu_average);
+    TimerHandle_t task_timer = xTimerCreateStatic("LED_ON_TIMER", pdMS_TO_TICKS(LED_FLASH_PERIOD_MS), pdTRUE, (void*)TIMER_ID, led_timer_callback, &TimerBufferLed);
+    TimerHandle_t usage_timer = xTimerCreateStatic("CPU_UUSAGE_TIMER", pdMS_TO_TICKS(AVERAGE_USAGE_INTERVAL_MS), pdTRUE, (void*)TIMER_ID, task_cpu_average, &TimerBufferUsage);
 
-    semaphore_irq = xSemaphoreCreateBinary();
+    semaphore_irq = xSemaphoreCreateBinaryStatic(&xSemaphoreBuffer);
     configASSERT(semaphore_irq != NULL);
     mutex_sleep_capacity = xSemaphoreCreateMutexStatic( &xMutexBuffer );
     configASSERT(mutex_sleep_capacity != NULL);

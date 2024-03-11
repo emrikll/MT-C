@@ -24,7 +24,7 @@ add_executable(
     ${FREERTOS_SRC_DIRECTORY}/stream_buffer.c
     ${FREERTOS_SRC_DIRECTORY}/tasks.c
     ${FREERTOS_SRC_DIRECTORY}/timers.c
-    ${FREERTOS_SRC_DIRECTORY}/portable/MemMang/heap_3.c
+    #${FREERTOS_SRC_DIRECTORY}/portable/MemMang/heap_3.c
     ${FREERTOS_SRC_DIRECTORY}/portable/GCC/ARM_CM4F/port.c
     driver/src/stm32f4xx_can.c
     driver/src/stm32f4xx_dac.c
