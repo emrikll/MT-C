@@ -6,7 +6,8 @@
 #include "stm32f4xx_gpio.h"
 #include "stm32f4xx_usart.h"
 #include <stdint.h>
-#include <math.h>
+#include <stdlib.h>
+#include <string.h>
 
 GPIO_InitTypeDef Gp;//Create GPIO struct
 GPIO_InitTypeDef gpioStructure;
@@ -37,10 +38,10 @@ StaticSemaphore_t xMutexBuffer;
 SemaphoreHandle_t mutex_sleep_capacity;
 
 //Tick counters IRQ
-uint64_t xStart, xEnd, xStartISR, xDifference, xDifferenceISR = 0;
+uint32_t xStart, xEnd, xStartISR, xDifference, xDifferenceISR = 0;
 
 //Tick counters IDLE
-uint64_t xTimeInCPU, xTimeOutCPU, xDifferenceCPU, xTotalCPU = 0;
+uint32_t xTimeInCPU, xTimeOutCPU, xDifferenceCPU, xTotalCPU = 0;
 
 // FreeRTOS static allocation
 
@@ -66,7 +67,7 @@ bytes.  For example, if each stack item is 32-bits, and this is set to 100,
 then 400 bytes (100 * 32-bits) will be allocated. */
 #define STACK_SIZE 200
 
-/* Structure that will hold the TCB of the task being created. */
+/* 64ructure that will hold the TCB of the task being created. */
 StaticTask_t xTaskBuffer[CAPACITY];
 
 /* Buffer that the task being created will use as its stack.  Note this is
@@ -80,134 +81,6 @@ SemaphoreHandle_t mutex_sleep_capacity;
 
 // Custom vector to get IRQ working
 #define SCB_VTOR_CUSTOM ((volatile unsigned long *) 0xE000ED08)
-
-// Reverses a string 'str' of length 'len' 
-void reverse(char* str, int len) 
-{ 
-    int i = 0, j = len - 1, temp; 
-    while (i < j) { 
-        temp = str[i]; 
-        str[i] = str[j]; 
-        str[j] = temp; 
-        i++; 
-        j--; 
-    } 
-} 
- 
-// Converts a given integer x to string str[]. 
-// d is the number of digits required in the output. 
-// If d is more than the number of digits in x, 
-// then 0s are added at the beginning. 
-int intToStr(int x, char str[], int d) 
-{ 
-    int i = 0; 
-    while (x) { 
-        str[i++] = (x % 10) + '0'; 
-        x = x / 10; 
-    } 
- 
-    // If number of digits required is more, then 
-    // add 0s at the beginning 
-    while (i < d) 
-        str[i++] = '0'; 
- 
-    reverse(str, i); 
-    str[i] = '\0'; 
-    return i; 
-} 
-
-// Converts a floating-point/double number to a string. 
-void ftoa(float n, char* res, int afterpoint) 
-{ 
-    // Extract integer part 
-    int ipart = (int)n; 
- 
-    // Extract floating part 
-    float fpart = n - (float)ipart; 
- 
-    // convert integer part to string 
-    int i = intToStr(ipart, res, 0); 
- 
-    // check for display option after point 
-    if (afterpoint != 0) { 
-        res[i] = '.'; // add dot 
- 
-        // Get the value of fraction part upto given no. 
-        // of points after dot. The third parameter 
-        // is needed to handle cases like 233.007 
-        fpart = fpart * pow(10, afterpoint); 
- 
-        intToStr((int)fpart, res + i + 1, afterpoint); 
-    } 
-} 
-
-/** Number on countu **/
-
-int n_tu(int number, int count)
-{
-    int result = 1;
-    while(count-- > 0)
-        result *= number;
-
-    return result;
-}
-
-/*** Convert float to string ***/
-void float_to_string(float f, char r[])
-{
-    long long int length, length2, i, number, position, sign;
-    float number2;
-
-    sign = -1;   // -1 == positive number
-    if (f < 0)
-    {
-        sign = '-';
-        f *= -1;
-    }
-
-    number2 = f;
-    number = f;
-    length = 0;  // Size of decimal part
-    length2 = 0; // Size of tenth
-
-    /* Calculate length2 tenth part */
-    while( (number2 - (float)number) != 0.0 && !((number2 - (float)number) < 0.0) )
-    {
-         number2 = f * (n_tu(10.0, length2 + 1));
-         number = number2;
-
-         length2++;
-    }
-
-    /* Calculate length decimal part */
-    for (length = (f > 1) ? 0 : 1; f > 1; length++)
-        f /= 10;
-
-    position = length;
-    length = length + 1 + length2;
-    number = number2;
-    if (sign == '-')
-    {
-        length++;
-        position++;
-    }
-
-    for (i = length; i >= 0 ; i--)
-    {
-        if (i == (length))
-            r[i] = '\0';
-        else if(i == (position))
-            r[i] = '.';
-        else if(sign == '-' && i == 0)
-            r[i] = '-';
-        else
-        {
-            r[i] = (number % 10) + '0';
-            number /=10;
-        }
-    }
-}
-
 
 /*
  ** Startup 
@@ -284,7 +157,6 @@ void hardware_init(){
 /* Set interrupt handlers */
 /* Handle PD0 interrupt */
 void EXTI0_IRQHandler(void) {
-    printf_("In IRQ handler\n\r");
     xStartISR = time_us();
     BaseType_t higher_priority_task_woken = pdFALSE;
     /* Make sure that interrupt flag is set */
@@ -330,14 +202,20 @@ void task_led(void *vParameters){
     for(;;)
     {
         if(xSemaphoreTake(semaphore_irq, portMAX_DELAY) == pdPASS) {
-            printf_("woo task!\n\r");
             xEnd = time_us();
             xDifference = xEnd - xStart;
             xDifferenceISR = xStartISR - xStart;
-            char buffer[32];
-            float_to_string(3.1, buffer);
-            printf_(buffer);
-            xStart = xEnd = xDifference = 0;
+            char buffer1[32];
+            char buffer2[32];
+            sprintf_(buffer1, "%u", xDifferenceISR);
+            sprintf_(buffer2, "%u", xDifference);
+            printf_("xDifferenceISR ");
+            printf_(buffer1);
+            
+            printf_(", xDifference ");
+            printf_(buffer2);
+            printf_("\n\r");
+            xStart = xEnd = xDifference = xDifferenceISR = 0;
             if (toggle) {
                 GPIO_ResetBits(LED_GPIO, RedLED_Pin);
             } else {
@@ -347,14 +225,11 @@ void task_led(void *vParameters){
             toggle = ~toggle;
             if (xSemaphoreTake(mutex_sleep_capacity, portMAX_DELAY) == pdPASS){
                 if (capacity_task_sleep < CAPACITY){
-                    printf_("capacity added\n\r");
-                    //xTaskCreateStatic(task_sleep, "SLEEP_TASK", 128, NULL,  1, xStack[capacity_task_sleep], &xTaskBuffer[capacity_task_sleep]);
+                    xTaskCreateStatic(task_sleep, "SLEEP_TASK", 128, NULL,  1, xStack[capacity_task_sleep], &xTaskBuffer[capacity_task_sleep]);
                     capacity_task_sleep++;
                 }
                 xSemaphoreGive(mutex_sleep_capacity);
             }
-        }else{
-            printf_("Could not take Semaphore\n\r");
         }
         
     }
@@ -366,7 +241,11 @@ void task_cpu_average(TimerHandle_t timer) {
 
     xTotalCPU = 0;
 
-    printf_("HERE SHOULD CPU USAGE BE PRINTED\n\r");
+    char str[32];
+    float_to_string(usage,str);
+    printf_("Usage: ");
+    printf_(str);
+    printf_("\n\r");
 }
 
 /**
@@ -376,7 +255,6 @@ void handle_switched_in(int* pxCurrentTCB) {
     TaskHandle_t handle = (TaskHandle_t)*pxCurrentTCB;
      if (handle == xTaskGetIdleTaskHandle()) {
         xTimeInCPU = time_us();
-        printf_("Switched in to IDLE\n\r");
      }
 }
 
@@ -389,13 +267,11 @@ void handle_switched_out(int* pxCurrentTCB) {
         xTimeOutCPU = time_us();
         xDifferenceCPU = xTimeOutCPU - xTimeInCPU;
         xTotalCPU = xTotalCPU + xDifferenceCPU;
-        printf_("Switched out\n\r");
         xTimeInCPU = xTimeOutCPU = xDifferenceCPU = 0;
      }
 }
 
 void led_timer_callback(TimerHandle_t timer) {
-    printf_("In LED callback\n\r");
 
     xStart = time_us();
     
@@ -407,8 +283,8 @@ void led_timer_callback(TimerHandle_t timer) {
   
 int main(void) {
     // Init hardware
-    printf_("Hardware initialization\n\r");
     hardware_init();
+    printf_("Hardware initialized\n\r");
 
     *((void (**)(void))0x2001C058) = EXTI0_IRQHandler;
 

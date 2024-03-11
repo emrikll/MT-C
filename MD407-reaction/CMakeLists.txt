@@ -39,6 +39,7 @@ add_executable(
     libraries/utils/timer.c
     libraries/utils/usart.c
     libraries/utils/printf.c
+    libraries/utils/ftos.c
     startup.c
     src/main.c)
 
@@ -49,7 +50,6 @@ target_include_directories(
     PRIVATE ${PROJECT_SOURCE_DIR}/driver/inc
     PRIVATE ${PROJECT_SOURCE_DIR}/device/inc
     PRIVATE ${PROJECT_SOURCE_DIR}/include
-    PRIVATE ${PROJECT_SOURCE_DIR}/libraries/io
     PRIVATE ${PROJECT_SOURCE_DIR}/src
     PRIVATE ${PROJECT_SOURCE_DIR}/libraries/utils
     PRIVATE ${FREERTOS_CFG_DIRECTORY}/
