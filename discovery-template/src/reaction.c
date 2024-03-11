@@ -47,12 +47,12 @@ StackType_t xStackLed[STACK_SIZE_LED];
 
 // Sleeper Task
 int capacity_task_sleep = 0;
-#define CAPACITY 1
+#define CAPACITY 12
 /* Dimensions of the buffer that the task being created will use as its stack.
 NOTE:  This is the number of words the stack will hold, not the number of
 bytes.  For example, if each stack item is 32-bits, and this is set to 100,
 then 400 bytes (100 * 32-bits) will be allocated. */
-#define STACK_SIZE 200
+#define STACK_SIZE 50
 
 /* Structure that will hold the TCB of the task being created. */
 StaticTask_t xTaskBuffer[CAPACITY];
@@ -182,10 +182,9 @@ void task_led(void *vParameters){
             xEnd = time_us();
             xDifference = xEnd - xStart;
             xDifferenceISR = xStartISR - xStart;
-        printf_("xDifferenceISR: %lu, xDifference: %lu \n\r", (long unsigned int)xDifferenceISR, (long unsigned int)xDifference);
-            xStart = 0; 
-            xEnd = 0;
-            xDifference = 0;
+            printf_("xDifferenceISR: %lu, xDifference: %lu, Background tasks: %u \n\r", 
+                (long unsigned int)xDifferenceISR, (long unsigned int)xDifference, capacity_task_sleep);
+            xStart = xEnd = xDifference = 0;
             if (toggle) {
                 GPIO_ResetBits(LED_GPIO, GreenLED_Pin);
             } else {
@@ -195,7 +194,13 @@ void task_led(void *vParameters){
             toggle = ~toggle;
             if (xSemaphoreTake(mutex_sleep_capacity, portMAX_DELAY) == pdPASS){
                 if (capacity_task_sleep < CAPACITY){
-                    xTaskCreateStatic(task_sleep, "SLEEP_TASK", 128, NULL,  1, xStack[capacity_task_sleep], &xTaskBuffer[capacity_task_sleep]);
+                    xTaskCreateStatic(
+                        task_sleep, 
+                        "SLEEP_TASK", 
+                        STACK_SIZE, 
+                        NULL,  
+                        1, 
+                        xStack[capacity_task_sleep], &xTaskBuffer[capacity_task_sleep]);
                     capacity_task_sleep++;
                 }
 
@@ -209,7 +214,6 @@ void task_led(void *vParameters){
 }
 
 void led_timer_callback(TimerHandle_t timer) {
-
     xStart = time_us();
     
     EXTI_GenerateSWInterrupt(EXTI_Line0);
@@ -245,18 +249,37 @@ int main(void)
 	Gp.GPIO_PuPd = GPIO_PuPd_NOPULL; //No pullup required as pullup is external
 	GPIO_Init(PushButton_GPIO, &Gp); //Assign struct to LED_GPIO
     
-    printf_("Before timers\n\r");
-    TaskHandle_t led_task = xTaskCreateStatic(task_led, "ToggleLED", 128, NULL, 1, xStackLed,&xTaskBufferLed);
-    TimerHandle_t task_timer = xTimerCreateStatic("LED_ON_TIMER", pdMS_TO_TICKS(LED_FLASH_PERIOD_MS), pdTRUE, (void*)TIMER_ID, led_timer_callback, &tasktimerbuffer);
-    TimerHandle_t usage_timer = xTimerCreateStatic("CPU_UUSAGE_TIMER", pdMS_TO_TICKS(AVERAGE_USAGE_INTERVAL_MS), pdTRUE, (void*)TIMER_ID, task_cpu_average, &usageTimerBuffer);
-    printf_("AFter timers\n\r");
-	//uint8_t ButtonRead = 0; //Initialize ButtonRead variable
+    xTaskCreateStatic(
+        task_led, 
+        "ToggleLED", 
+        STACK_SIZE_LED, 
+        NULL, 
+        1, 
+        xStackLed,&xTaskBufferLed
+    );
+    
+    TimerHandle_t task_timer = xTimerCreateStatic(
+        "LED_ON_TIMER", 
+        pdMS_TO_TICKS(LED_FLASH_PERIOD_MS), 
+        pdTRUE, 
+        (void*)TIMER_ID, 
+        led_timer_callback, 
+        &tasktimerbuffer
+    );
+    
+    TimerHandle_t usage_timer = xTimerCreateStatic(
+        "CPU_USAGE_TIMER", 
+        pdMS_TO_TICKS(AVERAGE_USAGE_INTERVAL_MS), 
+        pdTRUE, 
+        (void*)TIMER_ID, 
+        task_cpu_average, 
+        &usageTimerBuffer
+    );
+
     semaphore_irq = xSemaphoreCreateBinaryStatic(&pxSemaphoreBuffer);
     configASSERT(semaphore_irq != NULL);
     mutex_sleep_capacity = xSemaphoreCreateMutexStatic( &xMutexBuffer );
     configASSERT(mutex_sleep_capacity != NULL);
-
-    printf_("After asserts\n\r");
 
     if( task_timer == NULL || usage_timer == NULL ){
         printf_("Timers was not created\n");
@@ -266,7 +289,8 @@ int main(void)
             printf_("Timer could not be started\n");
         }
     }
-    printf_("Starting scheduler\n\r");
+
+    printf_("Starting scheduler...\n\r");
     vTaskStartScheduler();
 
 }
