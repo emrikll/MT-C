@@ -37,7 +37,7 @@ SemaphoreHandle_t mutex_sleep_capacity;
 NOTE:  This is the number of words the stack will hold, not the number of
 bytes.  For example, if each stack item is 32-bits, and this is set to 100,
 then 400 bytes (100 * 32-bits) will be allocated. */
-#define STACK_SIZE_LED 200
+#define STACK_SIZE_LED 118
 /* Structure that will hold the TCB of the task being created. */
 StaticTask_t xTaskBufferLed;
 /* Buffer that the task being created will use as its stack.  Note this is
@@ -47,12 +47,12 @@ StackType_t xStackLed[STACK_SIZE_LED];
 
 // Sleeper Task
 int capacity_task_sleep = 0;
-#define CAPACITY 12
+#define CAPACITY 18
 /* Dimensions of the buffer that the task being created will use as its stack.
 NOTE:  This is the number of words the stack will hold, not the number of
 bytes.  For example, if each stack item is 32-bits, and this is set to 100,
 then 400 bytes (100 * 32-bits) will be allocated. */
-#define STACK_SIZE 50
+#define STACK_SIZE 28
 
 /* Structure that will hold the TCB of the task being created. */
 StaticTask_t xTaskBuffer[CAPACITY];
@@ -148,7 +148,7 @@ void EXTI0_1_IRQHandler(void) {
     /* Clear interrupt flag */
     EXTI_ClearITPendingBit(EXTI_Line0);
 }
-
+UBaseType_t uxHighWaterMark;
 
 /*
  ** Tasks 
@@ -161,12 +161,12 @@ void task_sleep(void *vParameters) {
     TickType_t xLastWakeTime;
 
     xLastWakeTime = xTaskGetTickCount();
-
     for(;;){
         vTaskDelayUntil(&xLastWakeTime, xDelay);
         rand_nr = get_random_byte() % 10;
         start = time_us();
         while ((rand_nr * 1000000) < (time_us() - start) );
+        
     }
 }
 
@@ -185,6 +185,8 @@ void task_led(void *vParameters){
             printf_("xDifferenceISR: %lu, xDifference: %lu, Background tasks: %u \n\r", 
                 (long unsigned int)xDifferenceISR, (long unsigned int)xDifference, capacity_task_sleep);
             xStart = xEnd = xDifference = 0;
+
+            printf_("watermark: %u\n\r",uxHighWaterMark);
             if (toggle) {
                 GPIO_ResetBits(LED_GPIO, GreenLED_Pin);
             } else {
@@ -209,6 +211,8 @@ void task_led(void *vParameters){
         }else{
             printf_("Could not take Semaphore\n");
         }
+
+        uxHighWaterMark = uxTaskGetStackHighWaterMark( NULL );
         
     }
 }

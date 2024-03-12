@@ -27,13 +27,12 @@ OBJCOPY=arm-none-eabi-objcopy
 OBJDUMP=arm-none-eabi-objdump
 SIZE=arm-none-eabi-size
 
-CFLAGS  = -Wall -c -Os  
+CFLAGS  = -Wall -g -Os  
 CFLAGS += -mlittle-endian -mcpu=cortex-m0  -march=armv6-m -mthumb
 CFLAGS += -ffunction-sections -fdata-sections
 CFLAGS += -Wl,--gc-sections -Wl,-Map=build/$(PROJ_NAME).map
 #CFLAGS += --specs=nosys.specs
 CFLAGS += -specs=rdimon.specs
-CFLAGS += -fstack-usage
 CFLAGS += -lc -lrdimon
 #CFLAGS += -specs=nano.specs -u _printf_float -specs=rdimon.specs -lc -lrdimon
 
@@ -88,6 +87,8 @@ generateelf:
 	$(OBJDUMP) -St build/$(PROJ_NAME).elf > build/$(PROJ_NAME).lst
 	$(SIZE) build/$(PROJ_NAME).elf
 
+stack: buildreaction
+	python3 analyze.py $(SRCS) ./*.su src/reaction.c
 
 buildmain: $(SRCS)
 	mkdir -p build
@@ -95,7 +96,7 @@ buildmain: $(SRCS)
 
 buildreaction: $(SRCS)
 	mkdir -p build
-	$(CC) $(CFLAGS) src/reaction.c $^ -L$(STD_PERIPH_LIB) -lstm32f0 -L$(LDSCRIPT_INC) -Tstm32f0.ld
+	$(CC) $(CFLAGS) src/reaction.c $^ -o build/$(PROJ_NAME).elf -L$(STD_PERIPH_LIB) -lstm32f0 -L$(LDSCRIPT_INC) -Tstm32f0.ld
 
 program: build/$(PROJ_NAME).bin
 	$(OPENOCD) -f ./openocd.cfg -f $(OPENOCD_PROC_FILE) -c "stm_flash `pwd`/build/$(PROJ_NAME).bin"
