@@ -81,6 +81,16 @@ To see the out put use the command below. Switch X with an ACM that shows in the
 ```shell
 picocom -b 115200 -r /dev/ttyACMX
 ```
+To get OpenOCD to work install it with features for PICO
+```shell
+sudo apt install automake autoconf build-essential texinfo libtool libftdi-dev libusb-1.0-0-dev
+git clone https://github.com/raspberrypi/openocd.git --branch picoprobe --depth=1 --no-single-branch
+cd openocd
+./bootstrap
+./configure --enable-picoprobe ①
+make -j4
+sudo make i
+```
 
 ## The Apps
 
