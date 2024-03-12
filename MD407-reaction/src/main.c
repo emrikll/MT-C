@@ -53,7 +53,7 @@ uint32_t xTimeInCPU, xTimeOutCPU, xDifferenceCPU, xTotalCPU = 0;
 NOTE:  This is the number of words the stack will hold, not the number of
 bytes.  For example, if each stack item is 32-bits, and this is set to 100,
 then 400 bytes (100 * 32-bits) will be allocated. */
-#define STACK_SIZE_LED 200
+#define STACK_SIZE_LED 400
 /* Structure that will hold the TCB of the task being created. */
 StaticTask_t xTaskBufferLed;
 /* Buffer that the task being created will use as its stack.  Note this is
@@ -62,7 +62,7 @@ the RTOS port. */
 StackType_t xStackLed[STACK_SIZE_LED];
 
 // Sleeper Task
-int capacity_task_sleep = 0;
+uint32_t capacity_task_sleep = 0;
 #define CAPACITY 20
 /* Dimensions of the buffer that the task being created will use as its stack.
 NOTE:  This is the number of words the stack will hold, not the number of
@@ -205,15 +205,19 @@ void task_led(void *vParameters){
             xEnd = time_us();
             xDifference = xEnd - xStart;
             xDifferenceISR = xStartISR - xStart;
-            char buffer1[32];
+            char buffer1[16];
             char buffer2[32];
+            char taskbuffer[8];
             sprintf_(buffer1, "%u", xDifferenceISR);
             sprintf_(buffer2, "%u", xDifference);
+            sprintf_(taskbuffer, "%u", capacity_task_sleep);
             printf_("xDifferenceISR ");
             printf_(buffer1);
             
             printf_(", xDifference ");
             printf_(buffer2);
+            printf_(", Background tasks ");
+            printf_(taskbuffer);
             printf_("\n\r");
             xStart = xEnd = xDifference = xDifferenceISR = 0;
             if (toggle) {
@@ -289,7 +293,7 @@ int main(void) {
     *((void (**)(void))0x2001C058) = EXTI0_IRQHandler;
 
 
-    TaskHandle_t led_task = xTaskCreateStatic(task_led, "ToggleLED", 128, NULL, 1, xStackLed,&xTaskBufferLed);
+    TaskHandle_t led_task = xTaskCreateStatic(task_led, "ToggleLED", 256, NULL, 1, xStackLed,&xTaskBufferLed);
     TimerHandle_t task_timer = xTimerCreateStatic("LED_ON_TIMER", pdMS_TO_TICKS(LED_FLASH_PERIOD_MS), pdTRUE, (void*)TIMER_ID, led_timer_callback, &TimerBufferLed);
     TimerHandle_t usage_timer = xTimerCreateStatic("CPU_UUSAGE_TIMER", pdMS_TO_TICKS(AVERAGE_USAGE_INTERVAL_MS), pdTRUE, (void*)TIMER_ID, task_cpu_average, &TimerBufferUsage);
 
