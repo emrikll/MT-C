@@ -1,6 +1,7 @@
 *.xcworkspace/xcuserdata/*.xcuserdatad
 build
 
+
 #cmake stuff
 #App-Template/compile_commands.json
 #App-Template/Makefile

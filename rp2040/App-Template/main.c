@@ -7,7 +7,10 @@
  *
  */
 #include "main.h"
-#include "pico/stdio.h"
+//#include "pico/stdio.h"
+#include "hardware/uart.h"
+#include <stdio.h>
+#include "pico/stdlib.h"
 
 /*
  * GLOBALS
@@ -22,6 +25,15 @@ const TickType_t ms_delay = 500 / portTICK_PERIOD_MS;
 TaskHandle_t gpio_task_handle = NULL;
 TaskHandle_t pico_task_handle = NULL;
 
+// UART Configuration
+
+#define UART_ID uart0
+#define BAUD_RATE 115200
+
+// We are using pins 0 and 1, but see the GPIO function select table in the
+// datasheet for information on which other pins can be used.
+#define UART_TX_PIN 0
+#define UART_RX_PIN 1
 
 /*
  * FUNCTIONS
@@ -114,16 +126,19 @@ void log_device_info(void) {
  * RUNTIME START
  */
 int main() {
-  stdio_init_all();
+  
     // Enable STDIO
 #ifdef DEBUG
-    stdio_usb_init();
+    //stdio_usb_init();
+    stdio_init_all();
     // Pause to allow the USB path to initialize
     sleep_ms(2000);
 
     // Log app info
     log_device_info();
 #endif
+
+    
     
     // Set up two tasks
     // FROM 1.0.1 Store handles referencing the tasks; get return values

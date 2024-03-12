@@ -26,11 +26,12 @@
 #ifndef FREERTOS_CONFIG_H
 #define FREERTOS_CONFIG_H
 
-
 /* Use Pico SDK ISR handlers */
 #define vPortSVCHandler         isr_svcall
 #define xPortPendSVHandler      isr_pendsv
 #define xPortSysTickHandler     isr_systick
+
+#define configKERNEL_PROVIDED_STATIC_MEMORY     1
 
 #define configUSE_PREEMPTION                    1           // Allow tasks to be pre-empted
 #define configUSE_TIME_SLICING                  1           // Allow FreeRTOS to switch tasks at each tick
@@ -39,13 +40,13 @@
 #define configCPU_CLOCK_HZ                      133000000   // 133MHz for RP2040
 #define configTICK_RATE_HZ                      1000        // FreeRTOS beats per second
 #define configMAX_PRIORITIES                    5           // Max number of priority values (0-24)
-#define configMINIMAL_STACK_SIZE                128
+#define configMINIMAL_STACK_SIZE                512
 #define configMAX_TASK_NAME_LEN                 16
 #define configUSE_16_BIT_TICKS                  0
 #define configIDLE_SHOULD_YIELD                 1
 #define configUSE_TASK_NOTIFICATIONS            1
 #define configTASK_NOTIFICATION_ARRAY_ENTRIES   3
-#define configUSE_MUTEXES                       0
+#define configUSE_MUTEXES                       1
 #define configUSE_RECURSIVE_MUTEXES             0
 #define configUSE_COUNTING_SEMAPHORES           0
 #define configQUEUE_REGISTRY_SIZE               10
@@ -60,7 +61,7 @@
                                                             // than the number of bytes in a size_t.
 
 /* Memory allocation related definitions. */
-#define configSUPPORT_STATIC_ALLOCATION         0
+#define configSUPPORT_STATIC_ALLOCATION         1
 #define configSUPPORT_DYNAMIC_ALLOCATION        1           // Get FreeRTOS to allocation task memory
 #define configAPPLICATION_ALLOCATED_HEAP        1
 
@@ -100,14 +101,24 @@
 #define INCLUDE_xTaskGetSchedulerState          1
 #define INCLUDE_xTaskGetCurrentTaskHandle       1
 #define INCLUDE_uxTaskGetStackHighWaterMark     0
-#define INCLUDE_xTaskGetIdleTaskHandle          0
+#define INCLUDE_xTaskGetIdleTaskHandle          1
 #define INCLUDE_eTaskGetState                   0
 #define INCLUDE_xEventGroupSetBitFromISR        1
 #define INCLUDE_xTimerPendFunctionCall          0
 #define INCLUDE_xTaskAbortDelay                 0
-#define INCLUDE_xTaskGetHandle                  0
+#define INCLUDE_xTaskGetHandle                  1
 #define INCLUDE_xTaskResumeFromISR              1
 
 /* A header file that defines trace macro can be included here. */
+
+#ifdef REACTION
+    extern void log_debug(const char* msg);
+    extern void handle_switched_in(int* pxCurrentTCB);
+    extern void handle_switched_out(int* pxCurrentTCB);
+    
+    #define traceTASK_SWITCHED_IN() handle_switched_in(&pxCurrentTCB);
+    #define traceTASK_SWITCHED_OUT() handle_switched_out(&pxCurrentTCB);
+#endif
+
 
 #endif /* FREERTOS_CONFIG_H */

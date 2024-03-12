@@ -1,12 +1,14 @@
 [submodule "discovery-test/libraries/FreeRTOS-Kernel"]
 	path = discovery-test/libraries/FreeRTOS-Kernel
 	url = https://github.com/FreeRTOS/FreeRTOS-Kernel.git
-[submodule "rp2040-template/pico-sdk"]
-	path = rp2040-template/pico-sdk
-	url = https://github.com/raspberrypi/pico-sdk/
-[submodule "rp2040-template/FreeRTOS-Kernel"]
-	path = rp2040-template/FreeRTOS-Kernel
-	url = https://github.com/FreeRTOS/FreeRTOS-Kernel/
+[submodule "MD407-template/libraries/FreeRTOS-Kernel"]
+	path = MD407-template/libraries/FreeRTOS-Kernel
 [submodule "discovery-template/libraries/FreeRTOS-Kernel"]
 	path = discovery-template/libraries/FreeRTOS-Kernel
 	url = https://github.com/FreeRTOS/FreeRTOS-Kernel.git
+[submodule "rp2040/FreeRTOS-Kernel"]
+	path = rp2040/FreeRTOS-Kernel
+	url = https://github.com/FreeRTOS/FreeRTOS-Kernel.git
+[submodule "rp2040/pico-sdk"]
+	path = rp2040/pico-sdk
+	url = https://github.com/raspberrypi/pico-sdk.git
