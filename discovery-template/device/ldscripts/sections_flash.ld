@@ -90,6 +90,8 @@ SECTIONS
      libc.a ( * )
      libm.a ( * )
      libgcc.a ( * )
+    *(.ARM.exidx*)
+    *(.gnu.linkonce.armexidx.*)
      }
 
     /* Stabs debugging sections.  */

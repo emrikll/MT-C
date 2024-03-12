@@ -1,5 +1,4 @@
 # put your *.o targets here, make should handle the rest!
-SRCS = $(wildcard src/*.c)
 SRCS += device/startup_stm32f0xx.s # add startup file to build
 
 # all the files will be generated with this name (main.elf, main.bin, main.hex, etc)
@@ -40,7 +39,6 @@ CFLAGS += -lc -lrdimon
 
 ###################################################
 
-vpath %.c src
 vpath %.a $(STD_PERIPH_LIB)
 
 ROOT=$(shell pwd)
@@ -51,39 +49,54 @@ CFLAGS += -include $(STD_PERIPH_LIB)/stm32f0xx_conf.h
 CFLAGS += -I Include/
 CFLAGS += -I $(STD_PERIPH_LIB)/FreeRTOS-Kernel/portable/GCC/ARM_CM0
 CFLAGS += -I $(STD_PERIPH_LIB)/FreeRTOS-Kernel/include
+CFLAGS += -I libraries/utils
 CFLAGS += -I /usr/include
 
 SRCS += libraries/FreeRTOS-Kernel/tasks.c
+SRCS += src/system_stm32f0xx.c
 SRCS += libraries/FreeRTOS-Kernel/list.c
 SRCS += libraries/FreeRTOS-Kernel/croutine.c
 SRCS += libraries/FreeRTOS-Kernel/event_groups.c
 SRCS += libraries/FreeRTOS-Kernel/queue.c
 SRCS += libraries/FreeRTOS-Kernel/stream_buffer.c
 SRCS += libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM0/port.c
-
+SRCS += libraries/utils/usart.c
+SRCS += libraries/utils/timer.c
 OBJS = $(SRCS:.c=.o)
 
 ###################################################
 
 .PHONY: lib proj
 
-all: lib proj
+all: main
 
 lib:
 	$(MAKE) -C $(STD_PERIPH_LIB)
 
-proj: 	$(PROJ_NAME).elf
+main: lib buildmain generateelf program
 
-$(PROJ_NAME).elf: $(SRCS)
-	mkdir build
-	$(CC) $(CFLAGS) $^ -o build/$@ -L$(STD_PERIPH_LIB) -lstm32f0 -L$(LDSCRIPT_INC) -Tstm32f0.ld
+reaction: lib buildreaction generateelf program
+
+generateelf:
 	$(OBJCOPY) -O ihex build/$(PROJ_NAME).elf build/$(PROJ_NAME).hex
 	$(OBJCOPY) -O binary build/$(PROJ_NAME).elf build/$(PROJ_NAME).bin
 	$(OBJDUMP) -St build/$(PROJ_NAME).elf > build/$(PROJ_NAME).lst
 	$(SIZE) build/$(PROJ_NAME).elf
-	
+
+
+buildmain: $(SRCS)
+	mkdir -p build
+	$(CC) $(CFLAGS) src/main.c $^ -o build/$(PROJ_NAME).elf -L$(STD_PERIPH_LIB) -lstm32f0 -L$(LDSCRIPT_INC) -Tstm32f0.ld
+
+buildreaction: $(SRCS)
+	mkdir -p build
+	$(CC) $(CFLAGS) src/reaction.c $^ -o build/$(PROJ_NAME).elf -L$(STD_PERIPH_LIB) -lstm32f0 -L$(LDSCRIPT_INC) -Tstm32f0.ld
+
 program: build/$(PROJ_NAME).bin
 	$(OPENOCD) -f ./openocd.cfg -f $(OPENOCD_PROC_FILE) -c "stm_flash `pwd`/build/$(PROJ_NAME).bin"
+
+stop:
+	$(OPENOCD) -f ./openocd.cfg -f $(OPENOCD_PROC_FILE) -c "stm_stop"
 
 clean:
 	find ./ -name '*~' | xargs rm -f	

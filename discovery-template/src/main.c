@@ -1,14 +1,18 @@
-#include <stdio.h>
 #include <stm32f0xx_gpio.h>
 #include <stm32f0xx_rcc.h>
 #include <FreeRTOS.h>
 #include "FreeRTOSConfig.h"
+#include "bits/stdint-uintn.h"
 #include "portmacro.h"
 #include "task.h"
 #include "queue.h"
 #include "semphr.h"
 #include "croutine.h"
-
+#include "usart.h"
+#include "timer.h"
+#include "stm32f0xx.h"
+#include "stm32f0xx_gpio.h"
+#include "stm32f0xx_rcc.h"
 GPIO_InitTypeDef Gp;//Create GPIO struct
 
 //Define LED pins
@@ -20,7 +24,6 @@ GPIO_InitTypeDef Gp;//Create GPIO struct
 #define PushButton_Pin GPIO_Pin_0
 #define PushButton_GPIO GPIOA   
 
-extern void initialise_monitor_handles(void);
 
 /**
 **===========================================================================
@@ -29,13 +32,13 @@ extern void initialise_monitor_handles(void);
 **
 **===========================================================================
 */
-
 void vTask1(void *vParameters){
 
   int toggle = 0;
-  const TickType_t xDelay = 500 / portTICK_PERIOD_MS;
+  const TickType_t xDelay = 1000 / portTICK_PERIOD_MS - 1;
   for(;;)
   {
+    
     if(toggle){
       //set bit
       GPIO_SetBits(LED_GPIO, GreenLED_Pin);
@@ -45,6 +48,9 @@ void vTask1(void *vParameters){
       GPIO_ResetBits(LED_GPIO, GreenLED_Pin);
       toggle = 1;
     }
+    uint32_t tim_value = time_us();
+
+    printf("Timer value: %u\n\r", tim_value);
     vTaskDelay(xDelay);
   }
 }
@@ -52,9 +58,9 @@ void vTask1(void *vParameters){
 
 int main(void)
 {
-	initialise_monitor_handles();
 	//Enable clocks to both GPIOA (push button) and GPIOC (output LEDs)
-	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
+    enable_usart();
+    enable_timer();
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
 
 	Gp.GPIO_Pin = GreenLED_Pin | BlueLED_Pin; //Set pins inside the struct

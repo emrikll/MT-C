@@ -15,6 +15,8 @@ add_custom_target(
 
 add_executable(
   ${PROJECT_NAME}.elf
+  vectors.s
+  device/src/system_stm32f4xx.c
   ${FREERTOS_SRC_DIRECTORY}/event_groups.c
   ${FREERTOS_SRC_DIRECTORY}/list.c
   ${FREERTOS_SRC_DIRECTORY}/queue.c

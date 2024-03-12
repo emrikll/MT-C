@@ -1457,7 +1457,7 @@ typedef struct
 #define BKPSRAM_BB_BASE       ((uint32_t)0x42024000) /*!< Backup SRAM(4 KB) base address in the bit-band region                         */
 
 /* Legacy defines */
-#define SRAM_BASE             SRAM1_BASE
+#define SRAM_BASE             SRAM2_BASE
 #define SRAM_BB_BASE          SRAM1_BB_BASE
 
 
