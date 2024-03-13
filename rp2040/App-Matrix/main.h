@@ -31,14 +31,24 @@
 
 #define         LED_ON                      1
 #define         LED_OFF                     0
+
+#define         SW_IRQ_PIN                  21
         
 #define         LED_ERROR_FLASHES           5
 #define         LED_FLASH_PERIOD_MS         2000
-#define         SW_IRQ_PIN                  21
 
 #define         TIMER_ID_LED_ON             0
 
 #define         AVERAGE_USAGE_INTERVAL_MS   5000
+
+#define         SHARED_SIZE                 4
+
+#define         A_MATRIX_ROWS               4
+#define         A_MATRIX_COLUMNS            SHARED_SIZE          
+#define         B_MATRIX_ROWS               SHARED_SIZE
+#define         B_MATRIX_COLUMNS            4       
+#define         RESULT_MATRIX_ROWS          A_MATRIX_ROWS
+#define         RESULT_MATRIX_COLUMNS       B_MATRIX_COLUMNS
 
 /**
  * PROTOTYPES
@@ -47,17 +57,21 @@ void setup();
 void setup_led();
 void setup_gpio();
 
-void enable_irq(bool state);
-
 void led_on();
 void led_off();
 void led_set(bool state);
 
-void task_led_pico(void* unused_arg);
-
-void gpio_isr(uint gpio, uint32_t events);
-
-void task_sleep(void* unused_arg);
+/**
+ * HELPER FUNCTIONS
+ */
+void print_result_matrix(float matrix[RESULT_MATRIX_ROWS * RESULT_MATRIX_COLUMNS]);
+void print_a_matrix(float matrix[A_MATRIX_ROWS * A_MATRIX_COLUMNS]);
+void print_b_matrix(float matrix[B_MATRIX_ROWS * B_MATRIX_COLUMNS]);
+void handle_switched_in(int* pxCurrentTCB);
+void handle_switched_out(int* pxCurrentTCB);
+void task_cpu_usage(TimerHandle_t timer);
+void log_debug(const char* msg);
+void log_device_info(void);
 
 
 #endif      // MAIN_H
