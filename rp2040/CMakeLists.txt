@@ -11,7 +11,7 @@ set(APP_1_VERSION_NUMBER "1.4.2")
 set(APP_2_NAME "SCHEDULING_DEMO")
 set(APP_2_VERSION_NUMBER "1.4.2")
 
-set(APP_3_NAME "IRQS_DEMO")
+set(APP_3_NAME "REACTION")
 set(APP_3_VERSION_NUMBER "1.4.2")
 
 set(APP_4_NAME "TIMERS_DEMO")
@@ -20,11 +20,8 @@ set(APP_4_VERSION_NUMBER "1.4.2")
 # Specify the app(s) source code
 set(APP_1_SRC_DIRECTORY "${CMAKE_SOURCE_DIR}/App-Template")
 set(APP_2_SRC_DIRECTORY "${CMAKE_SOURCE_DIR}/App-Scheduling")
-set(APP_3_SRC_DIRECTORY "${CMAKE_SOURCE_DIR}/App-IRQs")
+set(APP_3_SRC_DIRECTORY "${CMAKE_SOURCE_DIR}/App-Reaction")
 set(APP_4_SRC_DIRECTORY "${CMAKE_SOURCE_DIR}/App-Timers")
-
-# FROM 1.3.0 -- Move common source code to a separate directory
-set(COMMON_CODE_DIRECTORY "${CMAKE_SOURCE_DIR}/Common")
 
 # FROM 1.4.2 -- Set app-side debugging on debug builds
 # Now uses CMake generator expression to extract config type
@@ -68,12 +65,13 @@ target_include_directories(FreeRTOS PUBLIC
     ${FREERTOS_CFG_DIRECTORY}/
     ${FREERTOS_SRC_DIRECTORY}/include
     ${FREERTOS_SRC_DIRECTORY}/portable/GCC/ARM_CM0
+    ${APP_3_SRC_DIRECTORY}/
 )
 
 # Include the apps' source code
 add_subdirectory(${APP_1_SRC_DIRECTORY})
 # add_subdirectory(${APP_2_SRC_DIRECTORY})
-# add_subdirectory(${APP_3_SRC_DIRECTORY})
+add_subdirectory(${APP_3_SRC_DIRECTORY})
 # add_subdirectory(${APP_4_SRC_DIRECTORY})
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
