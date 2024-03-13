@@ -14,10 +14,12 @@
  * GLOBALS
  */
 
+uint32_t start_time;
+
 // Matrix
-float a_matrix[A_MATRIX_ROWS * A_MATRIX_COLUMNS] = {1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0};
-float b_matrix[B_MATRIX_ROWS * B_MATRIX_COLUMNS] = {1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0};
-float result_matrix[RESULT_MATRIX_ROWS * RESULT_MATRIX_COLUMNS];
+double a_matrix[A_MATRIX_ROWS * A_MATRIX_COLUMNS] = {7986.45, 1292.79, 8583.79, 2072.98, 2161.08, 7137.87, 8844.89542, 1241.16699, 9333.09941, 1046.33654, 1766.28663, 227.57371};
+double b_matrix[B_MATRIX_ROWS * B_MATRIX_COLUMNS] = {2089.46, 484.29, 4070.86, 6388.14, 5878.41, 7796.02, 4174.04910, 3779.38097, 1819.78879, 392.12370, 5173.20243, 2525.39435, 4430.77499, 3700.96781, 3312.82425, 2487.50948, 1680.72726, 1257.68497, 5224.09199, 5027.58651, 4620.30426, 7821.20553, 5898.87661, 3104.60453, 4500.93917, 3847.383526, 1115.46655, 1150.36475};
+double result_matrix[RESULT_MATRIX_ROWS * RESULT_MATRIX_COLUMNS];
 
 
 // Tick counters IDLE
@@ -50,7 +52,7 @@ void task_i_row(void *parameter) {
     printf("Task %d\n\r", i);
 
     for (int j = 0; j < RESULT_MATRIX_COLUMNS; j++) {
-        float tmp = 0;
+        double tmp = 0.0;
         for (int k = 0; k < A_MATRIX_COLUMNS; k++) {
             tmp = tmp + (a_matrix[(i * A_MATRIX_COLUMNS) + k] * b_matrix[(k * B_MATRIX_COLUMNS) + j]);
         }
@@ -61,7 +63,8 @@ void task_i_row(void *parameter) {
     if (capacity_task_i_row == 0) {
         uint32_t end_time = time_us_32();
         TickType_t end = xTaskGetTickCount();
-        printf("End_time: %u\n\r", end);
+        printf("End_time FreeRTOS: %u\n\r", end);
+        printf("End_time: %u\n\r", end_time - start_time);
         print_result_matrix(result_matrix);
     }
 
@@ -113,7 +116,7 @@ int main() {
             
     // Start the FreeRTOS scheduler if any of the tasks are good
     if (true) {
-
+        start_time = time_us_32();
         // Start the scheduler
         vTaskStartScheduler();
     } else {
@@ -144,7 +147,7 @@ int main() {
 * PRINTS
 */
 
-void print_result_matrix(float matrix[RESULT_MATRIX_ROWS * RESULT_MATRIX_COLUMNS]) {
+void print_result_matrix(double matrix[RESULT_MATRIX_ROWS * RESULT_MATRIX_COLUMNS]) {
     printf("Matrix: \n\r");
 
     for (int i = 0; i < RESULT_MATRIX_ROWS; i++) {
@@ -160,25 +163,25 @@ void print_result_matrix(float matrix[RESULT_MATRIX_ROWS * RESULT_MATRIX_COLUMNS
     }
 }
 
-void print_a_matrix(float matrix[A_MATRIX_ROWS * A_MATRIX_COLUMNS]) {
+void print_a_matrix(double matrix[A_MATRIX_ROWS * A_MATRIX_COLUMNS]) {
     printf("Matrix A: \n\r");
 
-    for (int i = 0; i < RESULT_MATRIX_ROWS; i++) {
+    for (int i = 0; i < A_MATRIX_ROWS; i++) {
         printf("[");
-        for (int j = 0; j < RESULT_MATRIX_COLUMNS; j++) {
-            printf("%f , ", matrix[(i * RESULT_MATRIX_COLUMNS) + j]);
+        for (int j = 0; j < A_MATRIX_COLUMNS; j++) {
+            printf("%f , ", matrix[(i * A_MATRIX_COLUMNS) + j]);
         }
         printf("]\n\r");
     }
 }
 
-void print_b_matrix(float matrix[B_MATRIX_ROWS * B_MATRIX_COLUMNS]) {
+void print_b_matrix(double matrix[B_MATRIX_ROWS * B_MATRIX_COLUMNS]) {
     printf("Matrix B: \n\r");
 
-    for (int i = 0; i < RESULT_MATRIX_ROWS; i++) {
+    for (int i = 0; i < B_MATRIX_ROWS; i++) {
         printf("[");
-        for (int j = 0; j < RESULT_MATRIX_COLUMNS; j++) {
-            printf("%f , ", matrix[(i * RESULT_MATRIX_COLUMNS) + j]);
+        for (int j = 0; j < B_MATRIX_COLUMNS; j++) {
+            printf("%f , ", matrix[(i * B_MATRIX_COLUMNS) + j]);
         }
         printf("]\n\r");
     }

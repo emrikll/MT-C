@@ -43,10 +43,10 @@
 
 #define         SHARED_SIZE                 4
 
-#define         A_MATRIX_ROWS               4
+#define         A_MATRIX_ROWS               3
 #define         A_MATRIX_COLUMNS            SHARED_SIZE          
 #define         B_MATRIX_ROWS               SHARED_SIZE
-#define         B_MATRIX_COLUMNS            4       
+#define         B_MATRIX_COLUMNS            7    
 #define         RESULT_MATRIX_ROWS          A_MATRIX_ROWS
 #define         RESULT_MATRIX_COLUMNS       B_MATRIX_COLUMNS
 
@@ -64,9 +64,9 @@ void led_set(bool state);
 /**
  * HELPER FUNCTIONS
  */
-void print_result_matrix(float matrix[RESULT_MATRIX_ROWS * RESULT_MATRIX_COLUMNS]);
-void print_a_matrix(float matrix[A_MATRIX_ROWS * A_MATRIX_COLUMNS]);
-void print_b_matrix(float matrix[B_MATRIX_ROWS * B_MATRIX_COLUMNS]);
+void print_result_matrix(double matrix[RESULT_MATRIX_ROWS * RESULT_MATRIX_COLUMNS]);
+void print_a_matrix(double matrix[A_MATRIX_ROWS * A_MATRIX_COLUMNS]);
+void print_b_matrix(double matrix[B_MATRIX_ROWS * B_MATRIX_COLUMNS]);
 void handle_switched_in(int* pxCurrentTCB);
 void handle_switched_out(int* pxCurrentTCB);
 void task_cpu_usage(TimerHandle_t timer);
