@@ -27,7 +27,7 @@ OBJCOPY=arm-none-eabi-objcopy
 OBJDUMP=arm-none-eabi-objdump
 SIZE=arm-none-eabi-size
 
-CFLAGS  = -Wall -g -std=c99 -Os  
+CFLAGS  = -Wall -g -Os  
 CFLAGS += -mlittle-endian -mcpu=cortex-m0  -march=armv6-m -mthumb
 CFLAGS += -ffunction-sections -fdata-sections
 CFLAGS += -Wl,--gc-sections -Wl,-Map=build/$(PROJ_NAME).map
@@ -58,10 +58,14 @@ SRCS += libraries/FreeRTOS-Kernel/list.c
 SRCS += libraries/FreeRTOS-Kernel/croutine.c
 SRCS += libraries/FreeRTOS-Kernel/event_groups.c
 SRCS += libraries/FreeRTOS-Kernel/queue.c
+SRCS += libraries/FreeRTOS-Kernel/timers.c
 SRCS += libraries/FreeRTOS-Kernel/stream_buffer.c
 SRCS += libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM0/port.c
 SRCS += libraries/utils/usart.c
 SRCS += libraries/utils/timer.c
+SRCS += libraries/utils/idle.c
+SRCS += libraries/utils/rng.c
+SRCS += libraries/utils/printf.c
 OBJS = $(SRCS:.c=.o)
 
 ###################################################
@@ -83,6 +87,8 @@ generateelf:
 	$(OBJDUMP) -St build/$(PROJ_NAME).elf > build/$(PROJ_NAME).lst
 	$(SIZE) build/$(PROJ_NAME).elf
 
+stack: buildreaction
+	python3 analyze.py $(SRCS) ./*.su src/reaction.c
 
 buildmain: $(SRCS)
 	mkdir -p build
