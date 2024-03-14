@@ -7,6 +7,7 @@ call_graph = {}
 banned_functions = []
 recursive_calls = {}
 
+
 def main():
     print("Hello world")
     su_files = []
@@ -24,7 +25,7 @@ def main():
     parse_su_files(su_files)
 
     cflow_files = create_cflow_files(c_files)
-    
+
     parse_cflow_files(cflow_files)
 
     for function in call_graph:
