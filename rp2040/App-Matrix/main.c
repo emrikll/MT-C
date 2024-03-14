@@ -45,11 +45,14 @@ an array of StackType_t variables.  The size of StackType_t is dependent on
 the RTOS port. */
 StackType_t stack_i_row[RESULT_MATRIX_ROWS][ STACK_SIZE_I_ROW ];
 
-
+uint32_t task0start = 0;
 void task_i_row(void *parameter) {
     int i;
     i = (int) parameter;
-    printf("Task %d\n\r", i);
+
+    if (i == 0) {
+        task0start = time_us_32();
+    }
 
     for (int j = 0; j < RESULT_MATRIX_COLUMNS; j++) {
         double tmp = 0.0;
@@ -62,13 +65,16 @@ void task_i_row(void *parameter) {
     capacity_task_i_row = capacity_task_i_row - 1;
     if (capacity_task_i_row == 0) {
         uint32_t end_time = time_us_32();
-        TickType_t end = xTaskGetTickCount();
-        printf("End_time FreeRTOS: %u\n\r", end);
         printf("End_time: %u\n\r", end_time - start_time);
+        printf("End_time from task 0: %u\n\r", end_time - task0start);
         print_result_matrix(result_matrix);
     }
 
-    while(true){};
+    vTaskSuspend(NULL);
+
+    while(true){
+        taskYIELD();
+    }
 }
 
 
