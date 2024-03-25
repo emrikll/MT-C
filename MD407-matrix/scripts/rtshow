@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+if [ $# -eq 1 ]; then
+  stty -F $1 115200 raw -echo -parenb cs8 -cstopb &&
+  cat $1 &
+  cat > $1
+else
+  echo 'Usage:   rtshow <conn>'
+  echo 'Example: rtshow /dev/ttyUSB0'
+fi
