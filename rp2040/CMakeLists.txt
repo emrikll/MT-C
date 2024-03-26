@@ -8,7 +8,7 @@ set(BUILD_NUMBER "1")
 set(APP_1_NAME "TEMPLATE")
 set(APP_1_VERSION_NUMBER "1.4.2")
 
-set(APP_2_NAME "SCHEDULING_DEMO")
+set(APP_2_NAME "MATRIX")
 set(APP_2_VERSION_NUMBER "1.4.2")
 
 set(APP_3_NAME "REACTION")
@@ -19,7 +19,7 @@ set(APP_4_VERSION_NUMBER "1.4.2")
 
 # Specify the app(s) source code
 set(APP_1_SRC_DIRECTORY "${CMAKE_SOURCE_DIR}/App-Template")
-set(APP_2_SRC_DIRECTORY "${CMAKE_SOURCE_DIR}/App-Scheduling")
+set(APP_2_SRC_DIRECTORY "${CMAKE_SOURCE_DIR}/App-Matrix")
 set(APP_3_SRC_DIRECTORY "${CMAKE_SOURCE_DIR}/App-Reaction")
 set(APP_4_SRC_DIRECTORY "${CMAKE_SOURCE_DIR}/App-Timers")
 
@@ -70,7 +70,7 @@ target_include_directories(FreeRTOS PUBLIC
 
 # Include the apps' source code
 add_subdirectory(${APP_1_SRC_DIRECTORY})
-# add_subdirectory(${APP_2_SRC_DIRECTORY})
+add_subdirectory(${APP_2_SRC_DIRECTORY})
 add_subdirectory(${APP_3_SRC_DIRECTORY})
 # add_subdirectory(${APP_4_SRC_DIRECTORY})
 

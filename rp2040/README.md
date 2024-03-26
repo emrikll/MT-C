@@ -57,6 +57,8 @@ To use the code in this repo, your system must be set up for RP2040 C/C++ develo
         * `./deploy.sh build/App-Scheduling/SCHEDULING_DEMO.uf2`.
     * To trigger a build, include the `--build` or `-b` flag: `./deploy.sh -b`.
 
+1. If you want to change build commands check in `/home/emrik/Thesis/repos/MT-C/rp2040/build/CMakeCache.txt`.
+
 ## Debug vs Release
 
 You can switch between build types when you make the `cmake` call in step 5, above. A debug build is made explicit with:
@@ -77,9 +79,22 @@ Follow both of these commands with the usual
 cmake --build build
 ```
 
-To see the out put use the command below. Switch X with an ACM that shows in the /dev/ directory. 
-```shell
+To see the out put use the command below. Switch X with an ACM that shows in the /dev/ directory.
+
+``` shell
 picocom -b 115200 -r /dev/ttyACMX
+```
+
+To get OpenOCD to work install it with features for PICO
+
+```shell
+sudo apt install automake autoconf build-essential texinfo libtool libftdi-dev libusb-1.0-0-dev
+git clone https://github.com/raspberrypi/openocd.git --branch picoprobe --depth=1 --no-single-branch
+cd openocd
+./bootstrap
+./configure --enable-picoprobe ①
+make -j4
+sudo make i
 ```
 
 ## The Apps

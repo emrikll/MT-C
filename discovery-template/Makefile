@@ -27,7 +27,7 @@ OBJCOPY=arm-none-eabi-objcopy
 OBJDUMP=arm-none-eabi-objdump
 SIZE=arm-none-eabi-size
 
-CFLAGS  = -Wall -g -Os  
+CFLAGS  = -Wall -g -O3  
 CFLAGS += -mlittle-endian -mcpu=cortex-m0  -march=armv6-m -mthumb
 CFLAGS += -ffunction-sections -fdata-sections
 CFLAGS += -Wl,--gc-sections -Wl,-Map=build/$(PROJ_NAME).map
@@ -81,6 +81,8 @@ main: lib buildmain generateelf program
 
 reaction: lib buildreaction generateelf program
 
+matrix: lib buildmatrix generateelf program
+
 generateelf:
 	$(OBJCOPY) -O ihex build/$(PROJ_NAME).elf build/$(PROJ_NAME).hex
 	$(OBJCOPY) -O binary build/$(PROJ_NAME).elf build/$(PROJ_NAME).bin
@@ -96,6 +98,10 @@ stack: () buildreaction
 buildreaction: $(SRCS)
 	mkdir -p build
 	$(CC) $(CFLAGS) src/reaction.c $^ -o build/$(PROJ_NAME).elf -L$(STD_PERIPH_LIB) -lstm32f0 -L$(LDSCRIPT_INC) -Tstm32f0.ld
+
+buildmatrix: $(SRCS)
+	mkdir -p build
+	$(CC) $(CFLAGS) src/matrix.c $^ -o build/$(PROJ_NAME).elf -L$(STD_PERIPH_LIB) -lstm32f0 -L$(LDSCRIPT_INC) -Tstm32f0.ld
 
 program: build/$(PROJ_NAME).bin
 	$(OPENOCD) -f ./openocd.cfg -f $(OPENOCD_PROC_FILE) -c "stm_flash `pwd`/build/$(PROJ_NAME).bin"

@@ -56,6 +56,7 @@ void led_set(bool state);
 
 void task_led_pico(void* unused_arg);
 
+void enable_irq(bool state);
 void gpio_isr(uint gpio, uint32_t events);
 
 void task_sleep(void* unused_arg);
