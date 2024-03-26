@@ -8,7 +8,9 @@
  */
 #include "main.h"
 #include "projdefs.h"
+#include "stm32f4xx.h"
 #include "stm32f4xx_tim.h"
+#include "timer.h"
 #include <stdint.h>
 
 /*
@@ -40,13 +42,20 @@ an array of StackType_t variables.  The size of StackType_t is dependent on
 the RTOS port. */
 StackType_t xStackMelody[STACK_SIZE];
 
-TaskHandle_t handle_melody;
+TaskHandle_t handle_melody = NULL;
 
 /*
  * DAC
  */
 #define DAC_ADDRESS 0x4000741C
 #define DAC_REGISTER ((volatile unsigned char *)(DAC_ADDRESS))
+
+// Custom vector to get IRQ working
+#define SCB_VTOR_CUSTOM ((volatile unsigned long *)0xE000ED08)
+
+// Semaphores
+static SemaphoreHandle_t semaphore_irq = NULL;
+StaticSemaphore_t xSemaphoreBuffer;
 
 /*
  * HARDWARE INTERRUPT
@@ -59,19 +68,25 @@ void EnableTimerInterrupt() {
   nvicStructure.NVIC_IRQChannelSubPriority = 1;
   nvicStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&nvicStructure);
+  NVIC_SetPriority(TIM2_IRQn, 2);
 }
 
 void TIM2_IRQHandler() {
+  NVIC_ClearPendingIRQ(TIM2_IRQn);
   if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET) {
+
     TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
+
     BaseType_t higher_priority_task_woken = pdFALSE;
     /* Make sure that interrupt flag is set */
     /* ISR FUNCTION BODY USING A SEMAPHORE */
 
     // xStartISR = time_us_64();
 
-    vTaskNotifyGiveFromISR(handle_melody, &higher_priority_task_woken);
+    // vTaskNotifyGiveFromISR(handle_melody, &higher_priority_task_woken);
 
+    // Signal the alert clearance task
+    xSemaphoreGiveFromISR(semaphore_irq, &higher_priority_task_woken);
     // Exit to context switch if necessary
     portYIELD_FROM_ISR(higher_priority_task_woken);
   }
@@ -82,18 +97,12 @@ void TIM2_IRQHandler() {
  */
 
 void task_melody(void *vParameters) {
-  printf_("TEST\n\r");
-  uint32_t i = 1;
-  int volume = 40;
+  printf_("Begin task\n\r");
+  int volume = 10;
   int bin = 1;
-  uint32_t lasttime = 0;
 
   while (1) {
-    if (time_us() >= lasttime + 2024) {
-      lasttime = time_us();
-      char buffer[64];
-      //sprintf_(buffer, "%u\n\r", lasttime);
-      //printf_(buffer);
+    if (xSemaphoreTake(semaphore_irq, portMAX_DELAY) == pdPASS) {
       if (bin) {
         *DAC_REGISTER = 0;
         bin = 0;
@@ -111,15 +120,23 @@ void task_melody(void *vParameters) {
 
 int main() {
 
-  enable_timer();
-  // EnableTimerInterrupt();
-
   *((void (**)(void))0x2001C0B0) = TIM2_IRQHandler;
+
+  printf_("Hardware begin\n\r");
+  NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
+  EnableTimerInterrupt();
+
+  semaphore_irq = xSemaphoreCreateBinaryStatic(&xSemaphoreBuffer);
+  configASSERT(semaphore_irq != NULL);
+
+  enable_timer();
+  printf_("Hardware done\n\r");
+
   handle_melody = xTaskCreateStatic(task_melody, "MELODY", 128, NULL, 1,
                                     xStackMelody, &xTaskBufferMelody);
 
   // Start the FreeRTOS scheduler if any of the tasks are good
-  start_time = time_us();
+  // start_time = time_us();
   // Start the scheduler
   vTaskStartScheduler();
 
@@ -144,7 +161,6 @@ int main() {
 void handle_switched_in(int *pxCurrentTCB) {
   TaskHandle_t handle = (TaskHandle_t)*pxCurrentTCB;
   if (handle == xTaskGetIdleTaskHandle()) {
-    xTimeInPICO = time_us();
     // printf_("Switched in to IDLE");
   }
 }
@@ -156,7 +172,6 @@ void handle_switched_out(int *pxCurrentTCB) {
   TaskHandle_t handle = (TaskHandle_t)*pxCurrentTCB;
   if (handle == xTaskGetIdleTaskHandle()) {
     char str[64];
-    xTimeOutPICO = time_us();
     xDifferencePICO = xTimeOutPICO - xTimeInPICO;
     xTotalPICO = xTotalPICO + xDifferencePICO;
     sprintf_(str, "IDLE time: %lu", xDifferencePICO);

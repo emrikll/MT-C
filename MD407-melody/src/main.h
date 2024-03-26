@@ -33,7 +33,6 @@
 // Misc
 #include "usart.h"
 #include "printf.h"
-#include "timer.h"
 #include "ftos.h"
 
 /**
