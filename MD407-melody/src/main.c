@@ -7,6 +7,7 @@
  *
  */
 #include "main.h"
+#include "portmacro.h"
 #include "projdefs.h"
 #include "stm32f4xx.h"
 #include "stm32f4xx_tim.h"
@@ -83,10 +84,10 @@ void TIM2_IRQHandler() {
 
     // xStartISR = time_us_64();
 
-    // vTaskNotifyGiveFromISR(handle_melody, &higher_priority_task_woken);
+    vTaskNotifyGiveFromISR(handle_melody, &higher_priority_task_woken);
 
     // Signal the alert clearance task
-    xSemaphoreGiveFromISR(semaphore_irq, &higher_priority_task_woken);
+    //xSemaphoreGiveFromISR(semaphore_irq, &higher_priority_task_woken);
     // Exit to context switch if necessary
     portYIELD_FROM_ISR(higher_priority_task_woken);
   }
@@ -98,11 +99,12 @@ void TIM2_IRQHandler() {
 
 void task_melody(void *vParameters) {
   printf_("Begin task\n\r");
-  int volume = 10;
+  int volume = 40;
   int bin = 1;
 
   while (1) {
-    if (xSemaphoreTake(semaphore_irq, portMAX_DELAY) == pdPASS) {
+    //if (xSemaphoreTake(semaphore_irq, portMAX_DELAY) == pdPASS) {
+      ulTaskNotifyTake(pdFALSE, portMAX_DELAY);
       if (bin) {
         *DAC_REGISTER = 0;
         bin = 0;
@@ -110,7 +112,7 @@ void task_melody(void *vParameters) {
         *DAC_REGISTER = volume;
         bin = 1;
       }
-    }
+    //}
   }
 }
 
