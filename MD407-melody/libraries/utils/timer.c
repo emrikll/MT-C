@@ -5,9 +5,11 @@
 TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 
 void enable_timer(void) {
+    RCC_ClocksTypeDef RCC_ClocksStatus;
+    RCC_GetClocksFreq(&RCC_ClocksStatus);
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
     TIM_TimeBaseStructure.TIM_Prescaler = 
-        (uint16_t) (SystemCoreClock / 1000000) - 1; // To Hz
+        (uint16_t) (2 * RCC_ClocksStatus.PCLK1_Frequency / 1000000) - 1; // To Hz
     TIM_TimeBaseStructure.TIM_Period = 0xFFFFFFFF; // To Hz
     TIM_TimeBaseStructure.TIM_ClockDivision = 0;
     TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;

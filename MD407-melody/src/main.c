@@ -48,36 +48,6 @@ TaskHandle_t handle_melody;
 #define DAC_ADDRESS 0x4000741C
 #define DAC_REGISTER ((volatile unsigned char *)(DAC_ADDRESS))
 
-static void __dac_init() {
-  GPIO_InitTypeDef GPIO_InitStructure;
-  DAC_InitTypeDef DAC_InitStructure;
-
-  GPIO_DeInit( GPIOA );   // already done in __usart_init()
-
-  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);  // already done
-  //in __usart_init()
-  RCC_APB1PeriphClockCmd(RCC_APB1Periph_DAC, ENABLE);
-
-  GPIO_StructInit(&GPIO_InitStructure);
-
-  /* DAC channel 2 (DAC_OUT2 = PA.5) configuration */
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-  GPIO_Init(GPIOA, &GPIO_InitStructure);
-
-  DAC_DeInit();
-
-  DAC_StructInit(&DAC_InitStructure);
-
-  DAC_InitStructure.DAC_Trigger = DAC_Trigger_None;
-  DAC_InitStructure.DAC_WaveGeneration = DAC_WaveGeneration_None;
-  DAC_InitStructure.DAC_OutputBuffer = DAC_OutputBuffer_Enable;
-  DAC_Init(DAC_Channel_2, &DAC_InitStructure);
-  DAC_Cmd(DAC_Channel_2, ENABLE);
-  DAC_SetChannel2Data(DAC_Align_8b_R, 0);
-}
-
 /*
  * HARDWARE INTERRUPT
  */
@@ -114,7 +84,7 @@ void TIM2_IRQHandler() {
 void task_melody(void *vParameters) {
   printf_("TEST\n\r");
   uint32_t i = 1;
-  int volume = 3;
+  int volume = 40;
   int bin = 1;
   uint32_t lasttime = 0;
 
@@ -122,8 +92,8 @@ void task_melody(void *vParameters) {
     if (time_us() >= lasttime + 2024) {
       lasttime = time_us();
       char buffer[64];
-      sprintf_(buffer, "%u\n\r", lasttime);
-      printf_(buffer);
+      //sprintf_(buffer, "%u\n\r", lasttime);
+      //printf_(buffer);
       if (bin) {
         *DAC_REGISTER = 0;
         bin = 0;
@@ -142,7 +112,6 @@ void task_melody(void *vParameters) {
 int main() {
 
   enable_timer();
-  __dac_init();
   // EnableTimerInterrupt();
 
   *((void (**)(void))0x2001C0B0) = TIM2_IRQHandler;
