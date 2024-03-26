@@ -39,26 +39,8 @@
  * CONSTANTS
  */
 
-#define         LED_ON                      1
-#define         LED_OFF                     0
-
-#define         SW_IRQ_PIN                  21
-        
-#define         LED_ERROR_FLASHES           5
-#define         LED_FLASH_PERIOD_MS         2000
-
-#define         TIMER_ID_LED_ON             0
-
 #define         AVERAGE_USAGE_INTERVAL_MS   5000
-
-#define         SHARED_SIZE                 4
-
-#define         A_MATRIX_ROWS               3
-#define         A_MATRIX_COLUMNS            SHARED_SIZE          
-#define         B_MATRIX_ROWS               SHARED_SIZE
-#define         B_MATRIX_COLUMNS            7    
-#define         RESULT_MATRIX_ROWS          A_MATRIX_ROWS
-#define         RESULT_MATRIX_COLUMNS       B_MATRIX_COLUMNS
+#define         BACKGROUND_TASK_SLEEP_US    1
 
 /**
  * HELPER FUNCTIONS
