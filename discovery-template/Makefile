@@ -87,10 +87,9 @@ generateelf:
 	$(OBJDUMP) -St build/$(PROJ_NAME).elf > build/$(PROJ_NAME).lst
 	$(SIZE) build/$(PROJ_NAME).elf
 
-stack: buildreaction
-	python3 analyze.py $(SRCS) ./*.su src/reaction.c
+stack: () buildreaction
+	
 
-buildmain: $(SRCS)
 	mkdir -p build
 	$(CC) $(CFLAGS) src/main.c $^ -o build/$(PROJ_NAME).elf -L$(STD_PERIPH_LIB) -lstm32f0 -L$(LDSCRIPT_INC) -Tstm32f0.ld
 
