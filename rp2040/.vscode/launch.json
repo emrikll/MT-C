@@ -1,6 +1,7 @@
 {
     "version": "0.2.0",
     "configurations": [
+        
         {
             "name": "Pico Debug",
             "type": "cortex-debug",
@@ -21,7 +22,8 @@
                 "continue"
             ],
             "openOCDLaunchCommands": [
-                "adapter speed 500"
+                "adapter speed 500",
+                "set USE_CORE 0"
             ]
         },
         {

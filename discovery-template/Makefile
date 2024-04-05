@@ -83,6 +83,8 @@ reaction: lib buildreaction generateelf program
 
 matrix: lib buildmatrix generateelf program
 
+concurrency: lib buildconcurrency generateelf program
+
 generateelf:
 	$(OBJCOPY) -O ihex build/$(PROJ_NAME).elf build/$(PROJ_NAME).hex
 	$(OBJCOPY) -O binary build/$(PROJ_NAME).elf build/$(PROJ_NAME).bin
@@ -98,6 +100,10 @@ stack: () buildreaction
 buildreaction: $(SRCS)
 	mkdir -p build
 	$(CC) $(CFLAGS) src/reaction.c $^ -o build/$(PROJ_NAME).elf -L$(STD_PERIPH_LIB) -lstm32f0 -L$(LDSCRIPT_INC) -Tstm32f0.ld
+
+buildconcurrency: $(SRCS)
+	mkdir -p build
+	$(CC) $(CFLAGS) src/concurrency.c $^ -o build/$(PROJ_NAME).elf -L$(STD_PERIPH_LIB) -lstm32f0 -L$(LDSCRIPT_INC) -Tstm32f0.ld
 
 buildmatrix: $(SRCS)
 	mkdir -p build
