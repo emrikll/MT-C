@@ -1,10 +1,12 @@
 #include "main.h"
 #include "printf.h"
 #include "projdefs.h"
+#include "stm32f4xx.h"
 #include "stm32f4xx_rng.h"
 #include "stm32f4xx_exti.h"
 #include "stm32f4xx_gpio.h"
 #include "stm32f4xx_usart.h"
+#include "stm32f4xx_rcc.h"
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -131,6 +133,29 @@ void EnableInterruptEXTI0()
 }
 
 void hardware_init(){
+    
+    //Deinit the rcc
+    RCC_DeInit();
+    //enable hse
+    RCC_HSEConfig(RCC_HSE_ON);
+    //wait for hse to start
+    while (RCC_WaitForHSEStartUp() != SUCCESS);
+    //configure pll modifiers to match 168 mhz
+    RCC_PLLConfig(RCC_PLLSource_HSE, 4, 168, 2, 4);
+    RCC_PCLK1Config(RCC_HCLK_Div4);
+    RCC_PCLK2Config(RCC_HCLK_Div2);
+    
+    //enable pll
+    RCC_PLLCmd(ENABLE);
+    //wait for pll to become ready
+    while (RCC_GetFlagStatus(RCC_FLAG_PLLRDY) != SET);
+    
+    //set sysclk to use pll
+    RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
+    //wait until pll is syclksource
+    while (RCC_GetSYSCLKSource() != 0x08);
+
+
     NVIC_PriorityGroupConfig( NVIC_PriorityGroup_4 );
     EnableInterruptEXTI0();
     enable_timer();
@@ -225,6 +250,10 @@ void task_led(void *vParameters){
             } else {
                 GPIO_SetBits(LED_GPIO, RedLED_Pin);
             }
+            
+            RCC_ClocksTypeDef clocks;
+            RCC_GetClocksFreq(&clocks);
+            printf_("Clock speed: %d", clocks.SYSCLK_Frequency);
 
             toggle = ~toggle;
             if (xSemaphoreTake(mutex_sleep_capacity, portMAX_DELAY) == pdPASS){
@@ -293,7 +322,7 @@ int main(void) {
     *((void (**)(void))0x2001C058) = EXTI0_IRQHandler;
 
 
-    TaskHandle_t led_task = xTaskCreateStatic(task_led, "ToggleLED", 256, NULL, 1, xStackLed,&xTaskBufferLed);
+    TaskHandle_t led_task = xTaskCreateStatic(task_led, "ToggleLED", 256, NULL, 2, xStackLed,&xTaskBufferLed);
     TimerHandle_t task_timer = xTimerCreateStatic("LED_ON_TIMER", pdMS_TO_TICKS(LED_FLASH_PERIOD_MS), pdTRUE, (void*)TIMER_ID, led_timer_callback, &TimerBufferLed);
     TimerHandle_t usage_timer = xTimerCreateStatic("CPU_UUSAGE_TIMER", pdMS_TO_TICKS(AVERAGE_USAGE_INTERVAL_MS), pdTRUE, (void*)TIMER_ID, task_cpu_average, &TimerBufferUsage);
 

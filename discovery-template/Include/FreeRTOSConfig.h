@@ -125,4 +125,6 @@ extern void handle_switched_out(int* pxCurrentTCB);
 
 #define traceTASK_SWITCHED_IN() handle_switched_in(&pxCurrentTCB);
 #define traceTASK_SWITCHED_OUT() handle_switched_out(&pxCurrentTCB);
+
+
 #endif /* FREERTOS_CONFIG_H */

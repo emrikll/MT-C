@@ -3,6 +3,8 @@
 #include <FreeRTOS.h>
 #include "FreeRTOSConfig.h"
 #include "portmacro.h"
+#include "projdefs.h"
+#include "system_stm32f0xx.h"
 #include "task.h"
 #include "usart.h"
 #include "timer.h"
@@ -37,22 +39,22 @@ SemaphoreHandle_t mutex_sleep_capacity;
 NOTE:  This is the number of words the stack will hold, not the number of
 bytes.  For example, if each stack item is 32-bits, and this is set to 100,
 then 400 bytes (100 * 32-bits) will be allocated. */
-#define STACK_SIZE_LED 118
+#define STACK_SIZE_INTERRUPT_HANDLE 118
 /* Structure that will hold the TCB of the task being created. */
 StaticTask_t xTaskBufferLed;
 /* Buffer that the task being created will use as its stack.  Note this is
 an array of StackType_t variables.  The size of StackType_t is dependent on
 the RTOS port. */
-StackType_t xStackLed[STACK_SIZE_LED];
+StackType_t xStackLed[STACK_SIZE_INTERRUPT_HANDLE];
 
 // Sleeper Task
 int capacity_task_sleep = 0;
-#define CAPACITY 18
+#define CAPACITY 10
 /* Dimensions of the buffer that the task being created will use as its stack.
 NOTE:  This is the number of words the stack will hold, not the number of
 bytes.  For example, if each stack item is 32-bits, and this is set to 100,
 then 400 bytes (100 * 32-bits) will be allocated. */
-#define STACK_SIZE 28
+#define STACK_SIZE 60
 
 /* Structure that will hold the TCB of the task being created. */
 StaticTask_t xTaskBuffer[CAPACITY];
@@ -69,84 +71,33 @@ StaticSemaphore_t pxSemaphoreBuffer;
 
 StaticTimer_t tasktimerbuffer;
 StaticTimer_t usageTimerBuffer;
-//Define LED pins
-#define GreenLED_Pin GPIO_Pin_9
-#define BlueLED_Pin GPIO_Pin_8
-#define LED_GPIO GPIOC
-
-//Define Push button
-#define PushButton_Pin GPIO_Pin_0
-#define PushButton_GPIO GPIOA   
 
 #define EXTI0_Pin GPIO_Pin_12
 #define EXTI0_GPIO GPIOD
 
-#define         LED_ON                      1
-#define         LED_OFF                     0
-        
-#define         LED_ERROR_FLASHES           5
-#define         LED_FLASH_PERIOD_MS         2000
+#define TRIGGER_INTERRUPT_MS 2000
+
 #define         SW_IRQ_PIN                  21
 
 #define         TIMER_ID                    0
 
 #define         AVERAGE_USAGE_INTERVAL_MS   5000
 
-void EnableInterruptEXTI0()
-{    
-    /* Enable clock for GPIOD */
-    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOD, ENABLE);
-    /* Enable clock for SYSCFG */
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
-    
-    /* Set pin as input */
-    GPIO_InitStruct_EXTI.GPIO_Mode = GPIO_Mode_IN;
-    GPIO_InitStruct_EXTI.GPIO_OType = GPIO_OType_PP;
-    GPIO_InitStruct_EXTI.GPIO_Pin = EXTI0_Pin;
-    GPIO_InitStruct_EXTI.GPIO_PuPd = GPIO_PuPd_UP;
-    GPIO_InitStruct_EXTI.GPIO_Speed = GPIO_Speed_2MHz;
-    GPIO_Init(EXTI0_GPIO, &GPIO_InitStruct_EXTI);
-    
-    /* Tell system that you will use PD0 for EXTI_Line0 */
-    SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOD, EXTI_PinSource0);
-    
-    /* PD0 is connected to EXTI_Line0 */
-    EXTI_InitStruct.EXTI_Line = EXTI_Line0;
-    /* Enable interrupt */
-    EXTI_InitStruct.EXTI_LineCmd = ENABLE;
-    /* Interrupt mode */
-    EXTI_InitStruct.EXTI_Mode = EXTI_Mode_Interrupt;
-    /* Triggers on rising and falling edge */
-    EXTI_InitStruct.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
-    /* Add to EXTI */
-    EXTI_Init(&EXTI_InitStruct);
- 
-    /* Add IRQ vector to NVIC */
-    /* PD0 is connected to EXTI_Line0, which has EXTI0_IRQn vector */
-    NVIC_InitStruct.NVIC_IRQChannel = EXTI0_1_IRQn;
-    /* Set priority */
-    /* Enable interrupt */
-    NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
-    /* Add to NVIC */
-    NVIC_Init(&NVIC_InitStruct);
- 
-    NVIC_SetPriority(EXTI0_1_IRQn, 2);
-}
+void EnableInterruptEXTI0();
+
 
 void EXTI0_1_IRQHandler(void) {
     BaseType_t higher_priority_task_woken = pdFALSE;
     /* Make sure that interrupt flag is set */
     /* ISR FUNCTION BODY USING A SEMAPHORE */
-    
-    xStartISR = time_us();
 
+    xStartISR = time_us();
     // Signal the alert clearance task
     xSemaphoreGiveFromISR(semaphore_irq, &higher_priority_task_woken);
-
+    EXTI_ClearITPendingBit(EXTI_Line0);
     // Exit to context switch if necessary
     portYIELD_FROM_ISR(higher_priority_task_woken);
     /* Clear interrupt flag */
-    EXTI_ClearITPendingBit(EXTI_Line0);
 }
 UBaseType_t uxHighWaterMark;
 
@@ -170,10 +121,8 @@ void task_sleep(void *vParameters) {
     }
 }
 
-void task_led(void *vParameters){
+void task_handle_interrupt(void *vParameters){
 
-    int toggle = 0;
-    GPIO_ResetBits(LED_GPIO, GreenLED_Pin);
     vTaskDelay(1000);
     
     for(;;)
@@ -186,14 +135,6 @@ void task_led(void *vParameters){
                 (long unsigned int)xDifferenceISR, (long unsigned int)xDifference, capacity_task_sleep);
             xStart = xEnd = xDifference = 0;
 
-            printf_("watermark: %u\n\r",uxHighWaterMark);
-            if (toggle) {
-                GPIO_ResetBits(LED_GPIO, GreenLED_Pin);
-            } else {
-                GPIO_SetBits(LED_GPIO, GreenLED_Pin);
-            }
-
-            toggle = ~toggle;
             if (xSemaphoreTake(mutex_sleep_capacity, portMAX_DELAY) == pdPASS){
                 if (capacity_task_sleep < CAPACITY){
                     xTaskCreateStatic(
@@ -211,13 +152,10 @@ void task_led(void *vParameters){
         }else{
             printf_("Could not take Semaphore\n");
         }
-
-        uxHighWaterMark = uxTaskGetStackHighWaterMark( NULL );
-        
     }
 }
 
-void led_timer_callback(TimerHandle_t timer) {
+void generate_interrupt_callback(TimerHandle_t timer) {
     xStart = time_us();
     
     EXTI_GenerateSWInterrupt(EXTI_Line0);
@@ -233,41 +171,27 @@ void task_cpu_average(TimerHandle_t timer) {
 int main(void)
 {
 	//Enable clocks to both GPIOA (push button) and GPIOC (output LEDs)
+
     printf_("Init\n\r");
     enable_usart();
     enable_timer();
     adc_init();
-    EnableInterruptEXTI0();
 
-	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
-
-	Gp.GPIO_Pin = GreenLED_Pin | BlueLED_Pin; //Set pins inside the struct
-	Gp.GPIO_Mode = GPIO_Mode_OUT; //Set GPIO pins as output
-	Gp.GPIO_OType = GPIO_OType_PP; //Ensure output is push-pull vs open drain
-	Gp.GPIO_PuPd = GPIO_PuPd_NOPULL; //No internal pullup resistors required
-	Gp.GPIO_Speed = GPIO_Speed_Level_1; //Set GPIO speed to lowest
-	GPIO_Init(LED_GPIO, &Gp); //Assign struct to LED_GPIO
-
-	Gp.GPIO_Pin = PushButton_Pin; //Set pins inside the struct
-	Gp.GPIO_Mode = GPIO_Mode_IN; //Set GPIO pins as output
-	Gp.GPIO_PuPd = GPIO_PuPd_NOPULL; //No pullup required as pullup is external
-	GPIO_Init(PushButton_GPIO, &Gp); //Assign struct to LED_GPIO
-    
     xTaskCreateStatic(
-        task_led, 
-        "ToggleLED", 
-        STACK_SIZE_LED, 
+        task_handle_interrupt, 
+        "TaskHandleInterrupt", 
+        STACK_SIZE_INTERRUPT_HANDLE, 
         NULL, 
         1, 
         xStackLed,&xTaskBufferLed
     );
     
     TimerHandle_t task_timer = xTimerCreateStatic(
-        "LED_ON_TIMER", 
-        pdMS_TO_TICKS(LED_FLASH_PERIOD_MS), 
+        "TRIGGER_INTERRUPT_TIMER", 
+        pdMS_TO_TICKS(TRIGGER_INTERRUPT_MS), 
         pdTRUE, 
         (void*)TIMER_ID, 
-        led_timer_callback, 
+        generate_interrupt_callback, 
         &tasktimerbuffer
     );
     
@@ -284,6 +208,9 @@ int main(void)
     configASSERT(semaphore_irq != NULL);
     mutex_sleep_capacity = xSemaphoreCreateMutexStatic( &xMutexBuffer );
     configASSERT(mutex_sleep_capacity != NULL);
+
+
+    EnableInterruptEXTI0();
 
     if( task_timer == NULL || usage_timer == NULL ){
         printf_("Timers was not created\n");
@@ -333,3 +260,45 @@ void vApplicationGetTimerTaskMemory( StaticTask_t ** ppxTimerTaskTCBBuffer,
      * configMINIMAL_STACK_SIZE is specified in words, not bytes. */
     *pulTimerTaskStackSize = configTIMER_TASK_STACK_DEPTH;
 }
+
+void EnableInterruptEXTI0()
+{    
+    /* Enable clock for GPIOD */
+    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOD, ENABLE);
+    /* Enable clock for SYSCFG */
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
+    
+    /* Set pin as input */
+    GPIO_InitStruct_EXTI.GPIO_Mode = GPIO_Mode_IN;
+    GPIO_InitStruct_EXTI.GPIO_OType = GPIO_OType_PP;
+    GPIO_InitStruct_EXTI.GPIO_Pin = EXTI0_Pin;
+    GPIO_InitStruct_EXTI.GPIO_PuPd = GPIO_PuPd_UP;
+    GPIO_InitStruct_EXTI.GPIO_Speed = GPIO_Speed_2MHz;
+    GPIO_Init(EXTI0_GPIO, &GPIO_InitStruct_EXTI);
+    
+    /* Tell system that you will use PD0 for EXTI_Line0 */
+    SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOD, EXTI_PinSource0);
+    
+    /* PD0 is connected to EXTI_Line0 */
+    EXTI_InitStruct.EXTI_Line = EXTI_Line0;
+    /* Enable interrupt */
+    EXTI_InitStruct.EXTI_LineCmd = ENABLE;
+    /* Interrupt mode */
+    EXTI_InitStruct.EXTI_Mode = EXTI_Mode_Interrupt;
+    /* Triggers on rising and falling edge */
+    EXTI_InitStruct.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
+    /* Add to EXTI */
+    EXTI_Init(&EXTI_InitStruct);
+ 
+    /* Add IRQ vector to NVIC */
+    /* PD0 is connected to EXTI_Line0, which has EXTI0_IRQn vector */
+    NVIC_InitStruct.NVIC_IRQChannel = EXTI0_1_IRQn;
+    /* Set priority */
+    /* Enable interrupt */
+    NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
+    /* Add to NVIC */
+    NVIC_Init(&NVIC_InitStruct);
+ 
+    NVIC_SetPriority(EXTI0_1_IRQn, 2);
+}
+

@@ -2,9 +2,6 @@
 #include <FreeRTOS.h>
 #include "portmacro.h"
 #include "task.h"
-#include "queue.h"
-#include "semphr.h"
-#include "croutine.h"
 #include "timers.h"
 // Misc
 #include "usart.h"
@@ -12,13 +9,7 @@
 #include "timer.h"
 #include <stdint.h>
 //STM32
-#include "utils/idle.h"
 #include "rng.h"
-#include "stm32f0xx.h"
-#include "stm32f0xx_gpio.h"
-#include "stm32f0xx_rcc.h"
-#include "stm32f0xx_exti.h"
-#include "stm32f0xx_misc.h"
 
 
 
@@ -27,17 +18,6 @@
 /**
  * CONSTANTS
  */
-
-#define         LED_ON                      1
-#define         LED_OFF                     0
-
-#define         SW_IRQ_PIN                  21
-        
-#define         LED_ERROR_FLASHES           5
-#define         LED_FLASH_PERIOD_MS         2000
-
-#define         TIMER_ID_LED_ON             0
-
 #define         AVERAGE_USAGE_INTERVAL_MS   5000
 
 #define         SHARED_SIZE                 4
