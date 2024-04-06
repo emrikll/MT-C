@@ -1,0 +1,4 @@
+/home/simon/MT-C/MD407-melody/build/CMakeFiles/Debug.dir
+/home/simon/MT-C/MD407-melody/build/CMakeFiles/MD407-MATRIX.elf.dir
+/home/simon/MT-C/MD407-melody/build/CMakeFiles/edit_cache.dir
+/home/simon/MT-C/MD407-melody/build/CMakeFiles/rebuild_cache.dir

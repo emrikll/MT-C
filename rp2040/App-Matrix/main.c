@@ -83,6 +83,7 @@ void task_i_row(void *parameter) {
  */
 
 int main() {
+    timer_hw->dbgpause = 0;
     // DEBUG
     #ifdef DEBUG
     stdio_init_all();

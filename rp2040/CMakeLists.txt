@@ -14,14 +14,14 @@ set(APP_2_VERSION_NUMBER "1.4.2")
 set(APP_3_NAME "REACTION")
 set(APP_3_VERSION_NUMBER "1.4.2")
 
-set(APP_4_NAME "TIMERS_DEMO")
+set(APP_4_NAME "CONCURRENCY")
 set(APP_4_VERSION_NUMBER "1.4.2")
 
 # Specify the app(s) source code
 set(APP_1_SRC_DIRECTORY "${CMAKE_SOURCE_DIR}/App-Template")
 set(APP_2_SRC_DIRECTORY "${CMAKE_SOURCE_DIR}/App-Matrix")
 set(APP_3_SRC_DIRECTORY "${CMAKE_SOURCE_DIR}/App-Reaction")
-set(APP_4_SRC_DIRECTORY "${CMAKE_SOURCE_DIR}/App-Timers")
+set(APP_4_SRC_DIRECTORY "${CMAKE_SOURCE_DIR}/App-Concurrency")
 
 # FROM 1.4.2 -- Set app-side debugging on debug builds
 # Now uses CMake generator expression to extract config type
@@ -72,6 +72,6 @@ target_include_directories(FreeRTOS PUBLIC
 add_subdirectory(${APP_1_SRC_DIRECTORY})
 add_subdirectory(${APP_2_SRC_DIRECTORY})
 add_subdirectory(${APP_3_SRC_DIRECTORY})
-# add_subdirectory(${APP_4_SRC_DIRECTORY})
+add_subdirectory(${APP_4_SRC_DIRECTORY})
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
