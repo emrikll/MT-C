@@ -4,13 +4,13 @@
 #include "FreeRTOSConfig.h"
 #include "portmacro.h"
 #include "task.h"
+#include "printf.h"
 #include "usart.h"
 #include "timer.h"
 #include "stm32f0xx.h"
 #include "stm32f0xx_gpio.h"
 #include "stm32f0xx_rcc.h"
 #include "utils/idle.h"
-#include "rng.h"
 GPIO_InitTypeDef Gp;//Create GPIO struct
 
 //Define LED pins
@@ -31,25 +31,9 @@ GPIO_InitTypeDef Gp;//Create GPIO struct
 **===========================================================================
 */
 
-/*
- ** Tasks 
- 
-void task_sleep(void *vParameters) {
-    uint32_t rand_nr = RNG_GetRandomNumber();
-    uint32_t start = time_us();
+static StackType_t test_task2_stack[300];
+static StaticTask_t test_task2_buffer;
 
-    const TickType_t xDelay = 500 / portTICK_PERIOD_MS;
-    TickType_t xLastWakeTime;
-
-    xLastWakeTime = xTaskGetTickCount();
-
-    for(;;){
-        vTaskDelayUntil(&xLastWakeTime, xDelay);
-        rand_nr = RNG_GetRandomNumber() % 10;
-        start = time_us();
-        while ((rand_nr * 1000000) < (time_us() - start) );
-    }
-}*/
 void vTask1(void *vParameters){
 
   int toggle = 0;
@@ -68,10 +52,7 @@ void vTask1(void *vParameters){
     }
     uint32_t tim_value = time_us();
     float cpu_usage = cpu_usage_percent();
-    printf("CPU usage: %f",cpu_usage);
-    print("\n\r");
-    uint16_t rand = get_random_byte();
-    printf("Random byte: %u \n\r", rand);
+    printf_("test");
     vTaskDelay(xDelay);
   }
 }
@@ -82,8 +63,6 @@ int main(void)
 	//Enable clocks to both GPIOA (push button) and GPIOC (output LEDs)
     enable_usart();
     enable_timer();
-    adc_init();
-
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
 
 	Gp.GPIO_Pin = GreenLED_Pin | BlueLED_Pin; //Set pins inside the struct
@@ -99,8 +78,7 @@ int main(void)
 	GPIO_Init(PushButton_GPIO, &Gp); //Assign struct to LED_GPIO
 
 	//uint8_t ButtonRead = 0; //Initialize ButtonRead variable
-  static StackType_t test_task2_stack[128];
-	static StaticTask_t test_task2_buffer;
+  
   xTaskCreateStatic(vTask1, 
               "ToggleLED", 
               40, 
@@ -123,4 +101,27 @@ void vApplicationGetIdleTaskMemory( StaticTask_t **ppxIdleTaskTCBBuffer,
     *ppxIdleTaskTCBBuffer = &xIdleTaskTCB;
     *ppxIdleTaskStackBuffer = uxIdleTaskStack;
     *pulIdleTaskStackSize = configMINIMAL_STACK_SIZE;
+}
+
+void vApplicationGetTimerTaskMemory( StaticTask_t ** ppxTimerTaskTCBBuffer,
+                                     StackType_t ** ppxTimerTaskStackBuffer,
+                                     uint32_t * pulTimerTaskStackSize )
+{
+    /* If the buffers to be provided to the Timer task are declared inside this
+     * function then they must be declared static - otherwise they will be allocated on
+     * the stack and so not exists after this function exits. */
+    static StaticTask_t xTimerTaskTCB;
+    static StackType_t uxTimerTaskStack[ configTIMER_TASK_STACK_DEPTH ];
+ 
+    /* Pass out a pointer to the StaticTask_t structure in which the Idle
+     * task's state will be stored. */
+    *ppxTimerTaskTCBBuffer = &xTimerTaskTCB;
+ 
+    /* Pass out the array that will be used as the Timer task's stack. */
+    *ppxTimerTaskStackBuffer = uxTimerTaskStack;
+ 
+    /* Pass out the size of the array pointed to by *ppxTimerTaskStackBuffer.
+     * Note that, as the array is necessarily of type StackType_t,
+     * configMINIMAL_STACK_SIZE is specified in words, not bytes. */
+    *pulTimerTaskStackSize = configTIMER_TASK_STACK_DEPTH;
 }

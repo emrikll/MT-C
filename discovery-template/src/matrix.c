@@ -95,9 +95,9 @@ void task_i_row(void *parameter) {
         uint32_t end_time = time_us();
         //TickType_t end = xTaskGetTickCount();
         //printf_("End_time FreeRTOS: %u\n\r", end);
-        printf_("End_time: %u\n\r", end_time - start_time);
-        printf_("End_time from task 0: %u\n\r", end_time - task0start);
-        print_result_matrix(result_matrix);
+        //printf_("End_time: %u\n\r", end_time - start_time);
+        printf_("%u\n", end_time - task0start);
+        //print_result_matrix(result_matrix);
         vTaskEndScheduler();
     }
 
@@ -118,12 +118,12 @@ int main() {
     enable_usart();
     enable_timer();
 
-    printf_("Hardware Initialized");
-    printf_("A_ROW %d A_COL %d\n\r",A_MATRIX_ROWS, A_MATRIX_COLUMNS);
-    printf_("B_ROW %d B_COL %d\n\r",B_MATRIX_ROWS, B_MATRIX_COLUMNS);
-    printf_("RESULT_ROW %d RESULT_COL %d\n\r",RESULT_MATRIX_ROWS, RESULT_MATRIX_COLUMNS);
-    print_a_matrix(a_matrix);
-    print_b_matrix(b_matrix);
+    //printf_("Hardware Initialized");
+    //printf_("A_ROW %d A_COL %d\n\r",A_MATRIX_ROWS, A_MATRIX_COLUMNS);
+    //printf_("B_ROW %d B_COL %d\n\r",B_MATRIX_ROWS, B_MATRIX_COLUMNS);
+    //printf_("RESULT_ROW %d RESULT_COL %d\n\r",RESULT_MATRIX_ROWS, RESULT_MATRIX_COLUMNS);
+    //print_a_matrix(a_matrix);
+    //print_b_matrix(b_matrix);
 
     char buf[5];
     for (int i = 0; i < RESULT_MATRIX_ROWS; i++) {
@@ -137,7 +137,7 @@ int main() {
                         1,
                         stack_i_row[i],
                         &task_buffer_i_row[i]);
-        printf_("Created task %d\n\r", i);
+        //printf_("Created task %d\n\r", i);
     }
 
             

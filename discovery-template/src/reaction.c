@@ -169,13 +169,39 @@ void task_cpu_average(TimerHandle_t timer) {
 }
 
 int main(void)
-{
-	//Enable clocks to both GPIOA (push button) and GPIOC (output LEDs)
+{   
+    	//Enable clocks to both GPIOA (push button) and GPIOC (output LEDs)
+    //Deinit the rcc
+    RCC_DeInit();
+
+    RCC_HSEConfig(RCC_HSE_ON);
+
+    while(RCC_WaitForHSEStartUp() != SUCCESS);
+
+    RCC_HCLKConfig(RCC_SYSCLK_Div1);
+
+    RCC_PLLConfig(RCC_PLLSource_PREDIV1, RCC_PLLMul_8);  
+
+    RCC_PLLCmd(ENABLE);
+
+    while(RCC_GetFlagStatus(RCC_FLAG_PLLRDY) == RESET);
+
+    RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
+
+    while(RCC_GetSYSCLKSource() != 0x08); 
+    
+    enable_usart();
+    
+    adc_init();
+
+    RCC_USARTCLKConfig(RCC_USART1CLK_SYSCLK);
+    RCC_ClocksTypeDef clocks;
+    RCC_GetClocksFreq(&clocks);
+    printf_("Clock speed: %d", clocks.SYSCLK_Frequency);
 
     printf_("Init\n\r");
-    enable_usart();
+    
     enable_timer();
-    adc_init();
 
     xTaskCreateStatic(
         task_handle_interrupt, 

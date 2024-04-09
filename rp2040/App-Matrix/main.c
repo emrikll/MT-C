@@ -65,9 +65,9 @@ void task_i_row(void *parameter) {
     capacity_task_i_row = capacity_task_i_row - 1;
     if (capacity_task_i_row == 0) {
         uint32_t end_time = time_us_32();
-        printf("End_time: %u\n\r", end_time - start_time);
-        printf("End_time from task 0: %u\n\r", end_time - task0start);
-        print_result_matrix(result_matrix);
+        //printf("End_time: %u\n\r", end_time - start_time);
+        printf("%u\n", end_time - task0start);
+        //print_result_matrix(result_matrix);
     }
 
     vTaskSuspend(NULL);
@@ -90,20 +90,17 @@ int main() {
     // Pause to allow the USB path to initialize
     sleep_ms(2000);
     #endif
-
-    // Set up the hardware
-    setup();
     
     // Log app info
     #ifdef DEBUG
-    log_device_info();
+    //log_device_info();
     #endif
 
-    printf("A_ROW %d A_COL %d\n\r",A_MATRIX_ROWS, A_MATRIX_COLUMNS);
-    printf("B_ROW %d B_COL %d\n\r",B_MATRIX_ROWS, B_MATRIX_COLUMNS);
-    printf("RESULT_ROW %d RESULT_COL %d\n\r",RESULT_MATRIX_ROWS, RESULT_MATRIX_COLUMNS);
-    print_a_matrix(a_matrix);
-    print_b_matrix(b_matrix);
+    //printf("A_ROW %d A_COL %d\n\r",A_MATRIX_ROWS, A_MATRIX_COLUMNS);
+    //printf("B_ROW %d B_COL %d\n\r",B_MATRIX_ROWS, B_MATRIX_COLUMNS);
+    //printf("RESULT_ROW %d RESULT_COL %d\n\r",RESULT_MATRIX_ROWS, RESULT_MATRIX_COLUMNS);
+    //print_a_matrix(a_matrix);
+    //print_b_matrix(b_matrix);
 
     char buf[5];
     for (int i = 0; i < RESULT_MATRIX_ROWS; i++) {
@@ -117,7 +114,7 @@ int main() {
                         1,
                         stack_i_row[i],
                         &task_buffer_i_row[i]);
-        printf("Created task %d\n\r", i);
+        //printf("Created task %d\n\r", i);
     }
 
             
@@ -126,16 +123,6 @@ int main() {
         start_time = time_us_32();
         // Start the scheduler
         vTaskStartScheduler();
-    } else {
-        // Flash board LED 5 times
-        uint8_t count = LED_ERROR_FLASHES;
-        while (count > 0) {
-            led_on();
-            sleep_ms(100);
-            led_off();
-            sleep_ms(100);
-            count--;
-        }
     }
 
     // We should never get here, but just in case...
@@ -240,68 +227,6 @@ void task_cpu_usage(TimerHandle_t timer) {
 
     sprintf(str, "CPU USAGE: %f, BACKGROUND TASKS: %u", usage,capacity_task_i_row);
     log_debug(str);    
-}
-
-/*
- * LED FUNCTIONS
- */
-
-/**
- * @brief Configure the on-board LED.
- */
-void setup_led() {
-
-    gpio_init(PICO_DEFAULT_LED_PIN);
-    gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
-    led_off();
-}
-
-/**
- * @brief Set the on-board LED's state.
- */
-void led_set(bool state) {
-
-    gpio_put(PICO_DEFAULT_LED_PIN, state);
-}
-
-/**
- * @brief Turn the on-board LED on.
- */
-void led_on() {
-
-    led_set(true);
-}
-
-
-/**
- * @brief Turn the on-board LED off.
- */
-void led_off() {
-
-    led_set(false);
-}
-
-/*
-* GPIO
-*/
-
-void setup_gpio() {
-
-    gpio_init(SW_IRQ_PIN);
-    gpio_set_dir(SW_IRQ_PIN, GPIO_OUT);
-    gpio_put(SW_IRQ_PIN, 0);
-}
-
-/*
- * SETUP FUNCTIONS
- */
-
-/**
- * @brief Umbrella hardware setup routine.
- */
-void setup() {
-    setup_gpio();
-    setup_led();
 }
 
 /*

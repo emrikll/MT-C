@@ -7,7 +7,9 @@
  *
  */
 #include "main.h"
-
+#include "hardware/pll.h"
+#include "hardware/clocks.h"
+#include "hardware/structs/clocks.h"
 
 
 /*
@@ -31,15 +33,15 @@ uint64_t xTimeInPICO, xTimeOutPICO, xDifferencePICO, xTotalPICO = 0;
 NOTE:  This is the number of words the stack will hold, not the number of
 bytes.  For example, if each stack item is 32-bits, and this is set to 100,
 then 400 bytes (100 * 32-bits) will be allocated. */
-#define STACK_SIZE_LED 200
+#define STACK_SIZE_INTERRUPT 200
 
 /* Structure that will hold the TCB of the task being created. */
-StaticTask_t xTaskBufferLed;
+StaticTask_t xTaskBufferInterrupt;
 
 /* Buffer that the task being created will use as its stack.  Note this is
 an array of StackType_t variables.  The size of StackType_t is dependent on
 the RTOS port. */
-StackType_t xStackLed[ STACK_SIZE_LED ];
+StackType_t xStackInterrupt[ STACK_SIZE_INTERRUPT ];
 
 /* Dimensions of the buffer that the task being created will use as its stack.
 NOTE:  This is the number of words the stack will hold, not the number of
@@ -61,55 +63,7 @@ int CAPACITY = 250;
 StaticSemaphore_t xMutexBuffer;
 SemaphoreHandle_t mutex_sleep_capacity;
 
-
-
-
-
-/*
- * LED FUNCTIONS
- */
-
-/**
- * @brief Configure the on-board LED.
- */
-void setup_led() {
-
-    gpio_init(PICO_DEFAULT_LED_PIN);
-    gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
-    led_off();
-}
-
-/**
- * @brief Set the on-board LED's state.
- */
-void led_set(bool state) {
-
-    gpio_put(PICO_DEFAULT_LED_PIN, state);
-}
-
-/**
- * @brief Turn the on-board LED on.
- */
-void led_on() {
-
-    led_set(true);
-}
-
-
-/**
- * @brief Turn the on-board LED off.
- */
-void led_off() {
-
-    led_set(false);
-}
-
-/*
-* GPIO
-*/
-
 void setup_gpio() {
-
     gpio_init(SW_IRQ_PIN);
     gpio_set_dir(SW_IRQ_PIN, GPIO_OUT);
     gpio_put(SW_IRQ_PIN, 0);
@@ -123,7 +77,6 @@ void setup_gpio() {
  * @brief Umbrella hardware setup routine.
  */
 void setup() {
-    setup_led();
     setup_gpio();
     enable_irq(true);
 }
@@ -181,20 +134,7 @@ void enable_irq(bool state) {
  * @param events: Which event(s) triggered the IRQ.
  */
 void gpio_isr(uint gpio, uint32_t events) {
-
     // See BLOG POST https://blog.smittytone.net/2022/03/20/fun-with-freertos-and-pi-pico-interrupts-semaphores-notifications/
-
-    /* ISR FUNCTION BODY USING DIRECT TASK NOTIFICATIONS */
-    /*
-    // Signal the alert clearance task
-    static BaseType_t higher_priority_task_woken = pdFALSE;
-    vTaskNotifyGiveFromISR(handle_task_pico, &higher_priority_task_woken);
-    
-    // Exit to context switch if necessary
-    portYIELD_FROM_ISR(higher_priority_task_woken);
-    */
-    
-    /* ISR FUNCTION BODY USING A SEMAPHORE */
     
     xStartISR = time_us_64();
 
@@ -204,14 +144,6 @@ void gpio_isr(uint gpio, uint32_t events) {
     
     // Exit to context switch if necessary
     portYIELD_FROM_ISR(higher_priority_task_woken);
-    
-    
-    /*  ISR FUNCTION BODY USING A QUEUE */
-    /*
-    // Signal the alert clearance task
-    static bool state = 1;
-    xQueueSendToBackFromISR(irq_queue, &state, 0);
-     */
 }
 
 /*
@@ -221,7 +153,7 @@ void gpio_isr(uint gpio, uint32_t events) {
 /**
  * @brief Turn the Pico's built-in LED on or off based on LED_STATE.
  */
-void task_led_pico(void* unused_arg) {
+void task_handle_interrupt(void* unused_arg) {
 
     bool LED_STATE = true;
 
@@ -233,16 +165,7 @@ void task_led_pico(void* unused_arg) {
             xDifferenceISR = xStartISR - xStart;
             sprintf(str, "DifferenceISR: %lu, DIFFERENCEIRQ: %lu", xDifferenceISR, xDifference);
             log_debug(str);
-            xStart, xEnd, xDifference = 0;
-            if (LED_STATE) {
-                led_on();
-                LED_STATE = false;
-                //log_debug("LED turned on");
-            } else {
-                led_off();
-                LED_STATE = true;
-                //log_debug("LED turned off");
-            }
+            xStart, xEnd, xDifference = 0; 
             if (xSemaphoreTake(semaphore_irq, portMAX_DELAY) == pdPASS){
                 if (capacity_task_sleep < CAPACITY){
                     xTaskCreateStatic(task_sleep, "SLEEP_TASK", 128, NULL,  1, xStack[capacity_task_sleep], &xTaskBuffer[capacity_task_sleep]);
@@ -283,7 +206,7 @@ void task_cpu_usage(TimerHandle_t timer) {
 
     xTotalPICO = 0;
 
-    sprintf(str, "CPU USAGE: %f, BACKGROUND TASKS: %u", usage,capacity_task_sleep);
+    sprintf(str, "CPU USAGE: %f, BACKGROUND TASKS: %u, CLOCK_SPEED: %u", usage,capacity_task_sleep, clock_get_hz(clk_sys));
     log_debug(str);    
 }
 
@@ -334,12 +257,33 @@ void handle_switched_out(int* pxCurrentTCB) {
      }
 }
 
+void resus_callback(void) {
+    // Reconfigure PLL sys back to the default state of 1500 / 6 / 2 = 125MHz
+    pll_init(pll_sys, 1, 1600 * MHZ, 6, 2);
+    clock_configure(clk_sys,
+                    CLOCKS_CLK_SYS_CTRL_SRC_VALUE_CLKSRC_CLK_SYS_AUX,
+                    CLOCKS_CLK_SYS_CTRL_AUXSRC_VALUE_CLKSRC_PLL_SYS,
+                    133 * MHZ,
+                    133 * MHZ);
+    clock_configure(clk_peri,
+                    0,
+                    CLOCKS_CLK_PERI_CTRL_AUXSRC_VALUE_CLK_SYS,
+                    133 * MHZ,
+                    133 * MHZ);
+    // Reconfigure uart as clocks have changed
+    stdio_init_all();
+
+    // Wait for uart output to finish
+    uart_default_tx_wait_blocking();
+
+}
 /*
  * RUNTIME START
  */
-
 int main() {
     // DEBUG
+    timer_hw->dbgpause = 0;
+    
     #ifdef DEBUG
     stdio_init_all();
     // Pause to allow the USB path to initialize
@@ -354,20 +298,24 @@ int main() {
     log_device_info();
     #endif
 
+    clocks_enable_resus(&resus_callback);
+    pll_deinit(pll_sys);
+
     // Set up four tasks
-    handle_task_pico = xTaskCreateStatic(task_led_pico, 
-                                        "PICO_LED_TASK",  
+    handle_task_pico = xTaskCreateStatic(task_handle_interrupt, 
+                                        "PICO_INTERRUPT_TASK",  
                                         128, 
                                         NULL, 
                                         1, 
-                                        xStackLed, 
-                                        &xTaskBufferLed);
+                                        xStackInterrupt, 
+                                        &xTaskBufferInterrupt);
 
-    TimerHandle_t task_timer = xTimerCreate("LED_ON_TIMER", pdMS_TO_TICKS(LED_FLASH_PERIOD_MS), pdTRUE, (void*)TIMER_ID_LED_ON, timer_fired_callback);
-    TimerHandle_t timer_cpu_usage = xTimerCreate("LED_ON_TIMER", pdMS_TO_TICKS(AVERAGE_USAGE_INTERVAL_MS), pdTRUE, (void*)TIMER_ID_LED_ON, task_cpu_usage);
+    TimerHandle_t task_timer = xTimerCreate("HANDLE_INTERRUPT_TIMER", pdMS_TO_TICKS(INTERRUPT_PERIOD_MS), pdTRUE, (void*)TIMER_ID_LED_ON, timer_fired_callback);
+    TimerHandle_t timer_cpu_usage = xTimerCreate("USAGE_CPU_TIMER", pdMS_TO_TICKS(AVERAGE_USAGE_INTERVAL_MS), pdTRUE, (void*)TIMER_ID_LED_ON, task_cpu_usage);
 
     //xTaskCreate( prvIdleTask, ( signed portCHAR * ) "IDLE", tskIDLE_STACK_SIZE, ( void * ) NULL, tskIDLE_PRIORITY, &xIdleTaskHandle );
-    
+    log_debug("start");
+    printf("test");
     if( task_timer == NULL || timer_cpu_usage == NULL ){
         /* The timer was not created. */
         log_debug("Timers was not created");
@@ -393,16 +341,6 @@ int main() {
         
         // Start the scheduler
         vTaskStartScheduler();
-    } else {
-        // Flash board LED 5 times
-        uint8_t count = LED_ERROR_FLASHES;
-        while (count > 0) {
-            led_on();
-            vTaskDelay(100);
-            led_off();
-            vTaskDelay(100);
-            count--;
-        }
     }
 
     // We should never get here, but just in case...

@@ -101,6 +101,10 @@ buildreaction: $(SRCS)
 	mkdir -p build
 	$(CC) $(CFLAGS) src/reaction.c $^ -o build/$(PROJ_NAME).elf -L$(STD_PERIPH_LIB) -lstm32f0 -L$(LDSCRIPT_INC) -Tstm32f0.ld
 
+buildmain: $(SRCS)
+	mkdir -p build
+	$(CC) $(CFLAGS) src/main.c $^ -o build/$(PROJ_NAME).elf -L$(STD_PERIPH_LIB) -lstm32f0 -L$(LDSCRIPT_INC) -Tstm32f0.ld
+
 buildconcurrency: $(SRCS)
 	mkdir -p build
 	$(CC) $(CFLAGS) src/concurrency.c $^ -o build/$(PROJ_NAME).elf -L$(STD_PERIPH_LIB) -lstm32f0 -L$(LDSCRIPT_INC) -Tstm32f0.ld
