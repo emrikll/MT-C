@@ -77,6 +77,9 @@ all: main
 lib:
 	$(MAKE) -C $(STD_PERIPH_LIB)
 
+stack: buildreaction
+	python3 analyze.py $(SRCS) ./*.su src/reaction.c
+
 main: lib buildmain generateelf program
 
 reaction: lib buildreaction generateelf program
@@ -91,15 +94,9 @@ generateelf:
 	$(OBJDUMP) -St build/$(PROJ_NAME).elf > build/$(PROJ_NAME).lst
 	$(SIZE) build/$(PROJ_NAME).elf
 
-stack: () buildreaction
-	
-
-	mkdir -p build
-	$(CC) $(CFLAGS) src/main.c $^ -o build/$(PROJ_NAME).elf -L$(STD_PERIPH_LIB) -lstm32f0 -L$(LDSCRIPT_INC) -Tstm32f0.ld
-
 buildreaction: $(SRCS)
 	mkdir -p build
-	$(CC) $(CFLAGS) src/reaction.c $^ -o build/$(PROJ_NAME).elf -L$(STD_PERIPH_LIB) -lstm32f0 -L$(LDSCRIPT_INC) -Tstm32f0.ld
+	$(CC) $(CFLAGS) -fstack-usage src/reaction.c $^ -L$(STD_PERIPH_LIB) -lstm32f0 -L$(LDSCRIPT_INC) -Tstm32f0.ld
 
 buildmain: $(SRCS)
 	mkdir -p build

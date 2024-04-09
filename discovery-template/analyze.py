@@ -45,7 +45,7 @@ def parse_su_files(files):
 def create_cflow_files(c_files):
     cflow_files = []
     if(not os.path.exists("./cflow")):
-        os.mkdirs("./cflow")
+        os.mkdir("./cflow")
 
     for file in c_files:
         output = subprocess.check_output(["cflow", file]).decode()

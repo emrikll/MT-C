@@ -167,10 +167,10 @@ void task_cpu_average(TimerHandle_t timer) {
     printf_("CPU usage: %f \n\r", usage);
     printf_("\n\r");
 }
-
+#pragma GCC diagnostic error "-Wframe-larger-than=1"
 int main(void)
 {   
-    	//Enable clocks to both GPIOA (push button) and GPIOC (output LEDs)
+    //Enable clocks to both GPIOA (push button) and GPIOC (output LEDs)
     //Deinit the rcc
     RCC_DeInit();
 
