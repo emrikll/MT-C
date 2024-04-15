@@ -14,13 +14,7 @@
 #include "usart.h"
 #include "printf.h"
 
-#define CAPACITY_HIGH 5
-#define CAPACITY_MEDIUM 3
-#define CAPACITY_LOW 3
-
-#define FREQUENCY_HIGH 15 / portTICK_PERIOD_MS
-#define FREQUENCY_MEDIUM 15 / portTICK_PERIOD_MS
-#define FREQUENCY_LOW 15 / portTICK_PERIOD_MS
+#define FREQUENCY_HIGH 1 / portTICK_PERIOD_MS
 
 #define MAX_VALUE 10000
 /* Dimensions of the buffer that the task being created will use as its stack.
@@ -31,26 +25,54 @@ then 400 bytes (100 * 32-bits) will be allocated.  6817583
 #define STACK_SIZE 70
 
 /* Structure that will hold the TCB of the tasks being created. */
-StaticTask_t xTaskBufferLow[CAPACITY_LOW];
-StackType_t xStackLow[CAPACITY_LOW][ STACK_SIZE ];
 
-StaticTask_t xTaskBufferMedium[CAPACITY_MEDIUM];
-StackType_t xStackMedium[CAPACITY_MEDIUM][ STACK_SIZE ];
+#ifndef  REFERENCE
+StaticTask_t xTaskBufferLow;
+StackType_t xStackLow[ STACK_SIZE ];
 
-StaticTask_t xTaskBufferHigh[CAPACITY_HIGH];
-StackType_t xStackHigh[CAPACITY_HIGH][ STACK_SIZE ];
+StaticTask_t xTaskBufferHigh;
+StackType_t xStackHigh[ STACK_SIZE ];
+
+StaticSemaphore_t xMutexBuffer;
+static SemaphoreHandle_t shared_variable_lock;
+
+#else
+
+StaticTask_t xTaskBufferReference;
+StackType_t xStackReference[ STACK_SIZE ];
+#endif /* ifndef  REFERENCE */
+
 
 uint32_t start_time = 0;
 
 uint32_t shared_variable = 0;
 uint8_t done = 0;
 
-StaticSemaphore_t xMutexBuffer;
-static SemaphoreHandle_t shared_variable_lock;
+
 /*
  ** Tasks 
 */
 
+
+
+
+#ifdef REFERENCE
+void reference_task(void *parameter) {
+    while (1) {
+        if (done) {
+            vTaskSuspend(NULL);
+        }
+        shared_variable++;
+        if(shared_variable == MAX_VALUE) {
+            done = 1;
+            uint32_t end_time = time_us();
+
+            printf_("Reached max value at after: %d\r\n", end_time - start_time);
+        } 
+    }
+}
+
+#else
 void increment_shared() {
     if (done) {
         vTaskSuspend(NULL);
@@ -72,14 +94,6 @@ void increment_shared() {
 void low_priority_task(void *parameter) {
     while (1) {
         increment_shared();
-        vTaskDelay(FREQUENCY_LOW);
-    }
-}
-
-void medium_priority_task(void *parameter) {
-    while (1) {
-        increment_shared();
-        vTaskDelay(FREQUENCY_MEDIUM);
     }
 }
 
@@ -89,52 +103,53 @@ void high_priority_task(void *parameter) {
         vTaskDelay(FREQUENCY_HIGH);
     }
 }
+#endif
 
 int main(void)
 {
-    enable_timer();
     enable_usart();
     printf_("\n\rInit\n\r");
 
+    
+    #ifndef REFERENCE
     shared_variable_lock = xSemaphoreCreateMutexStatic( &xMutexBuffer );
     configASSERT(shared_variable_lock != NULL);
 
-    for (int i = 0; i < CAPACITY_HIGH; i++) {
-        xTaskCreateStatic(
-            high_priority_task, 
-            "High priority", 
-            STACK_SIZE, 
-            NULL, 
-            3, 
-            xStackHigh[i],
-            &xTaskBufferHigh[i]
-        );
-    }
+    xTaskCreateStatic(
+        high_priority_task, 
+        "High priority", 
+        STACK_SIZE, 
+        NULL, 
+        2, 
+        xStackHigh,
+        &xTaskBufferHigh
+    );
 
-    for (int i = 0; i < CAPACITY_MEDIUM; i++) {
-        xTaskCreateStatic(
-            medium_priority_task, 
-            "Medium priority", 
-            STACK_SIZE, 
-            NULL, 
-            2, 
-            xStackMedium[i],
-            &xTaskBufferMedium[i]
-        );
-    }
 
-    for (int i = 0; i < CAPACITY_LOW; i++) {
-        xTaskCreateStatic(
-            low_priority_task, 
-            "Low priority", 
-            STACK_SIZE, 
-            NULL, 
-            1, 
-            xStackLow[i],
-            &xTaskBufferLow[i]
-        );
-    }
+    xTaskCreateStatic(
+        low_priority_task, 
+        "Low priority", 
+        STACK_SIZE, 
+        NULL, 
+        1, 
+        xStackLow,
+        &xTaskBufferLow
+    );
 
+    #else
+
+    xTaskCreateStatic(
+        reference_task, 
+        "Reference task", 
+        STACK_SIZE, 
+        NULL, 
+        1, 
+        xStackReference,
+        &xTaskBufferReference
+    );
+    #endif
+
+    enable_timer();
 
     printf_("Starting scheduler...\n\r");
     start_time = time_us();

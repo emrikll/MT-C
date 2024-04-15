@@ -30,6 +30,8 @@ uint64_t xTimeInPICO, xTimeOutPICO, xDifferencePICO, xTotalPICO;
 int capacity_task_i_row = 0;
 int CAPACITY = 250;
 
+int largest_stack = ~0;
+
 // Static allocation task_i_row
 
 /* Dimensions of the buffer that the task being created will use as its stack.
@@ -38,15 +40,52 @@ bytes.  For example, if each stack item is 32-bits, and this is set to 100,
 then 400 bytes (100 * 32-bits) will be allocated. */
 #define STACK_SIZE_I_ROW 200
 
+#define REFERENCE
+
+#ifndef REFERENCE
 /* Structure that will hold the TCB of the task being created. */
 StaticTask_t task_buffer_i_row[RESULT_MATRIX_ROWS];
-
-/* Buffer that the task being created will use as its stack.  Note this is
-an array of StackType_t variables.  The size of StackType_t is dependent on
-the RTOS port. */
 StackType_t stack_i_row[RESULT_MATRIX_ROWS][ STACK_SIZE_I_ROW ];
+#else
+StaticTask_t task_buffer_reference;
+StackType_t stack_reference[ STACK_SIZE_I_ROW ];
+#endif
+
+void tick() {
+    uint32_t current = __get_MSP();
+    if (current < largest_stack) {
+        largest_stack = current;
+    }
+}
 
 uint32_t task0start = 0;
+
+#ifdef REFERENCE
+void reference_task(void *parameters) {
+    task0start = time_us();
+    for (int i = 0; i < RESULT_MATRIX_ROWS; i++) {
+        for (int j = 0; j < RESULT_MATRIX_COLUMNS; j++) {
+            double tmp = 0.0;
+            for (int k = 0; k < A_MATRIX_COLUMNS; k++) {
+                tmp = tmp + (a_matrix[(i * A_MATRIX_COLUMNS) + k] * b_matrix[(k * B_MATRIX_COLUMNS) + j]);
+            }
+            result_matrix[(i * RESULT_MATRIX_COLUMNS) + j] = tmp;
+        }
+
+    }
+    uint32_t end_time = time_us();
+    //TickType_t end = xTaskGetTickCount();
+    //printf_("End_time FreeRTOS: %u\n\r", end);
+    //printf_("End_time: %u\n\r", end_time - start_time);
+    tick();
+    //printf_("Stack usage: %u\r\n", START_STACK - largest_stack);
+    printf_("%u\n", end_time - task0start);
+    //print_result_matrix(result_matrix);
+    vTaskEndScheduler();
+ 
+}
+
+#else
 void task_i_row(void *parameter) {
     int i;
     i = (int) parameter;
@@ -84,6 +123,7 @@ void task_i_row(void *parameter) {
         taskYIELD();
     }
 }
+#endif
 
 
 /*
@@ -100,11 +140,12 @@ int main() {
     //print_a_matrix(a_matrix);
     //print_b_matrix(b_matrix);
 
+    #ifndef REFERENCE
     char buf[5];
     for (int i = 0; i < RESULT_MATRIX_ROWS; i++) {
         // Convert 123 to string [buf]
         capacity_task_i_row++;
-        sprintf_(buf,"%ld", i);
+        sprintf_(buf,"%i", i);
         xTaskCreateStatic(task_i_row,
                         buf,
                         128,
@@ -114,6 +155,16 @@ int main() {
                         &task_buffer_i_row[i]);
         //printf_("Created task %d\n\r", i);
     }
+    #else
+    xTaskCreateStatic(reference_task,
+        "reference",
+        128,
+        NULL,
+        1,
+        stack_reference,
+        &task_buffer_reference
+    );
+    #endif
 
             
     // Start the FreeRTOS scheduler if any of the tasks are good

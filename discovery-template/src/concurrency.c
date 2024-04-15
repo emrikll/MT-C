@@ -14,47 +14,65 @@
 #include "printf.h"
 #include "usart.h"
 
-#define CAPACITY_HIGH 3
-#define CAPACITY_MEDIUM 3
-#define CAPACITY_LOW 5
+#define FREQUENCY_HIGH 1 / portTICK_PERIOD_MS
 
-#define FREQUENCY_HIGH 5 / portTICK_PERIOD_MS
-#define FREQUENCY_MEDIUM 10 / portTICK_PERIOD_MS
-#define FREQUENCY_LOW 15 / portTICK_PERIOD_MS
+#define MAX_VALUE 10000
 /* Dimensions of the buffer that the task being created will use as its stack.
 NOTE:  This is the number of words the stack will hold, not the number of
 bytes.  For example, if each stack item is 32-bits, and this is set to 100,
-then 400 bytes (100 * 32-bits) will be allocated. */
+then 400 bytes (100 * 32-bits) will be allocated.  6817583
+*/
 #define STACK_SIZE 70
 
 /* Structure that will hold the TCB of the tasks being created. */
-StaticTask_t xTaskBufferLow[CAPACITY_LOW];
-StackType_t xStackLow[CAPACITY_LOW][ STACK_SIZE ];
 
-StaticTask_t xTaskBufferMedium[CAPACITY_MEDIUM];
-StackType_t xStackMedium[CAPACITY_MEDIUM][ STACK_SIZE ];
+#ifndef  REFERENCE
+StaticTask_t xTaskBufferLow;
+StackType_t xStackLow[ STACK_SIZE ];
 
-StaticTask_t xTaskBufferHigh[CAPACITY_HIGH];
-StackType_t xStackHigh[CAPACITY_HIGH][ STACK_SIZE ];
+StaticTask_t xTaskBufferHigh;
+StackType_t xStackHigh[ STACK_SIZE ];
 
-UBaseType_t uxHighWaterMark;
+StaticSemaphore_t xMutexBuffer;
+static SemaphoreHandle_t shared_variable_lock;
 
-#define MAX_VALUE 10000
+#else
+
+StaticTask_t xTaskBufferReference;
+StackType_t xStackReference[ STACK_SIZE ];
+#endif /* ifndef  REFERENCE */
+
 
 uint32_t start_time = 0;
 
 uint32_t shared_variable = 0;
 uint8_t done = 0;
 
-UBaseType_t uxHighWaterMark;
-UBaseType_t uxMediumWaterMark;
-UBaseType_t uxLowWaterMark;
-StaticSemaphore_t xMutexBuffer;
-static SemaphoreHandle_t shared_variable_lock;
+
 /*
  ** Tasks 
 */
 
+
+
+
+#ifdef REFERENCE
+void reference_task(void *parameter) {
+    while (1) {
+        if (done) {
+            vTaskSuspend(NULL);
+        }
+        shared_variable++;
+        if(shared_variable == MAX_VALUE) {
+            done = 1;
+            uint32_t end_time = time_us();
+
+            printf_("Reached max value at after: %u\r\n", end_time - start_time);
+        } 
+    }
+}
+
+#else
 void increment_shared() {
     if (done) {
         vTaskSuspend(NULL);
@@ -66,10 +84,8 @@ void increment_shared() {
     if(shared_variable == MAX_VALUE) {
         done = 1;
         uint32_t end_time = time_us();
+
         printf_("Reached max value at after: %d\r\n", end_time - start_time);
-        printf_("Watermark high: %ld\r\n", uxHighWaterMark);
-        printf_("Watermark medium: %ld\r\n", uxMediumWaterMark);
-        printf_("Watermark low: %ld\r\n", uxLowWaterMark);
     } 
     
     xSemaphoreGive(shared_variable_lock);
@@ -78,16 +94,6 @@ void increment_shared() {
 void low_priority_task(void *parameter) {
     while (1) {
         increment_shared();
-        vTaskDelay(FREQUENCY_LOW);
-        uxLowWaterMark = uxTaskGetStackHighWaterMark( NULL );
-    }
-}
-
-void medium_priority_task(void *parameter) {
-    while (1) {
-        increment_shared();
-        vTaskDelay(FREQUENCY_MEDIUM);
-        uxMediumWaterMark = uxTaskGetStackHighWaterMark( NULL );
     }
 }
 
@@ -95,8 +101,19 @@ void high_priority_task(void *parameter) {
     while (1) {
         increment_shared();
         vTaskDelay(FREQUENCY_HIGH);
-        uxHighWaterMark = uxTaskGetStackHighWaterMark( NULL );
     }
+}
+#endif
+
+void log_debug(const char* msg) {
+
+#ifdef DEBUG
+    uint msg_length = 9 + strlen(msg);
+    char* sprintf_buffer = malloc(msg_length);
+    sprintf(sprintf_buffer, "[DEBUG] %s\n", msg);
+    printf("%s", sprintf_buffer);
+    free(sprintf_buffer);
+#endif
 }
 
 int main(void)
@@ -105,44 +122,43 @@ int main(void)
     enable_usart();
     printf_("\n\rInit\n\r");
 
+    #ifndef REFERENCE
     shared_variable_lock = xSemaphoreCreateMutexStatic( &xMutexBuffer );
     configASSERT(shared_variable_lock != NULL);
 
-    for (int i = 0; i < CAPACITY_HIGH; i++) {
-        xTaskCreateStatic(
-            high_priority_task, 
-            "High priority", 
-            STACK_SIZE, 
-            NULL, 
-            3, 
-            xStackHigh[i],
-            &xTaskBufferHigh[i]
-        );
-    }
+    xTaskCreateStatic(
+        high_priority_task, 
+        "High priority", 
+        STACK_SIZE, 
+        NULL, 
+        2, 
+        xStackHigh,
+        &xTaskBufferHigh
+    );
 
-    for (int i = 0; i < CAPACITY_MEDIUM; i++) {
-        xTaskCreateStatic(
-            medium_priority_task, 
-            "Medium priority", 
-            STACK_SIZE, 
-            NULL, 
-            2, 
-            xStackMedium[i],
-            &xTaskBufferMedium[i]
-        );
-    }
 
-    for (int i = 0; i < CAPACITY_LOW; i++) {
-        xTaskCreateStatic(
-            low_priority_task, 
-            "Low priority", 
-            STACK_SIZE, 
-            NULL, 
-            1, 
-            xStackLow[i],
-            &xTaskBufferLow[i]
-        );
-    }
+    xTaskCreateStatic(
+        low_priority_task, 
+        "Low priority", 
+        STACK_SIZE, 
+        NULL, 
+        1, 
+        xStackLow,
+        &xTaskBufferLow
+    );
+
+    #else
+
+    xTaskCreateStatic(
+        reference_task, 
+        "Reference task", 
+        STACK_SIZE, 
+        NULL, 
+        1, 
+        xStackReference,
+        &xTaskBufferReference
+    );
+    #endif
 
 
     printf_("Starting scheduler...\n\r");

@@ -259,7 +259,7 @@ static void __sys_init() {
 
     SCB->CCR = 0x210;		// STKALIGN + DIV_0_TRP 
 #ifdef __USE_UNALIGN_TRP
-    SCB->CCR |= 0x008;      // + UNALIGN_TRP
+    //SCB->CCR |= 0x008;      // + UNALIGN_TRP
 #else
 	DUMP("\n\rNOTE: Usage Fault exception disabled for unaligned 16-bit/32-bit data transfers!\n\r");
 #endif
