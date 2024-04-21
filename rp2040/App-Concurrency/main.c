@@ -56,6 +56,22 @@ uint8_t done = 0;
  ** Tasks 
 */
 
+uint32_t largest_stack = ~0;
+uint32_t START_STACK = 0;
+
+__attribute__( ( always_inline ) ) uint32_t __get_MSP(void) {
+  register uint32_t result;
+
+  __asm__ volatile ("MRS %0, msp\n" : "=r" (result) );
+  return(result);
+}
+
+void tick() {
+    uint32_t current = __get_MSP();
+    if (current < largest_stack) {
+        largest_stack = current;
+    }
+}
 
 
 

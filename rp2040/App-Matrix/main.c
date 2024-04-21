@@ -29,8 +29,7 @@ uint64_t xTimeInPICO, xTimeOutPICO, xDifferencePICO, xTotalPICO = 0;
 int capacity_task_i_row = 0;
 int CAPACITY = 250;
 
-uint32_t largest_stack = ~0;
-uint32_t START_STACK = 100000;
+
 
 // Static allocation task_i_row
 
@@ -51,8 +50,18 @@ StaticTask_t task_buffer_reference;
 StackType_t stack_reference[ STACK_SIZE_I_ROW ];
 #endif
 
+uint32_t largest_stack = ~0;
+uint32_t START_STACK = 0;
+
+__attribute__( ( always_inline ) ) uint32_t __get_MSP(void) {
+  register uint32_t result;
+
+  __asm__ volatile ("MRS %0, msp\n" : "=r" (result) );
+  return(result);
+}
+
 void tick() {
-    uint32_t current = 5;
+    uint32_t current = __get_MSP();
     if (current < largest_stack) {
         largest_stack = current;
     }
@@ -64,6 +73,7 @@ uint32_t task0start = 0;
 void reference_task(void *parameters) {
     task0start = time_us_64();
     for (int i = 0; i < RESULT_MATRIX_ROWS; i++) {
+        tick();
         for (int j = 0; j < RESULT_MATRIX_COLUMNS; j++) {
             double tmp = 0.0;
             for (int k = 0; k < A_MATRIX_COLUMNS; k++) {
@@ -78,7 +88,7 @@ void reference_task(void *parameters) {
     //printf_("End_time FreeRTOS: %u\n\r", end);
     //printf_("End_time: %u\n\r", end_time - start_time);
     tick();
-    //printf("Stack usage: %u\r\n", START_STACK - largest_stack);
+    printf("Stack usage: %u\r\n", START_STACK - largest_stack);
     printf("%u\n", end_time - task0start);
     //print_result_matrix(result_matrix);
     vTaskEndScheduler();
@@ -122,6 +132,7 @@ void task_i_row(void *parameter) {
  */
 
 int main() {
+    START_STACK = __get_MSP();
     timer_hw->dbgpause = 0;
     // DEBUG
     #ifdef DEBUG

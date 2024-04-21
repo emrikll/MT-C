@@ -53,7 +53,15 @@ uint8_t done = 0;
  ** Tasks 
 */
 
+int largest_stack = ~0;
+int START_STACK = 0;
 
+void tick() {
+    uint32_t current = __get_MSP();
+    if (current < largest_stack) {
+        largest_stack = current;
+    }
+}
 
 
 #ifdef REFERENCE

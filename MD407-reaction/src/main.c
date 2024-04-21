@@ -80,6 +80,15 @@ an array of StackType_t variables.  The size of StackType_t is dependent on
 the RTOS port. */
 StackType_t xStack[CAPACITY][ STACK_SIZE ];
 
+int largest_stack = ~0;
+int START_STACK = 0;
+
+void tick() {
+    uint32_t current = __get_MSP();
+    if (current < largest_stack) {
+        largest_stack = current;
+    }
+}
 
 // Custom vector to get IRQ working
 #define SCB_VTOR_CUSTOM ((volatile unsigned long *) 0xE000ED08)

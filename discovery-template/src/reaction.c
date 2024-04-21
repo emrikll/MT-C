@@ -64,6 +64,16 @@ an array of StackType_t variables.  The size of StackType_t is dependent on
 the RTOS port. */
 StackType_t xStack[CAPACITY][ STACK_SIZE ];
 
+int START_STACK = 0;
+uint32_t largest_stack = ~0;
+
+void tick() {
+    uint32_t current = __get_MSP();
+    if (current < largest_stack) {
+        largest_stack = current;
+    }
+}
+
 // Semaphores
 StaticSemaphore_t xMutexBuffer;
 SemaphoreHandle_t mutex_sleep_capacity;

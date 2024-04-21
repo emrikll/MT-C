@@ -1,3 +1,4 @@
+
 // FreeRTOS
 #include <FreeRTOS.h>
 #include "core_cmFunc.h"
@@ -21,12 +22,12 @@
  */
 #define         AVERAGE_USAGE_INTERVAL_MS   5000
 
-#define         SHARED_SIZE                 4
+#define         SHARED_SIZE                 3
 
 #define         A_MATRIX_ROWS               3
 #define         A_MATRIX_COLUMNS            SHARED_SIZE          
 #define         B_MATRIX_ROWS               SHARED_SIZE
-#define         B_MATRIX_COLUMNS            7    
+#define         B_MATRIX_COLUMNS            3    
 #define         RESULT_MATRIX_ROWS          A_MATRIX_ROWS
 #define         RESULT_MATRIX_COLUMNS       B_MATRIX_COLUMNS
 
@@ -46,8 +47,8 @@ void task_cpu_usage(TimerHandle_t timer);
 uint32_t start_time;
 
 // Matrix
-double a_matrix[A_MATRIX_ROWS * A_MATRIX_COLUMNS] = {7986.45, 1292.79, 8583.79, 2072.98, 2161.08, 7137.87, 8844.89542, 1241.16699, 9333.09941, 1046.33654, 1766.28663, 227.57371};
-double b_matrix[B_MATRIX_ROWS * B_MATRIX_COLUMNS] = {2089.46, 484.29, 4070.86, 6388.14, 5878.41, 7796.02, 4174.04910, 3779.38097, 1819.78879, 392.12370, 5173.20243, 2525.39435, 4430.77499, 3700.96781, 3312.82425, 2487.50948, 1680.72726, 1257.68497, 5224.09199, 5027.58651, 4620.30426, 7821.20553, 5898.87661, 3104.60453, 4500.93917, 3847.383526, 1115.46655, 1150.36475};
+double a_matrix[A_MATRIX_ROWS * A_MATRIX_COLUMNS] = {9962.191118353554, 3945.225888718275, 1208.3999143470764, 7918.062891627125, 3852.39158238296, 4576.729150198891, 4457.865115558375, 3298.9384083296204};
+double b_matrix[B_MATRIX_ROWS * B_MATRIX_COLUMNS] = {1436.0893265454486, 9434.154262328304, 2644.7534848520077, 7041.133042536387, 6063.6041787683735, 8646.600093677709, 2387.468656636986, 3012.988488276858};
 double result_matrix[RESULT_MATRIX_ROWS * RESULT_MATRIX_COLUMNS];
 
 
@@ -56,10 +57,8 @@ uint64_t xTimeInPICO, xTimeOutPICO, xDifferencePICO, xTotalPICO;
 
 // Capacity
 int capacity_task_i_row = 0;
-int CAPACITY = 250;
 
-int START_STACK = 0;
-uint32_t largest_stack = ~0; 
+
 
 // Static allocation task_i_row
 
@@ -69,7 +68,7 @@ bytes.  For example, if each stack item is 32-bits, and this is set to 100,
 then 400 bytes (100 * 32-bits) will be allocated. */
 #define STACK_SIZE_I_ROW 200
 
-//#define REFERENCE
+ 
 
 #ifndef REFERENCE
 /* Structure that will hold the TCB of the task being created. */
@@ -79,7 +78,8 @@ StackType_t stack_i_row[RESULT_MATRIX_ROWS][ STACK_SIZE_I_ROW ];
 StaticTask_t task_buffer_reference;
 StackType_t stack_reference[ STACK_SIZE_I_ROW ];
 #endif
-
+int START_STACK = 0;
+uint32_t largest_stack = ~0; 
 void tick() {
     uint32_t current = __get_MSP();
     if (current < largest_stack) {
@@ -91,8 +91,10 @@ uint32_t task0start = 0;
 
 #ifdef REFERENCE
 void reference_task(void *parameters) {
-    task0start = time_us();
-    for (int i = 0; i < RESULT_MATRIX_ROWS; i++) {
+        for (int i = 0; i < RESULT_MATRIX_ROWS; i++) {
+            if (i == 0) {
+            }
+
         for (int j = 0; j < RESULT_MATRIX_COLUMNS; j++) {
             double tmp = 0.0;
             for (int k = 0; k < A_MATRIX_COLUMNS; k++) {
@@ -106,8 +108,8 @@ void reference_task(void *parameters) {
     //TickType_t end = xTaskGetTickCount();
     //printf_("End_time FreeRTOS: %u\n\r", end);
     //printf_("End_time: %u\n\r", end_time - start_time);
-    tick();
-    printf_("Stack usage: %u\r\n", START_STACK - largest_stack);
+    //tick();
+    //printf_("Stack usage: %u\r\n", START_STACK - largest_stack);
     printf_("%u\n", end_time - task0start);
     //print_result_matrix(result_matrix);
     vTaskEndScheduler();
@@ -127,6 +129,7 @@ void task_i_row(void *parameter) {
     for (int j = 0; j < RESULT_MATRIX_COLUMNS; j++) {
         double tmp = 0.0;
         for (int k = 0; k < A_MATRIX_COLUMNS; k++) {
+            tick();
             tmp = tmp + (a_matrix[(i * A_MATRIX_COLUMNS) + k] * b_matrix[(k * B_MATRIX_COLUMNS) + j]);
         }
         result_matrix[(i * RESULT_MATRIX_COLUMNS) + j] = tmp;
@@ -155,6 +158,7 @@ void task_i_row(void *parameter) {
 
 int main() {
     START_STACK = __get_MSP();
+    tick();
     enable_usart();
     enable_timer();
 
