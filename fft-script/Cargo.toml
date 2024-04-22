@@ -1,0 +1,15 @@
+[package]
+name = "fft-script"
+version = "0.1.0"
+edition = "2021"
+[toolchain]
+channel = "nightly"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+indicatif = "0.17.8"
+plotters = "0.3.5"
+realfft = "3.3.0"
+rustfft = "6.2.0"
+serde = {version = "1.0.197", features = ["serde_derive", "std"]}

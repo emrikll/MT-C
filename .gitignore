@@ -1,3 +1,5 @@
 compile_commands.json
 *.cflow
 *.su
+fft-script/target
+fft-script/*.csv
