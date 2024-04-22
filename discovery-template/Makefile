@@ -27,7 +27,7 @@ OBJCOPY=arm-none-eabi-objcopy
 OBJDUMP=arm-none-eabi-objdump
 SIZE=arm-none-eabi-size
 
-CFLAGS  = -Wall -g -Os -flto 
+CFLAGS  = -Wall -flto -Os  
 CFLAGS += -mlittle-endian -mcpu=cortex-m0  -march=armv6-m -mthumb
 CFLAGS += -ffunction-sections -fdata-sections
 CFLAGS += -Wl,--gc-sections -Wl,-Map=build/$(PROJ_NAME).map
@@ -96,7 +96,7 @@ generateelf:
 
 buildreaction: $(SRCS)
 	mkdir -p build
-	$(CC) $(CFLAGS) -fstack-usage src/reaction.c $^ -L$(STD_PERIPH_LIB) -lstm32f0 -L$(LDSCRIPT_INC) -Tstm32f0.ld
+	$(CC) $(CFLAGS) src/reaction.c $^ -o build/$(PROJ_NAME).elf -L$(STD_PERIPH_LIB) -lstm32f0 -L$(LDSCRIPT_INC) -Tstm32f0.ld
 
 buildmain: $(SRCS)
 	mkdir -p build

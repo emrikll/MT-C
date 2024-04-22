@@ -10,6 +10,7 @@
 #include "printf.h"
 #include "timer.h"
 #include <stdint.h>
+#include <string.h>
 //STM32
 #include "rng.h"
 
@@ -22,12 +23,12 @@
  */
 #define         AVERAGE_USAGE_INTERVAL_MS   5000
 
-#define         SHARED_SIZE                 3
+#define         SHARED_SIZE                 2
 
-#define         A_MATRIX_ROWS               3
+#define         A_MATRIX_ROWS               2
 #define         A_MATRIX_COLUMNS            SHARED_SIZE          
 #define         B_MATRIX_ROWS               SHARED_SIZE
-#define         B_MATRIX_COLUMNS            3    
+#define         B_MATRIX_COLUMNS            5    
 #define         RESULT_MATRIX_ROWS          A_MATRIX_ROWS
 #define         RESULT_MATRIX_COLUMNS       B_MATRIX_COLUMNS
 
@@ -47,9 +48,9 @@ void task_cpu_usage(TimerHandle_t timer);
 uint32_t start_time;
 
 // Matrix
-double a_matrix[A_MATRIX_ROWS * A_MATRIX_COLUMNS] = {9962.191118353554, 3945.225888718275, 1208.3999143470764, 7918.062891627125, 3852.39158238296, 4576.729150198891, 4457.865115558375, 3298.9384083296204};
-double b_matrix[B_MATRIX_ROWS * B_MATRIX_COLUMNS] = {1436.0893265454486, 9434.154262328304, 2644.7534848520077, 7041.133042536387, 6063.6041787683735, 8646.600093677709, 2387.468656636986, 3012.988488276858};
-double result_matrix[RESULT_MATRIX_ROWS * RESULT_MATRIX_COLUMNS];
+double a_matrix[A_MATRIX_ROWS * A_MATRIX_COLUMNS] = {1690.8640661047846, 5894.418762210852, 4105.601556185959, 3900.2683835766584};
+double b_matrix[B_MATRIX_ROWS * B_MATRIX_COLUMNS] = {6933.946414524028, 4775.034075590325, 2335.3851959129224, 3712.0637208157805, 6253.255027073763, 324.79736138169744, 9085.52784976614, 1889.6565720893182, 6003.231810790218, 648.5619461881109};
+volatile double result_matrix[RESULT_MATRIX_ROWS * RESULT_MATRIX_COLUMNS];
 
 
 // Tick counters IDLE
@@ -68,7 +69,7 @@ bytes.  For example, if each stack item is 32-bits, and this is set to 100,
 then 400 bytes (100 * 32-bits) will be allocated. */
 #define STACK_SIZE_I_ROW 200
 
- 
+#define REFERENCE 
 
 #ifndef REFERENCE
 /* Structure that will hold the TCB of the task being created. */
@@ -78,14 +79,14 @@ StackType_t stack_i_row[RESULT_MATRIX_ROWS][ STACK_SIZE_I_ROW ];
 StaticTask_t task_buffer_reference;
 StackType_t stack_reference[ STACK_SIZE_I_ROW ];
 #endif
-int START_STACK = 0;
-uint32_t largest_stack = ~0; 
-void tick() {
+volatile uint32_t largest_stack = ~0; 
+static void tick() {
     uint32_t current = __get_MSP();
     if (current < largest_stack) {
         largest_stack = current;
     }
 }
+
 
 uint32_t task0start = 0;
 
@@ -93,6 +94,7 @@ uint32_t task0start = 0;
 void reference_task(void *parameters) {
         for (int i = 0; i < RESULT_MATRIX_ROWS; i++) {
             if (i == 0) {
+                task0start = time_us();
             }
 
         for (int j = 0; j < RESULT_MATRIX_COLUMNS; j++) {
@@ -117,30 +119,30 @@ void reference_task(void *parameters) {
 }
 
 #else
+extern uint32_t _estack;
 void task_i_row(void *parameter) {
-    tick();
     int i;
     i = (int) parameter;
-    //printf_("Task %d\n\r", i);
     if (i == 0) {
         task0start = time_us();
     }
-
+    //tick();
     for (int j = 0; j < RESULT_MATRIX_COLUMNS; j++) {
         double tmp = 0.0;
         for (int k = 0; k < A_MATRIX_COLUMNS; k++) {
-            tick();
+            //tick();
             tmp = tmp + (a_matrix[(i * A_MATRIX_COLUMNS) + k] * b_matrix[(k * B_MATRIX_COLUMNS) + j]);
         }
         result_matrix[(i * RESULT_MATRIX_COLUMNS) + j] = tmp;
     }
 
+    //tick();
+
     capacity_task_i_row = capacity_task_i_row - 1;
     if (capacity_task_i_row == 0) {
         uint32_t end_time = time_us();
-        tick();
-        printf_("Stack usage: %u\r\n", START_STACK - largest_stack);
-        printf_("%u\n", end_time - task0start);
+        printf_("%08x\n", largest_stack);
+        //printf_("%u\n", end_time - task0start);
         vTaskEndScheduler();
     }
 
@@ -157,8 +159,7 @@ void task_i_row(void *parameter) {
  */
 
 int main() {
-    START_STACK = __get_MSP();
-    tick();
+    //stack_initialize_fill_value(_estack, 8000);
     enable_usart();
     enable_timer();
 

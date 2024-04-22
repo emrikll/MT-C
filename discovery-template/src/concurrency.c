@@ -23,8 +23,8 @@ NOTE:  This is the number of words the stack will hold, not the number of
 bytes.  For example, if each stack item is 32-bits, and this is set to 100,
 then 400 bytes (100 * 32-bits) will be allocated.  6817583
 */
-#define STACK_SIZE 70
-//#define REFERENCE
+#define STACK_SIZE 100
+#define REFERENCE
 /* Structure that will hold the TCB of the tasks being created. */
 #ifndef  REFERENCE
 StaticTask_t xTaskBufferLow;
@@ -45,7 +45,7 @@ StackType_t xStackReference[ STACK_SIZE ];
 
 uint32_t start_time = 0;
 
-uint32_t shared_variable = 0;
+volatile uint32_t shared_variable = 0;
 uint8_t done = 0;
 
 int START_STACK = 0;
@@ -74,7 +74,7 @@ void reference_task(void *parameter) {
             done = 1;
             uint32_t end_time = time_us();
 
-            printf_("%u\n", end_time);
+            printf_("%u\n", end_time-start_time);
         } 
     }
 }
@@ -87,28 +87,33 @@ void increment_shared() {
     if (xSemaphoreTake(shared_variable_lock, portMAX_DELAY) != pdTRUE) {
         printf_("Something went wrong\r\n");
     }
-    tick();
+    //tick();
     shared_variable++;
     if(shared_variable == MAX_VALUE) {
         done = 1;
         uint32_t end_time = time_us();
 
-        printf_("%u\n", START_STACK - largest_stack);
+        //printf_("%08x\n", largest_stack);
+        printf_("%u\n", end_time-start_time);
     } 
-    tick();
+    //tick();
     
     xSemaphoreGive(shared_variable_lock);
 }
 
 void low_priority_task(void *parameter) {
     while (1) {
+        //tick();
         increment_shared();
+        tick();
     }
 }
 
 void high_priority_task(void *parameter) {
     while (1) {
+        //tick();
         increment_shared();
+        //tick();
         vTaskDelay(FREQUENCY_HIGH);
     }
 }

@@ -139,11 +139,13 @@ void task_handle_interrupt(void *vParameters){
     {
         if(xSemaphoreTake(semaphore_irq, portMAX_DELAY) == pdPASS) {
             xEnd = time_us();
+            tick();
             xDifference = xEnd - xStart;
             xDifferenceISR = xStartISR - xStart;
-            printf_("xDifferenceISR: %lu, xDifference: %lu, Background tasks: %u \n\r", 
-                (long unsigned int)xDifferenceISR, (long unsigned int)xDifference, capacity_task_sleep);
+            //printf_("%lu, %lu\n", 
+              //  (long unsigned int)xDifferenceISR, (long unsigned int)xDifference);
             xStart = xEnd = xDifference = 0;
+            printf_("%08x\n", largest_stack);
 
             if (xSemaphoreTake(mutex_sleep_capacity, portMAX_DELAY) == pdPASS){
                 if (capacity_task_sleep < CAPACITY){
@@ -159,6 +161,7 @@ void task_handle_interrupt(void *vParameters){
 
                 xSemaphoreGive(mutex_sleep_capacity);
             }
+            tick();
         }else{
             printf_("Could not take Semaphore\n");
         }
@@ -166,6 +169,7 @@ void task_handle_interrupt(void *vParameters){
 }
 
 void generate_interrupt_callback(TimerHandle_t timer) {
+    tick();
     xStart = time_us();
     
     EXTI_GenerateSWInterrupt(EXTI_Line0);
@@ -177,48 +181,27 @@ void task_cpu_average(TimerHandle_t timer) {
     printf_("CPU usage: %f \n\r", usage);
     printf_("\n\r");
 }
-#pragma GCC diagnostic error "-Wframe-larger-than=1"
+
 int main(void)
 {   
     //Enable clocks to both GPIOA (push button) and GPIOC (output LEDs)
     //Deinit the rcc
-    RCC_DeInit();
-
-    RCC_HSEConfig(RCC_HSE_ON);
-
-    while(RCC_WaitForHSEStartUp() != SUCCESS);
-
-    RCC_HCLKConfig(RCC_SYSCLK_Div1);
-
-    RCC_PLLConfig(RCC_PLLSource_PREDIV1, RCC_PLLMul_8);  
-
-    RCC_PLLCmd(ENABLE);
-
-    while(RCC_GetFlagStatus(RCC_FLAG_PLLRDY) == RESET);
-
-    RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
-
-    while(RCC_GetSYSCLKSource() != 0x08); 
     
     enable_usart();
     
     adc_init();
 
-    RCC_USARTCLKConfig(RCC_USART1CLK_SYSCLK);
-    RCC_ClocksTypeDef clocks;
-    RCC_GetClocksFreq(&clocks);
-    printf_("Clock speed: %d", clocks.SYSCLK_Frequency);
-
-    printf_("Init\n\r");
     
     enable_timer();
+
+    printf_("init");
 
     xTaskCreateStatic(
         task_handle_interrupt, 
         "TaskHandleInterrupt", 
         STACK_SIZE_INTERRUPT_HANDLE, 
         NULL, 
-        1, 
+        2, 
         xStackLed,&xTaskBufferLed
     );
     
@@ -231,14 +214,6 @@ int main(void)
         &tasktimerbuffer
     );
     
-    TimerHandle_t usage_timer = xTimerCreateStatic(
-        "CPU_USAGE_TIMER", 
-        pdMS_TO_TICKS(AVERAGE_USAGE_INTERVAL_MS), 
-        pdTRUE, 
-        (void*)TIMER_ID, 
-        task_cpu_average, 
-        &usageTimerBuffer
-    );
 
     semaphore_irq = xSemaphoreCreateBinaryStatic(&pxSemaphoreBuffer);
     configASSERT(semaphore_irq != NULL);
@@ -248,10 +223,10 @@ int main(void)
 
     EnableInterruptEXTI0();
 
-    if( task_timer == NULL || usage_timer == NULL ){
+    if( task_timer == NULL){
         printf_("Timers was not created\n");
     }else{
-        if( xTimerStart( task_timer, 0 ) != pdPASS || xTimerStart(usage_timer,0) != pdPASS)
+        if( xTimerStart( task_timer, 0 ) != pdPASS)
         {
             printf_("Timer could not be started\n");
         }

@@ -20,7 +20,7 @@ NLINES=$(du -sb "../scripts/$FILENAME" | awk '{print $1}')
 
 for i in {1..51}
 do
-    make concurrency &
+    make matrix &
     process_pid=$!
     while [ $(du -sb "../scripts/$FILENAME"  | awk '{print $1}') == $NLINES ]; do sleep 0.5; done
     NLINES=$(du -sb "../scripts/$FILENAME"  | awk '{print $1}')
