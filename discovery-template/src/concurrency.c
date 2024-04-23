@@ -105,7 +105,7 @@ void low_priority_task(void *parameter) {
     while (1) {
         //tick();
         increment_shared();
-        tick();
+        //tick();
     }
 }
 
@@ -134,7 +134,6 @@ int main(void)
 {
     START_STACK = __get_MSP();
     
-    enable_timer();
     enable_usart();
 
     tick();

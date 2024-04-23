@@ -23,12 +23,12 @@
  */
 #define         AVERAGE_USAGE_INTERVAL_MS   5000
 
-#define         SHARED_SIZE                 2
+#define         SHARED_SIZE                 3
 
-#define         A_MATRIX_ROWS               2
+#define         A_MATRIX_ROWS               3
 #define         A_MATRIX_COLUMNS            SHARED_SIZE          
 #define         B_MATRIX_ROWS               SHARED_SIZE
-#define         B_MATRIX_COLUMNS            5    
+#define         B_MATRIX_COLUMNS            3    
 #define         RESULT_MATRIX_ROWS          A_MATRIX_ROWS
 #define         RESULT_MATRIX_COLUMNS       B_MATRIX_COLUMNS
 
@@ -48,8 +48,8 @@ void task_cpu_usage(TimerHandle_t timer);
 uint32_t start_time;
 
 // Matrix
-double a_matrix[A_MATRIX_ROWS * A_MATRIX_COLUMNS] = {1690.8640661047846, 5894.418762210852, 4105.601556185959, 3900.2683835766584};
-double b_matrix[B_MATRIX_ROWS * B_MATRIX_COLUMNS] = {6933.946414524028, 4775.034075590325, 2335.3851959129224, 3712.0637208157805, 6253.255027073763, 324.79736138169744, 9085.52784976614, 1889.6565720893182, 6003.231810790218, 648.5619461881109};
+double a_matrix[A_MATRIX_ROWS * A_MATRIX_COLUMNS] = { 2958.4254660624565, 2205.728533217619, 907.3962922123202, 1910.4427866475473, 6443.74967854295, 1074.3743547121767, 7623.972395081617, 8809.26890614364, 1267.2493630233294 };
+double b_matrix[B_MATRIX_ROWS * B_MATRIX_COLUMNS] = { 554.4708460569973, 1982.7714695002542, 6708.407086820884, 9429.952591789537, 1075.8857354955398, 869.5598501173213, 1473.7730125605185, 3809.699097557997, 7641.862704532702 };
 volatile double result_matrix[RESULT_MATRIX_ROWS * RESULT_MATRIX_COLUMNS];
 
 
@@ -69,7 +69,7 @@ bytes.  For example, if each stack item is 32-bits, and this is set to 100,
 then 400 bytes (100 * 32-bits) will be allocated. */
 #define STACK_SIZE_I_ROW 200
 
-#define REFERENCE 
+//#define REFERENCE 
 
 #ifndef REFERENCE
 /* Structure that will hold the TCB of the task being created. */
@@ -141,8 +141,8 @@ void task_i_row(void *parameter) {
     capacity_task_i_row = capacity_task_i_row - 1;
     if (capacity_task_i_row == 0) {
         uint32_t end_time = time_us();
-        printf_("%08x\n", largest_stack);
-        //printf_("%u\n", end_time - task0start);
+        //printf_("%08x\n", largest_stack);
+        printf_("%u\n", end_time - task0start);
         vTaskEndScheduler();
     }
 

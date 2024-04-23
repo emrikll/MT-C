@@ -9,7 +9,8 @@ set(CMAKE_C_COMPILER
 
 set(CMAKE_C_FLAGS
     "-g \
-    -O0 \
+    -Os \
+    -flto \
     -Wall \
     -mthumb \
     -mcpu=cortex-m4 \

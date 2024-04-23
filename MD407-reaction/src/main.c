@@ -1,4 +1,5 @@
 #include "main.h"
+#include "portmacro.h"
 #include "printf.h"
 #include "projdefs.h"
 #include "stm32f4xx.h"
@@ -56,6 +57,7 @@ NOTE:  This is the number of words the stack will hold, not the number of
 bytes.  For example, if each stack item is 32-bits, and this is set to 100,
 then 400 bytes (100 * 32-bits) will be allocated. */
 #define STACK_SIZE_LED 400
+#define BACKGROUND_TASKS 100
 /* Structure that will hold the TCB of the task being created. */
 StaticTask_t xTaskBufferLed;
 /* Buffer that the task being created will use as its stack.  Note this is
@@ -65,7 +67,7 @@ StackType_t xStackLed[STACK_SIZE_LED];
 
 // Sleeper Task
 uint32_t capacity_task_sleep = 0;
-#define CAPACITY 20
+#define CAPACITY BACKGROUND_TASKS
 /* Dimensions of the buffer that the task being created will use as its stack.
 NOTE:  This is the number of words the stack will hold, not the number of
 bytes.  For example, if each stack item is 32-bits, and this is set to 100,
@@ -211,67 +213,34 @@ void EXTI0_IRQHandler(void) {
  ** Tasks 
  */
 void task_sleep(void *vParameters) {
-    uint32_t rand_nr = RNG_GetRandomNumber();
+    uint32_t rand_nr_work = RNG_GetRandomNumber();
+    uint32_t rand_nr_sleep = RNG_GetRandomNumber();
     uint32_t start = time_us();
 
-    const TickType_t xDelay = 500 / portTICK_PERIOD_MS;
-    TickType_t xLastWakeTime;
-
-    xLastWakeTime = xTaskGetTickCount();
-
     for(;;){
-        vTaskDelayUntil(&xLastWakeTime, xDelay);
-        rand_nr = RNG_GetRandomNumber() % 10;
+        rand_nr_work = RNG_GetRandomNumber() % 10;
+        rand_nr_sleep = RNG_GetRandomNumber() % 10;
         start = time_us();
-        while ((rand_nr * 1000000) < (time_us() - start) );
+
+        while ((rand_nr_work * 1000) < (time_us() - start) );
+
+        vTaskDelay(rand_nr_sleep / portTICK_PERIOD_MS);
     }
 }
 
 void task_led(void *vParameters){
-
-    int toggle = 0;
-    GPIO_ResetBits(LED_GPIO, RedLED_Pin);
-    vTaskDelay(1000);
-    
     for(;;)
     {
         if(xSemaphoreTake(semaphore_irq, portMAX_DELAY) == pdPASS) {
             xEnd = time_us();
+            //tick();
             xDifference = xEnd - xStart;
             xDifferenceISR = xStartISR - xStart;
-            char buffer1[16];
-            char buffer2[32];
-            char taskbuffer[8];
-            sprintf_(buffer1, "%u", xDifferenceISR);
-            sprintf_(buffer2, "%u", xDifference);
-            sprintf_(taskbuffer, "%u", capacity_task_sleep);
-            printf_("xDifferenceISR ");
-            printf_(buffer1);
+            //tick();
+            printf_("%u, %u\n", xDifferenceISR, xDifference);
+            //printf_("%08x\n", largest_stack);
             
-            printf_(", xDifference ");
-            printf_(buffer2);
-            printf_(", Background tasks ");
-            printf_(taskbuffer);
-            printf_("\n\r");
             xStart = xEnd = xDifference = xDifferenceISR = 0;
-            if (toggle) {
-                GPIO_ResetBits(LED_GPIO, RedLED_Pin);
-            } else {
-                GPIO_SetBits(LED_GPIO, RedLED_Pin);
-            }
-            
-            RCC_ClocksTypeDef clocks;
-            RCC_GetClocksFreq(&clocks);
-            printf_("Clock speed: %d", clocks.SYSCLK_Frequency);
-
-            toggle = ~toggle;
-            if (xSemaphoreTake(mutex_sleep_capacity, portMAX_DELAY) == pdPASS){
-                if (capacity_task_sleep < CAPACITY){
-                    xTaskCreateStatic(task_sleep, "SLEEP_TASK", 128, NULL,  1, xStack[capacity_task_sleep], &xTaskBuffer[capacity_task_sleep]);
-                    capacity_task_sleep++;
-                }
-                xSemaphoreGive(mutex_sleep_capacity);
-            }
         }
         
     }
@@ -294,29 +263,17 @@ void task_cpu_average(TimerHandle_t timer) {
  * @brief Handler for when tasks switch in.
  */
 void handle_switched_in(int* pxCurrentTCB) {
-    TaskHandle_t handle = (TaskHandle_t)*pxCurrentTCB;
-     if (handle == xTaskGetIdleTaskHandle()) {
-        xTimeInCPU = time_us();
-     }
 }
 
 /**
  * @brief Handler for when tasks switch out.
  */
 void handle_switched_out(int* pxCurrentTCB) {
-    TaskHandle_t handle = (TaskHandle_t)*pxCurrentTCB;
-     if (handle == xTaskGetIdleTaskHandle()) {
-        xTimeOutCPU = time_us();
-        xDifferenceCPU = xTimeOutCPU - xTimeInCPU;
-        xTotalCPU = xTotalCPU + xDifferenceCPU;
-        xTimeInCPU = xTimeOutCPU = xDifferenceCPU = 0;
-     }
 }
 
 void led_timer_callback(TimerHandle_t timer) {
-
+    //tick();
     xStart = time_us();
-    
     EXTI_GenerateSWInterrupt(EXTI_Line0);
 }
 
@@ -333,21 +290,24 @@ int main(void) {
 
     TaskHandle_t led_task = xTaskCreateStatic(task_led, "ToggleLED", 256, NULL, 2, xStackLed,&xTaskBufferLed);
     TimerHandle_t task_timer = xTimerCreateStatic("LED_ON_TIMER", pdMS_TO_TICKS(LED_FLASH_PERIOD_MS), pdTRUE, (void*)TIMER_ID, led_timer_callback, &TimerBufferLed);
-    TimerHandle_t usage_timer = xTimerCreateStatic("CPU_UUSAGE_TIMER", pdMS_TO_TICKS(AVERAGE_USAGE_INTERVAL_MS), pdTRUE, (void*)TIMER_ID, task_cpu_average, &TimerBufferUsage);
+    
+    for (int i = 0; i < BACKGROUND_TASKS; i++) {
+        xTaskCreateStatic(task_sleep, "SLEEP_TASK", 128, NULL,  1, xStack[i], &xTaskBuffer[i]);
+    }
 
     semaphore_irq = xSemaphoreCreateBinaryStatic(&xSemaphoreBuffer);
     configASSERT(semaphore_irq != NULL);
     mutex_sleep_capacity = xSemaphoreCreateMutexStatic( &xMutexBuffer );
     configASSERT(mutex_sleep_capacity != NULL);
 
-    if( task_timer == NULL || usage_timer == NULL ){
+    if( task_timer == NULL ){
         /* The timer was not created. */
         printf_("Timers was not created\n");
     }else{
     /* Start the timer.  No block time is specified, and
     even if one was it would be ignored because the RTOS
     scheduler has not yet been started. */
-        if( xTimerStart( task_timer, 0 ) != pdPASS || xTimerStart(usage_timer,0) != pdPASS)
+        if( xTimerStart( task_timer, 0 ) != pdPASS)
         {
             /* The timer could not be set into the Active
             state. */

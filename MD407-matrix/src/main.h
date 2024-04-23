@@ -51,12 +51,12 @@
 
 #define         AVERAGE_USAGE_INTERVAL_MS   5000
 
-#define         SHARED_SIZE                 3
+#define         SHARED_SIZE                 8
 
-#define         A_MATRIX_ROWS               30
+#define         A_MATRIX_ROWS               8
 #define         A_MATRIX_COLUMNS            SHARED_SIZE          
 #define         B_MATRIX_ROWS               SHARED_SIZE
-#define         B_MATRIX_COLUMNS            30   
+#define         B_MATRIX_COLUMNS            40   
 #define         RESULT_MATRIX_ROWS          A_MATRIX_ROWS
 #define         RESULT_MATRIX_COLUMNS       B_MATRIX_COLUMNS
 
