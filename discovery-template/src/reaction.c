@@ -49,7 +49,7 @@ StackType_t xStackLed[STACK_SIZE_INTERRUPT_HANDLE];
 
 // Sleeper Task
 int capacity_task_sleep = 0;
-#define CAPACITY 10
+#define CAPACITY 1
 /* Dimensions of the buffer that the task being created will use as its stack.
 NOTE:  This is the number of words the stack will hold, not the number of
 bytes.  For example, if each stack item is 32-bits, and this is set to 100,
@@ -85,7 +85,7 @@ StaticTimer_t usageTimerBuffer;
 #define EXTI0_Pin GPIO_Pin_12
 #define EXTI0_GPIO GPIOD
 
-#define TRIGGER_INTERRUPT_MS 2000
+#define TRIGGER_INTERRUPT_MS 1000
 
 #define         SW_IRQ_PIN                  21
 
@@ -115,19 +115,17 @@ UBaseType_t uxHighWaterMark;
  ** Tasks 
 */ 
 void task_sleep(void *vParameters) {
-    uint32_t rand_nr;
+    uint32_t work_nr;
+    uint32_t sleep_nr;
+
     uint32_t start;
 
-    const TickType_t xDelay = 500 / portTICK_PERIOD_MS;
-    TickType_t xLastWakeTime;
-
-    xLastWakeTime = xTaskGetTickCount();
     for(;;){
-        vTaskDelayUntil(&xLastWakeTime, xDelay);
-        rand_nr = get_random_byte() % 10;
+        work_nr = get_random_byte() % 10;
+        sleep_nr = get_random_byte() % 10;
         start = time_us();
-        while ((rand_nr * 1000000) < (time_us() - start) );
-        
+        while ((work_nr * 1000) < (time_us() - start) );
+        vTaskDelay(sleep_nr / portTICK_PERIOD_MS);
     }
 }
 
@@ -139,29 +137,15 @@ void task_handle_interrupt(void *vParameters){
     {
         if(xSemaphoreTake(semaphore_irq, portMAX_DELAY) == pdPASS) {
             xEnd = time_us();
-            tick();
+            //tick();
             xDifference = xEnd - xStart;
             xDifferenceISR = xStartISR - xStart;
-            //printf_("%lu, %lu\n", 
-              //  (long unsigned int)xDifferenceISR, (long unsigned int)xDifference);
+            printf_("%lu, %lu\n", 
+              (long unsigned int)xDifferenceISR, (long unsigned int)xDifference);
             xStart = xEnd = xDifference = 0;
-            printf_("%08x\n", largest_stack);
+            //printf_("%08x\n", largest_stack);
 
-            if (xSemaphoreTake(mutex_sleep_capacity, portMAX_DELAY) == pdPASS){
-                if (capacity_task_sleep < CAPACITY){
-                    xTaskCreateStatic(
-                        task_sleep, 
-                        "SLEEP_TASK", 
-                        STACK_SIZE, 
-                        NULL,  
-                        1, 
-                        xStack[capacity_task_sleep], &xTaskBuffer[capacity_task_sleep]);
-                    capacity_task_sleep++;
-                }
-
-                xSemaphoreGive(mutex_sleep_capacity);
-            }
-            tick();
+            //tick();
         }else{
             printf_("Could not take Semaphore\n");
         }
@@ -169,7 +153,7 @@ void task_handle_interrupt(void *vParameters){
 }
 
 void generate_interrupt_callback(TimerHandle_t timer) {
-    tick();
+    //tick();
     xStart = time_us();
     
     EXTI_GenerateSWInterrupt(EXTI_Line0);
@@ -190,7 +174,6 @@ int main(void)
     enable_usart();
     
     adc_init();
-
     
     enable_timer();
 
@@ -213,7 +196,18 @@ int main(void)
         generate_interrupt_callback, 
         &tasktimerbuffer
     );
-    
+
+    for (int i = 0; i < CAPACITY; i++) {
+        xTaskCreateStatic(
+            task_sleep, 
+            "SleepTask", 
+            STACK_SIZE, 
+            NULL, 
+            1, 
+            xStack[i],
+            &xTaskBuffer[i]
+    );
+    }
 
     semaphore_irq = xSemaphoreCreateBinaryStatic(&pxSemaphoreBuffer);
     configASSERT(semaphore_irq != NULL);

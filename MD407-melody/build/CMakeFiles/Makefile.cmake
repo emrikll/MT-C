@@ -8,9 +8,9 @@ set(CMAKE_DEPENDS_GENERATOR "Unix Makefiles")
 set(CMAKE_MAKEFILE_DEPENDS
   "CMakeCache.txt"
   "/home/simon/MT-C/MD407-melody/CMakeLists.txt"
-  "CMakeFiles/3.29.0/CMakeASMCompiler.cmake"
-  "CMakeFiles/3.29.0/CMakeCCompiler.cmake"
-  "CMakeFiles/3.29.0/CMakeSystem.cmake"
+  "CMakeFiles/3.29.2/CMakeASMCompiler.cmake"
+  "CMakeFiles/3.29.2/CMakeCCompiler.cmake"
+  "CMakeFiles/3.29.2/CMakeSystem.cmake"
   "/home/simon/MT-C/MD407-melody/toolchain.cmake"
   "/usr/share/cmake/Modules/CMakeASMInformation.cmake"
   "/usr/share/cmake/Modules/CMakeCInformation.cmake"

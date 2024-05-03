@@ -24,7 +24,7 @@ bytes.  For example, if each stack item is 32-bits, and this is set to 100,
 then 400 bytes (100 * 32-bits) will be allocated.  6817583
 */
 #define STACK_SIZE 100
-#define REFERENCE
+//#define REFERENCE
 /* Structure that will hold the TCB of the tasks being created. */
 #ifndef  REFERENCE
 StaticTask_t xTaskBufferLow;

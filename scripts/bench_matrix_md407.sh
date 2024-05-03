@@ -5,7 +5,7 @@ killall cat
 
 FILENAME="results.txt"
 
-cd ../MD407-matrix/
+cd ../MD407-concurrency/
 
 cmake -S . -B build
 cmake --build build

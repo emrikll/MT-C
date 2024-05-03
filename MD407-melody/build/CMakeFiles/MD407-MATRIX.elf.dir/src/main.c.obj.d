@@ -1,6 +1,5 @@
 CMakeFiles/MD407-MATRIX.elf.dir/src/main.c.obj: \
  /home/simon/MT-C/MD407-melody/src/main.c \
- /home/simon/MT-C/MD407-melody/src/main.h \
  /usr/lib/gcc/arm-none-eabi/13.2.0/include/stdint.h \
  /usr/arm-none-eabi/include/stdint.h \
  /usr/arm-none-eabi/include/machine/_default_types.h \
@@ -8,21 +7,21 @@ CMakeFiles/MD407-MATRIX.elf.dir/src/main.c.obj: \
  /usr/arm-none-eabi/include/_newlib_version.h \
  /usr/arm-none-eabi/include/sys/_intsup.h \
  /usr/arm-none-eabi/include/sys/_stdint.h \
- /home/simon/MT-C/MD407-melody/driver/inc/stm32f4xx_gpio.h \
+ /home/simon/MT-C/MD407-melody/driver/inc/misc.h \
  /home/simon/MT-C/MD407-melody/device/inc/stm32f4xx.h \
  /home/simon/MT-C/MD407-melody/device/inc/core_cm4.h \
  /home/simon/MT-C/MD407-melody/device/inc/core_cmInstr.h \
  /home/simon/MT-C/MD407-melody/device/inc/core_cmFunc.h \
  /home/simon/MT-C/MD407-melody/device/inc/core_cm4_simd.h \
  /home/simon/MT-C/MD407-melody/device/inc/system_stm32f4xx.h \
- /home/simon/MT-C/MD407-melody/driver/inc/stm32f4xx_rcc.h \
- /home/simon/MT-C/MD407-melody/driver/inc/stm32f4xx_tim.h \
- /home/simon/MT-C/MD407-melody/driver/inc/stm32f4xx_exti.h \
- /home/simon/MT-C/MD407-melody/driver/inc/stm32f4xx_syscfg.h \
- /home/simon/MT-C/MD407-melody/driver/inc/stm32f4xx_dac.h \
- /home/simon/MT-C/MD407-melody/driver/inc/stm32f4xx_rng.h \
- /home/simon/MT-C/MD407-melody/driver/inc/misc.h \
  /home/simon/MT-C/MD407-melody/device/inc/system_stm32f4xx.h \
+ /home/simon/MT-C/MD407-melody/driver/inc/stm32f4xx_dac.h \
+ /home/simon/MT-C/MD407-melody/driver/inc/stm32f4xx_exti.h \
+ /home/simon/MT-C/MD407-melody/driver/inc/stm32f4xx_gpio.h \
+ /home/simon/MT-C/MD407-melody/driver/inc/stm32f4xx_rcc.h \
+ /home/simon/MT-C/MD407-melody/driver/inc/stm32f4xx_rng.h \
+ /home/simon/MT-C/MD407-melody/driver/inc/stm32f4xx_syscfg.h \
+ /home/simon/MT-C/MD407-melody/driver/inc/stm32f4xx_tim.h \
  /home/simon/MT-C/MD407-melody/libraries/FreeRTOS-Kernel/include/FreeRTOS.h \
  /usr/lib/gcc/arm-none-eabi/13.2.0/include/stddef.h \
  /home/simon/MT-C/MD407-melody/include/FreeRTOSConfig.h \
@@ -31,18 +30,17 @@ CMakeFiles/MD407-MATRIX.elf.dir/src/main.c.obj: \
  /home/simon/MT-C/MD407-melody/libraries/FreeRTOS-Kernel/include/deprecated_definitions.h \
  /home/simon/MT-C/MD407-melody/libraries/FreeRTOS-Kernel/portable/GCC/ARM_CM4F/portmacro.h \
  /home/simon/MT-C/MD407-melody/libraries/FreeRTOS-Kernel/include/mpu_wrappers.h \
- /home/simon/MT-C/MD407-melody/libraries/FreeRTOS-Kernel/include/task.h \
+ /home/simon/MT-C/MD407-melody/libraries/FreeRTOS-Kernel/include/croutine.h \
  /home/simon/MT-C/MD407-melody/libraries/FreeRTOS-Kernel/include/list.h \
  /home/simon/MT-C/MD407-melody/libraries/FreeRTOS-Kernel/include/queue.h \
  /home/simon/MT-C/MD407-melody/libraries/FreeRTOS-Kernel/include/task.h \
  /home/simon/MT-C/MD407-melody/libraries/FreeRTOS-Kernel/include/semphr.h \
  /home/simon/MT-C/MD407-melody/libraries/FreeRTOS-Kernel/include/queue.h \
- /home/simon/MT-C/MD407-melody/libraries/FreeRTOS-Kernel/include/croutine.h \
+ /home/simon/MT-C/MD407-melody/libraries/FreeRTOS-Kernel/include/task.h \
  /home/simon/MT-C/MD407-melody/libraries/FreeRTOS-Kernel/include/timers.h \
  /home/simon/MT-C/MD407-melody/libraries/utils/usart.h \
  /home/simon/MT-C/MD407-melody/driver/inc/stm32f4xx_usart.h \
  /usr/lib/gcc/arm-none-eabi/13.2.0/include/stdarg.h \
- /home/simon/MT-C/MD407-melody/libraries/utils/printf.h \
  /home/simon/MT-C/MD407-melody/libraries/utils/ftos.h \
- /home/simon/MT-C/MD407-melody/libraries/FreeRTOS-Kernel/include/projdefs.h \
+ /home/simon/MT-C/MD407-melody/libraries/utils/printf.h \
  /home/simon/MT-C/MD407-melody/libraries/utils/timer.h

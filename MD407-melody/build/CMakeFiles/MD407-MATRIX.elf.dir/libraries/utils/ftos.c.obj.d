@@ -13,8 +13,7 @@ CMakeFiles/MD407-MATRIX.elf.dir/libraries/utils/ftos.c.obj: \
  /usr/arm-none-eabi/include/sys/config.h \
  /usr/arm-none-eabi/include/machine/ieeefp.h \
  /usr/lib/gcc/arm-none-eabi/13.2.0/include/stddef.h \
+ /usr/arm-none-eabi/include/sys/cdefs.h \
  /usr/arm-none-eabi/include/sys/_types.h \
  /usr/arm-none-eabi/include/machine/_types.h \
- /usr/arm-none-eabi/include/sys/lock.h \
- /usr/arm-none-eabi/include/sys/cdefs.h \
- /usr/arm-none-eabi/include/_ansi.h
+ /usr/arm-none-eabi/include/sys/lock.h /usr/arm-none-eabi/include/_ansi.h

@@ -57,7 +57,7 @@ NOTE:  This is the number of words the stack will hold, not the number of
 bytes.  For example, if each stack item is 32-bits, and this is set to 100,
 then 400 bytes (100 * 32-bits) will be allocated. */
 #define STACK_SIZE_LED 400
-#define BACKGROUND_TASKS 100
+#define BACKGROUND_TASKS 10
 /* Structure that will hold the TCB of the task being created. */
 StaticTask_t xTaskBufferLed;
 /* Buffer that the task being created will use as its stack.  Note this is
@@ -75,7 +75,7 @@ then 400 bytes (100 * 32-bits) will be allocated. */
 #define STACK_SIZE 200
 
 /* 64ructure that will hold the TCB of the task being created. */
-StaticTask_t xTaskBuffer[CAPACITY];
+volatile StaticTask_t xTaskBuffer[CAPACITY];
 
 /* Buffer that the task being created will use as its stack.  Note this is
 an array of StackType_t variables.  The size of StackType_t is dependent on

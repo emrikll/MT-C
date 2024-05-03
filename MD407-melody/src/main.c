@@ -36,7 +36,8 @@ uint64_t xTimeInPICO, xTimeOutPICO, xDifferencePICO, xTotalPICO;
 
 // Background Task
 int capacity_background_task = 0;
-#define CAPACITY 128
+#define CAPACITY 1
+
 /* Dimensions of the buffer that the task being created will use as its stack.
 NOTE:  This is the number of words the stack will hold, not the number of
 bytes.  For example, if each stack item is 32-bits, and this is set to 100,
@@ -52,13 +53,13 @@ the RTOS port. */
 StackType_t xStackBackground[CAPACITY][STACK_SIZE_BACKGROUND];
 
 // Melody Task
-#define STACK_SIZE_MELODY 150
+#define STACK_SIZE_MELODY 300
 StaticTask_t xTaskBufferMelody;
 StackType_t xStackMelody[STACK_SIZE_MELODY];
 TaskHandle_t handle_melody = NULL;
 
 // Background Task
-#define STACK_SIZE_SPAWN_BACKGROUND 150
+#define STACK_SIZE_SPAWN_BACKGROUND 300
 StaticTask_t xTaskBufferSpawnBackground;
 StackType_t xStackSpawnBackground[STACK_SIZE_MELODY];
 TaskHandle_t handle_spawn_background = NULL;
@@ -113,8 +114,9 @@ void TIM5_IRQHandler() {
 
     BaseType_t higher_priority_task_woken = pdFALSE;
 
-    vTaskNotifyGiveFromISR(handle_melody, &higher_priority_task_woken);
 
+    vTaskNotifyGiveFromISR(handle_melody, &higher_priority_task_woken);
+    
     // Exit to context switch if necessary
     portYIELD_FROM_ISR(higher_priority_task_woken);
   }
@@ -125,8 +127,9 @@ void TIM5_IRQHandler() {
  */
 
 void task_melody(void *vParameters) {
-  int volume = 10;
+  int volume = 50;
   int bin = 1;
+  printf_("task melody spawned");
   xStartMelody = time_us();
   while (1) {
     ulTaskNotifyTake(pdFALSE, portMAX_DELAY);
@@ -152,24 +155,6 @@ void task_background(void *vParameters) {
   }
 }
 
-void task_spawn_background(void *vParameters) {
-  const TickType_t xDelay = 1000 / portTICK_PERIOD_MS;
-  TickType_t xLastWakeTime;
-  xLastWakeTime = xTaskGetTickCount();
-  xStartSpawnBackground = time_us();
-  while (1) {
-    if (capacity_background_task < CAPACITY) {
-      xTaskCreateStatic(task_background, "BACKGROUND", 64, NULL, 1,
-                        xStackBackground[capacity_background_task],
-                        &xTaskBufferBackground[capacity_background_task]);
-      capacity_background_task++;
-      vTaskDelayUntil(&xLastWakeTime, xDelay);
-    } else {
-      printf_("SPAWN %u, MELODY %u\n\r", xStartSpawnBackground, xStartMelody);
-      vTaskSuspend(NULL);
-    }
-  }
-}
 
 /*
  * RUNTIME START
@@ -183,17 +168,20 @@ int main() {
   NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
   EnableTimerInterrupt();
   enable_timer();
-  enable_timer_tim5();
+  
   printf_("Hardware done\n\r");
+
+    for (int i = 0; i < CAPACITY; i++) {
+        xTaskCreateStatic(task_background, "BACKGROUND", 64, NULL, 1,
+                        xStackBackground[i],
+                        &xTaskBufferBackground[i]);
+    }
 
   // Task handlers
   handle_melody = xTaskCreateStatic(task_melody, "MELODY", 128, NULL, 1,
                                     xStackMelody, &xTaskBufferMelody);
-  handle_spawn_background =
-      xTaskCreateStatic(task_spawn_background, "SPAWN BACKGROUND", 128, NULL, 1,
-                        xStackSpawnBackground, &xTaskBufferSpawnBackground);
-
   // Start the scheduler
+    enable_timer_tim5();
   vTaskStartScheduler();
 }
 

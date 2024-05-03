@@ -556,7 +556,6 @@ CMakeFiles/MD407-MATRIX.elf.dir/src/main.c.obj: /home/simon/MT-C/MD407-melody/sr
   /home/simon/MT-C/MD407-melody/libraries/utils/printf.h \
   /home/simon/MT-C/MD407-melody/libraries/utils/timer.h \
   /home/simon/MT-C/MD407-melody/libraries/utils/usart.h \
-  /home/simon/MT-C/MD407-melody/src/main.h \
   /usr/arm-none-eabi/include/_newlib_version.h \
   /usr/arm-none-eabi/include/machine/_default_types.h \
   /usr/arm-none-eabi/include/stdint.h \
@@ -589,8 +588,6 @@ CMakeFiles/MD407-MATRIX.elf.dir/startup.c.obj: /home/simon/MT-C/MD407-melody/sta
   /usr/arm-none-eabi/include/sys/features.h \
   /usr/lib/gcc/arm-none-eabi/13.2.0/include/stdint.h
 
-
-/home/simon/MT-C/MD407-melody/src/main.h:
 
 /home/simon/MT-C/MD407-melody/libraries/utils/timer.h:
 

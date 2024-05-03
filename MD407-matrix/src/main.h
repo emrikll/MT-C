@@ -63,9 +63,9 @@
 /**
  * HELPER FUNCTIONS
  */
-void print_result_matrix(double matrix[RESULT_MATRIX_ROWS * RESULT_MATRIX_COLUMNS]);
-void print_a_matrix(double matrix[A_MATRIX_ROWS * A_MATRIX_COLUMNS]);
-void print_b_matrix(double matrix[B_MATRIX_ROWS * B_MATRIX_COLUMNS]);
+void print_result_matrix(float matrix[RESULT_MATRIX_ROWS * RESULT_MATRIX_COLUMNS]);
+void print_a_matrix(float matrix[A_MATRIX_ROWS * A_MATRIX_COLUMNS]);
+void print_b_matrix(float matrix[B_MATRIX_ROWS * B_MATRIX_COLUMNS]);
 void handle_switched_in(int* pxCurrentTCB);
 void handle_switched_out(int* pxCurrentTCB);
 void task_cpu_usage(TimerHandle_t timer);
