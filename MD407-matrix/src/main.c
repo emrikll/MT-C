@@ -38,7 +38,7 @@ NOTE:  This is the number of words the stack will hold, not the number of
 bytes.  For example, if each stack item is 32-bits, and this is set to 100,
 then 400 bytes (100 * 32-bits) will be allocated. */
 #define STACK_SIZE_I_ROW 200
-#define REFERENCE
+//#define REFERENCE
 #ifndef REFERENCE
 /* Structure that will hold the TCB of the task being created. */
 StaticTask_t task_buffer_i_row[RESULT_MATRIX_ROWS];
@@ -91,7 +91,7 @@ void task_i_row(void *parameter) {
     int i;
     i = (int) parameter;
     //printf_("Task %d\n\r", i);
-    //tick();
+    tick();
     if (i == 0) {
         task0start = time_us();
     }
@@ -99,13 +99,13 @@ void task_i_row(void *parameter) {
     for (int j = 0; j < RESULT_MATRIX_COLUMNS; j++) {
         float tmp = 0.0;
         for (int k = 0; k < A_MATRIX_COLUMNS; k++) {
-            //tick();
+            tick();
             tmp = tmp + (a_matrix[(i * A_MATRIX_COLUMNS) + k] * b_matrix[(k * B_MATRIX_COLUMNS) + j]);
         }
         result_matrix[(i * RESULT_MATRIX_COLUMNS) + j] = tmp;
     }
 
-    //tick();
+    tick();
 
     capacity_task_i_row = capacity_task_i_row - 1;
     if (capacity_task_i_row == 0) {
@@ -114,8 +114,8 @@ void task_i_row(void *parameter) {
         //printf_("End_time FreeRTOS: %u\n\r", end);
         //printf_("End_time: %u\n\r", end_time - start_time);
 
-        //printf_("%08x\n", largest_stack);
-        printf_("%u\n", end_time - task0start);
+        printf_("%08x\n", largest_stack);
+        //printf_("%u\n", end_time - task0start);
         //print_result_matrix(result_matrix);
         vTaskDelay(500);
         NVIC_SystemReset(); 
