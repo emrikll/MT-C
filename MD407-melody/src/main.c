@@ -36,7 +36,7 @@ uint64_t xTimeInPICO, xTimeOutPICO, xDifferencePICO, xTotalPICO;
 
 // Background Task
 int capacity_background_task = 0;
-#define CAPACITY 1
+#define CAPACITY 190
 
 /* Dimensions of the buffer that the task being created will use as its stack.
 NOTE:  This is the number of words the stack will hold, not the number of
@@ -127,7 +127,7 @@ void TIM5_IRQHandler() {
  */
 
 void task_melody(void *vParameters) {
-  int volume = 50;
+  int volume = 1000;
   int bin = 1;
   printf_("task melody spawned");
   xStartMelody = time_us();

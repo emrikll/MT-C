@@ -21,7 +21,7 @@ CMAKE_ADDR2LINE:FILEPATH=/usr/bin/arm-none-eabi-addr2line
 CMAKE_AR:FILEPATH=/usr/bin/arm-none-eabi-ar
 
 //ASM compiler
-CMAKE_ASM_COMPILER:STRING=/usr/bin/arm-none-eabi-gcc
+CMAKE_ASM_COMPILER:FILEPATH=/usr/bin/arm-none-eabi-gcc
 
 //A wrapper around 'ar' adding the appropriate '--plugin' option
 // for the GCC compiler
@@ -281,7 +281,7 @@ CMAKE_C_COMPILER_AR-ADVANCED:INTERNAL=1
 CMAKE_C_COMPILER_RANLIB-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_C_FLAGS
 CMAKE_C_FLAGS-ADVANCED:INTERNAL=1
-CMAKE_C_FLAGS:INTERNAL=-g     -Og     -Wall     -mthumb     -mcpu=cortex-m4     -mfloat-abi=hard     -mfpu=fpv4-sp-d16     -fverbose-asm     -DSTM32F40_41xxx
+CMAKE_C_FLAGS:INTERNAL=-Og     -flto     -Wall     -mthumb     -mcpu=cortex-m4     -mfloat-abi=hard     -mfpu=fpv4-sp-d16     -fverbose-asm     -DSTM32F40_41xxx
 //ADVANCED property for variable: CMAKE_C_FLAGS_DEBUG
 CMAKE_C_FLAGS_DEBUG-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_C_FLAGS_MINSIZEREL

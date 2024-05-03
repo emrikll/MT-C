@@ -8,8 +8,8 @@ set(CMAKE_C_COMPILER
     CACHE INTERNAL "")
 
 set(CMAKE_C_FLAGS
-    "-g \
-    -Og \
+    "-Og \
+    -flto \
     -Wall \
     -mthumb \
     -mcpu=cortex-m4 \
