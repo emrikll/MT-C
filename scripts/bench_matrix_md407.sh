@@ -2,10 +2,11 @@
 #!/bin/bash
 
 killall cat
+killall openocd
 
 FILENAME="results.txt"
 
-cd ../MD407-concurrency/
+cd ../MD407-matrix/
 
 cmake -S . -B build
 cmake --build build
