@@ -11,9 +11,10 @@ use realfft::num_traits::Pow;
 use std::str;
 const UPPER_LIMIT: f64 = 0.250;
 const LOWER_LIMIT: f64 = 0.220;
-const INTERVAL: f64 = 0.00000001;
+const INTERVAL: f64 = 0.000064;
 const HERTZ: f64 = 1.0/INTERVAL;
 const LINES: usize = 10_000;
+const EXPECTED_FREQ: f32 = 1.0 / 0.004048;
 const GRAPH_NAME: &str = "graph.png";
 
 fn add_iterator_to_csv_result<T>(pb: &ProgressBar, result_time_vec: &mut Vec<f64>, result_value_vec: &mut Vec<f64>, iter: &[Result<String, T>]){
@@ -88,10 +89,10 @@ fn make_fft(mut value_vec: Vec<f64>) -> Vec<Complex<f64>> {
 
 
 fn main() {
-        let (mut a, mut b) = parse_csv(&"/home/emrik/Thesis/repos/MT-C/fft-script/analog.csv".to_string()).unwrap();
+        let (mut a, mut b) = parse_csv(&"data/c_0/analog.csv".to_string()).unwrap();
     //println!("{:?}, {:?}",a,b);
     
-    let mut spectrum = make_fft(a);
+    let mut spectrum = make_fft(a.clone());
 
     //println!("{:?}", spectrum[0].re);
 
@@ -102,9 +103,9 @@ fn main() {
     let mut low_y = 0 as f64;
     let mut high_x = 0 as f64;
     let mut high_y = 0 as f64;
-    let freq_resolution = HERTZ/(spectrum.len() as f64);
+    let freq_resolution = HERTZ/(a.len() as f64);
     
-    for (index,complex) in spectrum.into_iter().enumerate() {
+    for (index,complex) in spectrum.clone().into_iter().enumerate() {
         real.push(complex.re);
         img.push(complex.im);
         //format.push((complex.re as f32,complex.im as f32));
@@ -139,7 +140,7 @@ fn main() {
         .margin(5)
         .x_label_area_size(50)
         .y_label_area_size(50)
-        .build_cartesian_2d(low_x as f32..1000000 as f64 as f32, low_y as f32..500000 as f32).unwrap();
+        .build_cartesian_2d(low_x as f32..500 as f64 as f32, low_y as f32..50000 as f32).unwrap();
 
     chart.configure_mesh().draw().unwrap();
 
@@ -148,6 +149,11 @@ fn main() {
             format,
             &RED,
         )).unwrap();
+
+    chart.draw_series(LineSeries::new(
+        [(EXPECTED_FREQ, 0.0), (EXPECTED_FREQ, 50000.0)],
+        &BLUE
+    )).unwrap();
 
     println!("Done! Saved as {}", GRAPH_NAME);
     root.present().unwrap();
