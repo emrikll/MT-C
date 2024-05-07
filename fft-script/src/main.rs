@@ -16,6 +16,7 @@ const HERTZ: f64 = 1.0/INTERVAL;
 const LINES: usize = 10_000;
 const EXPECTED_FREQ: f32 = 1.0 / 0.004048;
 const GRAPH_NAME: &str = "graph.png";
+const FONT: &str = "Luxi Serif:style=Regular";
 
 fn add_iterator_to_csv_result<T>(pb: &ProgressBar, result_time_vec: &mut Vec<f64>, result_value_vec: &mut Vec<f64>, iter: &[Result<String, T>]){
 
@@ -89,7 +90,17 @@ fn make_fft(mut value_vec: Vec<f64>) -> Vec<Complex<f64>> {
 
 
 fn main() {
-        let (mut a, mut b) = parse_csv(&"data/c_0/analog.csv".to_string()).unwrap();
+    let args: Vec<String> = env::args().collect();
+    let filename = &args[1];
+    let filewoext = filename.split(".").collect::<Vec<&str>>()[1].split("/").collect::<Vec<&str>>()[2];
+    let graph_file = format!("{}.png", filewoext);
+
+    let n_tasks = graph_file.split("_").collect::<Vec<&str>>()[1].split(".").collect::<Vec<&str>>()[0];
+
+    let title = format!("Frequency as a FFT with {} tasks", n_tasks);  
+
+
+        let (mut a, mut b) = parse_csv(&filename.to_string()).unwrap();
     //println!("{:?}, {:?}",a,b);
     
     let mut spectrum = make_fft(a.clone());
@@ -125,6 +136,14 @@ fn main() {
         if mag > high_y {
             high_y = mag;
         }
+
+        if freq < 0.0 {
+            continue
+        }
+
+        if freq > 500.0 {
+            break
+        }
         
         format.push((freq as f32, mag as f32));
     }
@@ -133,28 +152,41 @@ fn main() {
     //println!("IMG {:?}", img);
     //println!("Format {:?}", format);
 
-    let root = BitMapBackend::new(GRAPH_NAME, (1920, 1080)).into_drawing_area();
+    let root = BitMapBackend::new(&graph_file, (1200, 450)).into_drawing_area();
     root.fill(&WHITE).unwrap();
     let mut chart = ChartBuilder::on(&root)
-        .caption("Frequency as a FFT", ("sans-serif", 30).into_font())
-        .margin(5)
-        .x_label_area_size(50)
-        .y_label_area_size(50)
+        .caption(title, (FONT, 40).into_font())
+        .margin(10)
+        .margin_right(30)
+        .x_label_area_size(100)
+        .y_label_area_size(180)
         .build_cartesian_2d(low_x as f32..500 as f64 as f32, low_y as f32..50000 as f32).unwrap();
 
-    chart.configure_mesh().draw().unwrap();
+    chart.configure_mesh()
+        .x_desc("Frequency (Hz)")
+        .y_desc("Amplitude")
+        .label_style((FONT, 40))
+        .y_labels(6)
+        .draw()
+        .unwrap();
 
-    chart
+        chart
         .draw_series(LineSeries::new(
             format,
             &RED,
-        )).unwrap();
+        )).unwrap().label("Frequency")
+        .legend(|(x, y)| PathElement::new(vec![(x, y), (x + 40, y)], ShapeStyle{ color: RED.mix(1.0), filled: true, stroke_width: 5 }));
 
     chart.draw_series(LineSeries::new(
         [(EXPECTED_FREQ, 0.0), (EXPECTED_FREQ, 50000.0)],
-        &BLUE
-    )).unwrap();
+        ShapeStyle{ color: BLUE.mix(0.5), filled: true, stroke_width: 1 } 
+    )).unwrap().label("Target frequency (247Hz)")
+        .legend(|(x, y)| PathElement::new(vec![(x, y), (x + 40, y)], ShapeStyle{ color: BLUE.mix(1.0), filled: true, stroke_width: 5 }));
 
-    println!("Done! Saved as {}", GRAPH_NAME);
+
+    
+    chart.configure_series_labels().border_style(BLACK).legend_area_size(50).label_font((FONT, 40)).draw().unwrap();
+
+    println!("Done! Saved as {}", graph_file);
     root.present().unwrap();
 }
