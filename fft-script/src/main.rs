@@ -11,8 +11,7 @@ use realfft::num_traits::Pow;
 use std::str;
 const UPPER_LIMIT: f64 = 0.250;
 const LOWER_LIMIT: f64 = 0.220;
-const INTERVAL: f64 = 0.000064;
-const HERTZ: f64 = 1.0/INTERVAL;
+const HERTZ: f64 = 625000.0;
 const LINES: usize = 10_000;
 const EXPECTED_FREQ: f32 = 1.0 / 0.004048;
 const GRAPH_NAME: &str = "graph.png";
@@ -160,7 +159,7 @@ fn main() {
         .margin_right(30)
         .x_label_area_size(100)
         .y_label_area_size(180)
-        .build_cartesian_2d(low_x as f32..500 as f64 as f32, low_y as f32..50000 as f32).unwrap();
+        .build_cartesian_2d(low_x as f32..500 as f64 as f32, low_y as f32..500000 as f32).unwrap();
 
     chart.configure_mesh()
         .x_desc("Frequency (Hz)")
