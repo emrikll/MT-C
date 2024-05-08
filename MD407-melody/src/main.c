@@ -36,7 +36,7 @@ uint64_t xTimeInPICO, xTimeOutPICO, xDifferencePICO, xTotalPICO;
 
 // Background Task
 int capacity_background_task = 0;
-#define CAPACITY 190
+#define CAPACITY 50
 
 /* Dimensions of the buffer that the task being created will use as its stack.
 NOTE:  This is the number of words the stack will hold, not the number of

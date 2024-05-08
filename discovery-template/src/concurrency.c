@@ -24,7 +24,7 @@ bytes.  For example, if each stack item is 32-bits, and this is set to 100,
 then 400 bytes (100 * 32-bits) will be allocated.  6817583
 */
 #define STACK_SIZE 100
-//#define REFERENCE
+#define REFERENCE
 /* Structure that will hold the TCB of the tasks being created. */
 #ifndef  REFERENCE
 StaticTask_t xTaskBufferLow;
@@ -92,6 +92,7 @@ void increment_shared() {
     if(shared_variable == MAX_VALUE) {
         done = 1;
         uint32_t end_time = time_us();
+        //tick();
 
         //printf_("%08x\n", largest_stack);
         printf_("%u\n", end_time-start_time);

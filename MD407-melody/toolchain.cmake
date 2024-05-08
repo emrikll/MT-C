@@ -8,7 +8,7 @@ set(CMAKE_C_COMPILER
     CACHE INTERNAL "")
 
 set(CMAKE_C_FLAGS
-    "-Og \
+    "-Os \
     -flto \
     -Wall \
     -mthumb \

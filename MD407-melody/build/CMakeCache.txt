@@ -272,8 +272,6 @@ CMAKE_COMMAND:INTERNAL=/usr/bin/cmake
 CMAKE_CPACK_COMMAND:INTERNAL=/usr/bin/cpack
 //Path to ctest program executable.
 CMAKE_CTEST_COMMAND:INTERNAL=/usr/bin/ctest
-//ADVANCED property for variable: CMAKE_C_COMPILER
-CMAKE_C_COMPILER-ADVANCED:INTERNAL=1
 CMAKE_C_COMPILER:INTERNAL=arm-none-eabi-gcc
 //ADVANCED property for variable: CMAKE_C_COMPILER_AR
 CMAKE_C_COMPILER_AR-ADVANCED:INTERNAL=1
@@ -281,7 +279,7 @@ CMAKE_C_COMPILER_AR-ADVANCED:INTERNAL=1
 CMAKE_C_COMPILER_RANLIB-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_C_FLAGS
 CMAKE_C_FLAGS-ADVANCED:INTERNAL=1
-CMAKE_C_FLAGS:INTERNAL=-Og     -flto     -Wall     -mthumb     -mcpu=cortex-m4     -mfloat-abi=hard     -mfpu=fpv4-sp-d16     -fverbose-asm     -DSTM32F40_41xxx
+CMAKE_C_FLAGS:INTERNAL=-Os     -flto     -Wall     -mthumb     -mcpu=cortex-m4     -mfloat-abi=hard     -mfpu=fpv4-sp-d16     -fverbose-asm     -DSTM32F40_41xxx
 //ADVANCED property for variable: CMAKE_C_FLAGS_DEBUG
 CMAKE_C_FLAGS_DEBUG-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_C_FLAGS_MINSIZEREL
