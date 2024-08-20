@@ -49,13 +49,14 @@ StackType_t xStackLed[STACK_SIZE_INTERRUPT_HANDLE];
 
 // Sleeper Task
 int capacity_task_sleep = 0;
-#define CAPACITY 1
+#define CAPACITY 10
 /* Dimensions of the buffer that the task being created will use as its stack.
 NOTE:  This is the number of words the stack will hold, not the number of
 bytes.  For example, if each stack item is 32-bits, and this is set to 100,
 then 400 bytes (100 * 32-bits) will be allocated. */
 #define STACK_SIZE 60
 
+TaskHandle_t sleep_handle;
 /* Structure that will hold the TCB of the task being created. */
 StaticTask_t xTaskBuffer[CAPACITY];
 
@@ -137,15 +138,23 @@ void task_handle_interrupt(void *vParameters){
     {
         if(xSemaphoreTake(semaphore_irq, portMAX_DELAY) == pdPASS) {
             xEnd = time_us();
-            //tick();
+            tick();
             xDifference = xEnd - xStart;
             xDifferenceISR = xStartISR - xStart;
-            printf_("%lu, %lu\n", 
-              (long unsigned int)xDifferenceISR, (long unsigned int)xDifference);
+            //printf_("%lu, %lu\n", 
+              //(long unsigned int)xDifferenceISR, (long unsigned int)xDifference);
             xStart = xEnd = xDifference = 0;
+            UBaseType_t uxHighWaterMarkSleep;
+            UBaseType_t uxHighWaterMarkCurrent;
+            uxHighWaterMarkSleep = uxTaskGetStackHighWaterMark(sleep_handle);
+            uxHighWaterMarkCurrent = uxTaskGetStackHighWaterMark(NULL);
+            //printf("%lu, %lu\n",xDifference,xDifferenceISR);
+            UBaseType_t totalBytes = (STACK_SIZE_INTERRUPT_HANDLE - uxHighWaterMarkCurrent) * 4 + (STACK_SIZE - uxHighWaterMarkSleep) * 4 * CAPACITY; 
+            printf_("%lu, %08x\n", totalBytes, largest_stack);
+
             //printf_("%08x\n", largest_stack);
 
-            //tick();
+            tick();
         }else{
             printf_("Could not take Semaphore\n");
         }
@@ -153,7 +162,7 @@ void task_handle_interrupt(void *vParameters){
 }
 
 void generate_interrupt_callback(TimerHandle_t timer) {
-    //tick();
+    tick();
     xStart = time_us();
     
     EXTI_GenerateSWInterrupt(EXTI_Line0);
@@ -198,7 +207,7 @@ int main(void)
     );
 
     for (int i = 0; i < CAPACITY; i++) {
-        xTaskCreateStatic(
+        sleep_handle = xTaskCreateStatic(
             task_sleep, 
             "SleepTask", 
             STACK_SIZE, 

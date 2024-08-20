@@ -121,11 +121,6 @@ standard names. */
 
 /* USER CODE BEGIN Defines */
 /* Section where parameter definitions can be added (for instance, to override default ones in FreeRTOS.h) */
-extern void handle_switched_in(int* pxCurrentTCB);
-extern void handle_switched_out(int* pxCurrentTCB);
-
-#define traceTASK_SWITCHED_IN() handle_switched_in(&pxCurrentTCB);
-#define traceTASK_SWITCHED_OUT() handle_switched_out(&pxCurrentTCB);
 /* USER CODE END Defines */
 
 #endif /* FREERTOS_CONFIG_H */

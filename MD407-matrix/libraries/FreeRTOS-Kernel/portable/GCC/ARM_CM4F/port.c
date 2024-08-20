@@ -313,7 +313,9 @@ BaseType_t xPortStartScheduler( void )
     configASSERT( portCPUID != portCORTEX_M7_r0p1_ID );
     configASSERT( portCPUID != portCORTEX_M7_r0p0_ID );
 
-    *SCB_VTOR_CUSTOM  = 0x2001C000;
+    unsigned long volatile * const p_reg = (unsigned long *) 0xE000ED08;
+    *p_reg = 0x2001C000;
+
     *((void (**)(void))0x2001C03C) = xPortSysTickHandler;
     *((void (**)(void))0x2001C038) = xPortPendSVHandler;
     *((void (**)(void))0x2001C02C) = vPortSVCHandler;

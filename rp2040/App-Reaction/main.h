@@ -30,7 +30,7 @@
  * CONSTANTS
  */
 
-#define         INTERRUPT_PERIOD_MS         2000
+#define         INTERRUPT_PERIOD_MS         1000
 #define         SW_IRQ_PIN                  21
 
 #define         TIMER_ID_LED_ON             0

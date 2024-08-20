@@ -10,6 +10,7 @@
 #include "hardware/pll.h"
 #include "hardware/clocks.h"
 #include "hardware/structs/clocks.h"
+#include <time.h>
 
 
 /*
@@ -33,7 +34,7 @@ uint64_t xTimeInPICO, xTimeOutPICO, xDifferencePICO, xTotalPICO = 0;
 NOTE:  This is the number of words the stack will hold, not the number of
 bytes.  For example, if each stack item is 32-bits, and this is set to 100,
 then 400 bytes (100 * 32-bits) will be allocated. */
-#define STACK_SIZE_INTERRUPT 200
+#define STACK_SIZE_INTERRUPT 400
 
 /* Structure that will hold the TCB of the task being created. */
 StaticTask_t xTaskBufferInterrupt;
@@ -48,22 +49,23 @@ NOTE:  This is the number of words the stack will hold, not the number of
 bytes.  For example, if each stack item is 32-bits, and this is set to 100,
 then 400 bytes (100 * 32-bits) will be allocated. */
 #define STACK_SIZE 200
-
+#define CAPACITY 100
 /* Structure that will hold the TCB of the task being created. */
-StaticTask_t xTaskBuffer[250];
+StaticTask_t xTaskBuffer[CAPACITY];
 
 /* Buffer that the task being created will use as its stack.  Note this is
 an array of StackType_t variables.  The size of StackType_t is dependent on
 the RTOS port. */
-StackType_t xStack[250][ STACK_SIZE ];
+StackType_t xStack[CAPACITY][ STACK_SIZE ];
 
 int capacity_task_sleep = 0;
-int CAPACITY = 250;
 
 StaticSemaphore_t xMutexBuffer;
 SemaphoreHandle_t mutex_sleep_capacity;
 
-uint32_t largest_stack = ~0;
+TaskHandle_t sleep_handle;
+
+volatile uint32_t largest_stack = ~0;
 uint32_t START_STACK = 0;
 
 __attribute__( ( always_inline ) ) uint32_t __get_MSP(void) {
@@ -79,7 +81,6 @@ void tick() {
         largest_stack = current;
     }
 }
-
 
 void setup_gpio() {
     gpio_init(SW_IRQ_PIN);
@@ -153,7 +154,7 @@ void enable_irq(bool state) {
  */
 void gpio_isr(uint gpio, uint32_t events) {
     // See BLOG POST https://blog.smittytone.net/2022/03/20/fun-with-freertos-and-pi-pico-interrupts-semaphores-notifications/
-    
+    //tick(); 
     xStartISR = time_us_64();
 
     // Signal the alert clearance task
@@ -178,20 +179,20 @@ void task_handle_interrupt(void* unused_arg) {
     while(true){
         if (xSemaphoreTake(semaphore_irq, portMAX_DELAY) == pdPASS) {
             xEnd = time_us_64();
-            char str[64];
+            //tick();
             xDifference = xEnd - xStart;
             xDifferenceISR = xStartISR - xStart;
-            sprintf(str, "DifferenceISR: %lu, DIFFERENCEIRQ: %lu", xDifferenceISR, xDifference);
-            log_debug(str);
+            UBaseType_t uxHighWaterMarkSleep;
+            UBaseType_t uxHighWaterMarkCurrent;
+            //uxHighWaterMarkSleep = uxTaskGetStackHighWaterMark(sleep_handle);
+            //uxHighWaterMarkCurrent = uxTaskGetStackHighWaterMark(NULL);
+            printf("%llu, %llu\n",xDifferenceISR,xDifference);
+            //printf("%lu, %lu\n",xDifference,xDifferenceISR);
+            UBaseType_t totalBytes = (STACK_SIZE_INTERRUPT - uxHighWaterMarkCurrent) * 4 + (STACK_SIZE - uxHighWaterMarkSleep) * 4 * CAPACITY; 
+            //printf("%u, %08x\n", totalBytes, largest_stack);
+            
             xStart, xEnd, xDifference = 0; 
-            if (xSemaphoreTake(semaphore_irq, portMAX_DELAY) == pdPASS){
-                if (capacity_task_sleep < CAPACITY){
-                    xTaskCreateStatic(task_sleep, "SLEEP_TASK", 128, NULL,  1, xStack[capacity_task_sleep], &xTaskBuffer[capacity_task_sleep]);
-                    capacity_task_sleep++;
-                }
-            }
-        }else{
-            log_debug("Could not take semaphore");
+            //tick();
         }
     }
 }
@@ -212,89 +213,35 @@ void timer_fired_callback(TimerHandle_t timer) {
 }
 
 /**
- * @brief Callback actioned when CPU usage timer fires.
- *
- * @param timer: The triggering timer.
- */
-void task_cpu_usage(TimerHandle_t timer) {
-
-    char str[64];
-    int average_time = (AVERAGE_USAGE_INTERVAL_MS*1000);
-    float usage = ( (float)average_time - (float)xTotalPICO) / (float)average_time;
-
-    xTotalPICO = 0;
-
-    sprintf(str, "CPU USAGE: %f, BACKGROUND TASKS: %u, CLOCK_SPEED: %u", usage,capacity_task_sleep, clock_get_hz(clk_sys));
-    log_debug(str);    
-}
-
-/**
  * @brief Sleeper task to take up CPU time.
  */
-void task_sleep(void* unused_arg) {
+void task_sleep(void *vParameters) {
+    uint32_t rand_nr_work = get_rand_32();
+    uint32_t rand_nr_sleep = get_rand_32();
+    uint32_t start = time_us_64();
 
-    uint32_t rand_nr = get_rand_32() % 10;  
+    for(;;){
+        rand_nr_work = get_rand_32() % 10;
+        rand_nr_sleep = get_rand_32() % 10;
+        start = time_us_64();
 
-    const TickType_t xDelay = 500 / portTICK_PERIOD_MS;
-    TickType_t xLastWakeTime;
-
-    xLastWakeTime = xTaskGetTickCount();
-
-    while(true){
-        vTaskDelayUntil(&xLastWakeTime, xDelay);
-        rand_nr = get_rand_32() % 10;
-        sleep_ms(rand_nr*1000);
+        while ((rand_nr_work * 1000) < (time_us_64() - start) );
+        vTaskDelay(rand_nr_sleep / portTICK_PERIOD_MS);
     }
-    
 }
 
 /**
  * @brief Handler for when tasks switch in.
  */
 void handle_switched_in(int* pxCurrentTCB) {
-    TaskHandle_t handle = (TaskHandle_t)*pxCurrentTCB;
-     if (handle == xTaskGetIdleTaskHandle()) {
-        xTimeInPICO = time_us_64();
-        log_debug("Switched in to IDLE");
-     }
 }
 
 /**
  * @brief Handler for when tasks switch out.
  */
 void handle_switched_out(int* pxCurrentTCB) {
-    TaskHandle_t handle = (TaskHandle_t)*pxCurrentTCB;
-     if (handle == xTaskGetIdleTaskHandle()) {
-        char str[64];
-        xTimeOutPICO = time_us_64();
-        xDifferencePICO = xTimeOutPICO - xTimeInPICO;
-        xTotalPICO = xTotalPICO + xDifferencePICO;
-        sprintf(str, "IDLE time: %lu", xDifferencePICO);
-        log_debug(str);
-        xTimeInPICO, xTimeOutPICO, xDifferencePICO = 0;
-     }
 }
 
-void resus_callback(void) {
-    // Reconfigure PLL sys back to the default state of 1500 / 6 / 2 = 125MHz
-    pll_init(pll_sys, 1, 1600 * MHZ, 6, 2);
-    clock_configure(clk_sys,
-                    CLOCKS_CLK_SYS_CTRL_SRC_VALUE_CLKSRC_CLK_SYS_AUX,
-                    CLOCKS_CLK_SYS_CTRL_AUXSRC_VALUE_CLKSRC_PLL_SYS,
-                    133 * MHZ,
-                    133 * MHZ);
-    clock_configure(clk_peri,
-                    0,
-                    CLOCKS_CLK_PERI_CTRL_AUXSRC_VALUE_CLK_SYS,
-                    133 * MHZ,
-                    133 * MHZ);
-    // Reconfigure uart as clocks have changed
-    stdio_init_all();
-
-    // Wait for uart output to finish
-    uart_default_tx_wait_blocking();
-
-}
 /*
  * RUNTIME START
  */
@@ -302,11 +249,9 @@ int main() {
     // DEBUG
     timer_hw->dbgpause = 0;
     
-    #ifdef DEBUG
     stdio_init_all();
     // Pause to allow the USB path to initialize
     sleep_ms(2000);
-    #endif
 
     // Set up the hardware
     setup();
@@ -316,32 +261,33 @@ int main() {
     log_device_info();
     #endif
 
-    clocks_enable_resus(&resus_callback);
-    pll_deinit(pll_sys);
 
     // Set up four tasks
     handle_task_pico = xTaskCreateStatic(task_handle_interrupt, 
                                         "PICO_INTERRUPT_TASK",  
-                                        128, 
+                                        STACK_SIZE_INTERRUPT, 
                                         NULL, 
-                                        1, 
+                                        2, 
                                         xStackInterrupt, 
                                         &xTaskBufferInterrupt);
 
+    for (int i = 0; i < CAPACITY; i++) {
+        sleep_handle = xTaskCreateStatic(task_sleep, "SLEEP_TASK", STACK_SIZE, NULL,  1, xStack[i], &xTaskBuffer[i]);
+    }
+
     TimerHandle_t task_timer = xTimerCreate("HANDLE_INTERRUPT_TIMER", pdMS_TO_TICKS(INTERRUPT_PERIOD_MS), pdTRUE, (void*)TIMER_ID_LED_ON, timer_fired_callback);
-    TimerHandle_t timer_cpu_usage = xTimerCreate("USAGE_CPU_TIMER", pdMS_TO_TICKS(AVERAGE_USAGE_INTERVAL_MS), pdTRUE, (void*)TIMER_ID_LED_ON, task_cpu_usage);
 
     //xTaskCreate( prvIdleTask, ( signed portCHAR * ) "IDLE", tskIDLE_STACK_SIZE, ( void * ) NULL, tskIDLE_PRIORITY, &xIdleTaskHandle );
     log_debug("start");
-    printf("test");
-    if( task_timer == NULL || timer_cpu_usage == NULL ){
+    //printf("test");
+    if( task_timer == NULL ){
         /* The timer was not created. */
         log_debug("Timers was not created");
     }else{
     /* Start the timer.  No block time is specified, and
     even if one was it would be ignored because the RTOS
     scheduler has not yet been started. */
-        if( xTimerStart( task_timer, 0 ) != pdPASS || xTimerStart( timer_cpu_usage, 0 ) != pdPASS )
+        if( xTimerStart( task_timer, 0 ) != pdPASS )
         {
             /* The timer could not be set into the Active
             state. */

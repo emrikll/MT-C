@@ -18,14 +18,14 @@
 
 #define FREQUENCY_HIGH 1 / portTICK_PERIOD_MS
 
-#define MAX_VALUE 10000
+#define MAX_VALUE 100000
 /* Dimensions of the buffer that the task being created will use as its stack.
 NOTE:  This is the number of words the stack will hold, not the number of
 bytes.  For example, if each stack item is 32-bits, and this is set to 100,
 then 400 bytes (100 * 32-bits) will be allocated.  6817583
 */
-#define STACK_SIZE 70
-#define REFERENCE
+#define STACK_SIZE 200
+//#define REFERENCE
 
 /* Structure that will hold the TCB of the tasks being created. */
 
@@ -39,8 +39,10 @@ StackType_t xStackHigh[ STACK_SIZE ];
 StaticSemaphore_t xMutexBuffer;
 static SemaphoreHandle_t shared_variable_lock;
 
-#else
+TaskHandle_t low_handle;
+TaskHandle_t high_handle;
 
+#else
 StaticTask_t xTaskBufferReference;
 StackType_t xStackReference[ STACK_SIZE ];
 #endif /* ifndef  REFERENCE */
@@ -48,7 +50,7 @@ StackType_t xStackReference[ STACK_SIZE ];
 
 uint32_t start_time = 0;
 
-uint32_t shared_variable = 0;
+volatile uint32_t shared_variable = 0;
 uint8_t done = 0;
 
 
@@ -93,25 +95,35 @@ void reference_task(void *parameter) {
 
 #else
 void increment_shared() {
-    if (done) {
-        vTaskSuspend(NULL);
-    }
     if (xSemaphoreTake(shared_variable_lock, portMAX_DELAY) != pdTRUE) {
         printf("Something went wrong\r\n");
     }
+    if (done) {
+        vTaskSuspend(NULL);
+    }
+    tick();
     shared_variable++;
     if(shared_variable == MAX_VALUE) {
         done = 1;
         uint32_t end_time = time_us_64();
+        ubasetype_t low_watermark = uxtaskgetstackhighwatermark(low_handle);
+        UBaseType_t high_watermark = uxTaskGetStackHighWaterMark(high_handle);
 
-        printf("Reached max value at after: %d\r\n", end_time - start_time);
+        UBaseType_t total = (STACK_SIZE*2 - (low_watermark + high_watermark)) * 4;
+
+        printf("%u, %08x\n", total, largest_stack);
+
+        //printf("Reached max value at after: %d\r\n", end_time - start_time);
+        
     } 
+
+    tick();
     
     xSemaphoreGive(shared_variable_lock);
 }
 
 void low_priority_task(void *parameter) {
-    while (1) {
+    while (1){ 
         increment_shared();
     }
 }
@@ -147,22 +159,18 @@ void log_device_info(void) {
 int main(void)
 {
     timer_hw->dbgpause = 0;
-    #ifdef DEBUG
     stdio_init_all();
     // Pause to allow the USB path to initialize
     sleep_ms(2000);
-    #endif
     
     // Log app info
     timer_hw->dbgpause = 1;
-
-    printf("\n\rInit\n\r");
 
     #ifndef REFERENCE
     shared_variable_lock = xSemaphoreCreateMutexStatic( &xMutexBuffer );
     configASSERT(shared_variable_lock != NULL);
 
-    xTaskCreateStatic(
+    high_handle = xTaskCreateStatic(
         high_priority_task, 
         "High priority", 
         STACK_SIZE, 
@@ -173,7 +181,7 @@ int main(void)
     );
 
 
-    xTaskCreateStatic(
+low_handle = xTaskCreateStatic(
         low_priority_task, 
         "Low priority", 
         STACK_SIZE, 
@@ -197,7 +205,6 @@ int main(void)
     #endif
 
 
-    printf("Starting scheduler...\n\r");
     start_time = time_us_64();
     vTaskStartScheduler();
 

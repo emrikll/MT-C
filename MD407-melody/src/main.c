@@ -1,3 +1,4 @@
+
 #include <stdint.h>
 // STM32f4
 #include "misc.h"
@@ -36,7 +37,7 @@ uint64_t xTimeInPICO, xTimeOutPICO, xDifferencePICO, xTotalPICO;
 
 // Background Task
 int capacity_background_task = 0;
-#define CAPACITY 50
+#define CAPACITY 190
 
 /* Dimensions of the buffer that the task being created will use as its stack.
 NOTE:  This is the number of words the stack will hold, not the number of
@@ -104,6 +105,14 @@ void EnableTimerInterrupt() {
   nvicStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&nvicStructure);
   NVIC_SetPriority(TIM5_IRQn, 2);
+
+NVIC_InitTypeDef nvicStructure2;
+  nvicStructure2.NVIC_IRQChannel = USART1_IRQn;
+  nvicStructure2.NVIC_IRQChannelPreemptionPriority = 0;
+  nvicStructure2.NVIC_IRQChannelSubPriority = 1;
+  nvicStructure2.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&nvicStructure2);
+  NVIC_SetPriority(USART1_IRQn, 2);
 }
 
 void TIM5_IRQHandler() {
@@ -160,11 +169,19 @@ void task_background(void *vParameters) {
  * RUNTIME START
  */
 
+void usart_irq() {
+    NVIC_ClearPendingIRQ(USART1_IRQn);
+    NVIC_SystemReset();
+}
+
 int main() {
 
   *((void (**)(void))0x2001C108) = TIM5_IRQHandler;
+    *((void (**)(void) ) 0x2001C0D4 ) = usart_irq;
 
+    enable_usart();
   printf_("Hardware begin\n\r");
+    
   NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
   EnableTimerInterrupt();
   enable_timer();

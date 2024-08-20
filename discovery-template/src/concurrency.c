@@ -23,8 +23,8 @@ NOTE:  This is the number of words the stack will hold, not the number of
 bytes.  For example, if each stack item is 32-bits, and this is set to 100,
 then 400 bytes (100 * 32-bits) will be allocated.  6817583
 */
-#define STACK_SIZE 100
-#define REFERENCE
+#define STACK_SIZE 200
+//#define REFERENCE
 /* Structure that will hold the TCB of the tasks being created. */
 #ifndef  REFERENCE
 StaticTask_t xTaskBufferLow;
@@ -35,6 +35,9 @@ StackType_t xStackHigh[ STACK_SIZE ];
 
 StaticSemaphore_t xMutexBuffer;
 static SemaphoreHandle_t shared_variable_lock;
+
+TaskHandle_t low_handle;
+TaskHandle_t high_handle;
 
 #else
 
@@ -87,34 +90,36 @@ void increment_shared() {
     if (xSemaphoreTake(shared_variable_lock, portMAX_DELAY) != pdTRUE) {
         printf_("Something went wrong\r\n");
     }
-    //tick();
+    tick();
     shared_variable++;
     if(shared_variable == MAX_VALUE) {
         done = 1;
         uint32_t end_time = time_us();
-        //tick();
+        tick();
 
-        //printf_("%08x\n", largest_stack);
-        printf_("%u\n", end_time-start_time);
+        UBaseType_t low_watermark = uxTaskGetStackHighWaterMark(low_handle);
+        UBaseType_t high_watermark = uxTaskGetStackHighWaterMark(high_handle);
+
+        UBaseType_t total = (STACK_SIZE*2 - (low_watermark + high_watermark)) * 4;
+
+        printf_("%lu, %08x\n", total, largest_stack);
+        
+        //printf_("%u\n", end_time-start_time);
     } 
-    //tick();
+    tick();
     
     xSemaphoreGive(shared_variable_lock);
 }
 
 void low_priority_task(void *parameter) {
     while (1) {
-        //tick();
         increment_shared();
-        //tick();
     }
 }
 
 void high_priority_task(void *parameter) {
     while (1) {
-        //tick();
         increment_shared();
-        //tick();
         vTaskDelay(FREQUENCY_HIGH);
     }
 }
@@ -143,7 +148,7 @@ int main(void)
     shared_variable_lock = xSemaphoreCreateMutexStatic( &xMutexBuffer );
     configASSERT(shared_variable_lock != NULL);
 
-    xTaskCreateStatic(
+    high_handle = xTaskCreateStatic(
         high_priority_task, 
         "High priority", 
         STACK_SIZE, 
@@ -154,7 +159,7 @@ int main(void)
     );
 
 
-    xTaskCreateStatic(
+    low_handle = xTaskCreateStatic(
         low_priority_task, 
         "Low priority", 
         STACK_SIZE, 

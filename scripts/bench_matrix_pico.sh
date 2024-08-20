@@ -15,9 +15,11 @@ NLINES=$(du -sb "../scripts/$FILENAME" | awk '{print $1}')
 
 for i in {1..50}
 do
-   openocd -f interface/cmsis-dap.cfg -f target/rp2040.cfg -c "adapter speed 5000" -c "program ./build/App-Matrix/MATRIX.elf verify reset exit" &
+   openocd -f interface/cmsis-dap.cfg -f target/rp2040.cfg -c "adapter speed 5000" -c "program ./build/App-Matrix/MATRIX.elf verify reset" &
+   process_pid=$!
    while [ $(du -sb "../scripts/$FILENAME"  | awk '{print $1}') == $NLINES ]; do sleep 0.5; done
    NLINES=$(du -sb "../scripts/$FILENAME"  | awk '{print $1}')
+   kill $process_pid
 done
 
 sed -i 's/[\n]//g' ../scripts/$FILENAME

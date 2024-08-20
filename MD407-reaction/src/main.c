@@ -57,13 +57,14 @@ NOTE:  This is the number of words the stack will hold, not the number of
 bytes.  For example, if each stack item is 32-bits, and this is set to 100,
 then 400 bytes (100 * 32-bits) will be allocated. */
 #define STACK_SIZE_LED 400
-#define BACKGROUND_TASKS 10
+#define BACKGROUND_TASKS 100
 /* Structure that will hold the TCB of the task being created. */
 StaticTask_t xTaskBufferLed;
 /* Buffer that the task being created will use as its stack.  Note this is
 an array of StackType_t variables.  The size of StackType_t is dependent on
 the RTOS port. */
 StackType_t xStackLed[STACK_SIZE_LED];
+TaskHandle_t sleep_handle;
 
 // Sleeper Task
 uint32_t capacity_task_sleep = 0;
@@ -81,6 +82,8 @@ volatile StaticTask_t xTaskBuffer[CAPACITY];
 an array of StackType_t variables.  The size of StackType_t is dependent on
 the RTOS port. */
 StackType_t xStack[CAPACITY][ STACK_SIZE ];
+
+TaskHandle_t sleep_handle;
 
 int largest_stack = ~0;
 int START_STACK = 0;
@@ -144,29 +147,7 @@ void EnableInterruptEXTI0()
 }
 
 void hardware_init(){
-    
-    //Deinit the rcc
-    RCC_DeInit();
-    //enable hse
-    RCC_HSEConfig(RCC_HSE_ON);
-    //wait for hse to start
-    while (RCC_WaitForHSEStartUp() != SUCCESS);
-    //configure pll modifiers to match 168 mhz
-    RCC_PLLConfig(RCC_PLLSource_HSE, 4, 168, 2, 4);
-    RCC_PCLK1Config(RCC_HCLK_Div4);
-    RCC_PCLK2Config(RCC_HCLK_Div2);
-    
-    //enable pll
-    RCC_PLLCmd(ENABLE);
-    //wait for pll to become ready
-    while (RCC_GetFlagStatus(RCC_FLAG_PLLRDY) != SET);
-    
-    //set sysclk to use pll
-    RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
-    //wait until pll is syclksource
-    while (RCC_GetSYSCLKSource() != 0x08);
-
-
+    tick();
     NVIC_PriorityGroupConfig( NVIC_PriorityGroup_4 );
     EnableInterruptEXTI0();
     enable_timer();
@@ -233,11 +214,16 @@ void task_led(void *vParameters){
     {
         if(xSemaphoreTake(semaphore_irq, portMAX_DELAY) == pdPASS) {
             xEnd = time_us();
-            //tick();
+            tick();
             xDifference = xEnd - xStart;
             xDifferenceISR = xStartISR - xStart;
-            //tick();
-            printf_("%u, %u\n", xDifferenceISR, xDifference);
+            tick();
+            //printf_("%u, %u\n", xDifferenceISR, xDifference);
+            UBaseType_t uxHighWaterMarkSleep = uxTaskGetStackHighWaterMark(sleep_handle);
+            UBaseType_t uxHighWaterMarkCurrent = uxTaskGetStackHighWaterMark(NULL);
+            //printf("%lu, %lu\n",xDifference,xDifferenceISR);
+            UBaseType_t totalBytes = (STACK_SIZE_LED - uxHighWaterMarkCurrent) * 4 + (STACK_SIZE - uxHighWaterMarkSleep) * 4 * CAPACITY; 
+            printf_("%lu, %08x\n", totalBytes, largest_stack);
             //printf_("%08x\n", largest_stack);
             
             xStart = xEnd = xDifference = xDifferenceISR = 0;
@@ -292,7 +278,7 @@ int main(void) {
     TimerHandle_t task_timer = xTimerCreateStatic("LED_ON_TIMER", pdMS_TO_TICKS(LED_FLASH_PERIOD_MS), pdTRUE, (void*)TIMER_ID, led_timer_callback, &TimerBufferLed);
     
     for (int i = 0; i < BACKGROUND_TASKS; i++) {
-        xTaskCreateStatic(task_sleep, "SLEEP_TASK", 128, NULL,  1, xStack[i], &xTaskBuffer[i]);
+        sleep_handle = xTaskCreateStatic(task_sleep, "SLEEP_TASK", 128, NULL,  1, xStack[i], &xTaskBuffer[i]);
     }
 
     semaphore_irq = xSemaphoreCreateBinaryStatic(&xSemaphoreBuffer);

@@ -36,6 +36,9 @@ StackType_t xStackHigh[ STACK_SIZE ];
 StaticSemaphore_t xMutexBuffer;
 static SemaphoreHandle_t shared_variable_lock;
 
+TaskHandle_t low_handle;
+TaskHandle_t high_handle;
+
 #else
 
 StaticTask_t xTaskBufferReference;
@@ -90,18 +93,23 @@ void increment_shared() {
     if (xSemaphoreTake(shared_variable_lock, portMAX_DELAY) != pdTRUE) {
         printf_("Something went wrong\r\n");
     }
-    //tick();
+    tick();
     shared_variable++;
     if(shared_variable == MAX_VALUE) {
         done = 1;
         uint32_t end_time = time_us();
-        printf_("%u\n", end_time-start_time);
-        //printf_("%08x\n", largest_stack);
+        //printf_("%u\n", end_time-start_time);
+        UBaseType_t low_watermark = uxTaskGetStackHighWaterMark(low_handle);
+        UBaseType_t high_watermark = uxTaskGetStackHighWaterMark(high_handle);
+
+        UBaseType_t total = (STACK_SIZE*2 - (low_watermark + high_watermark)) * 4;
+
+        printf("%u, %08x\n", total, largest_stack);
 
         vTaskDelay(500);
         NVIC_SystemReset();
     } 
-    //tick();
+    tick();
     xSemaphoreGive(shared_variable_lock);
 }
 
@@ -127,7 +135,7 @@ int main(void)
     shared_variable_lock = xSemaphoreCreateMutexStatic( &xMutexBuffer );
     configASSERT(shared_variable_lock != NULL);
 
-    xTaskCreateStatic(
+    high_handle = xTaskCreateStatic(
         high_priority_task, 
         "High priority", 
         STACK_SIZE, 
@@ -138,7 +146,7 @@ int main(void)
     );
 
 
-    xTaskCreateStatic(
+    low_handle = xTaskCreateStatic(
         low_priority_task, 
         "Low priority", 
         STACK_SIZE, 

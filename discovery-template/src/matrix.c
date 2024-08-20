@@ -58,7 +58,7 @@ uint64_t xTimeInPICO, xTimeOutPICO, xDifferencePICO, xTotalPICO;
 
 // Capacity
 int capacity_task_i_row = 0;
-
+TaskHandle_t i_handle;
 
 
 // Static allocation task_i_row
@@ -67,7 +67,8 @@ int capacity_task_i_row = 0;
 NOTE:  This is the number of words the stack will hold, not the number of
 bytes.  For example, if each stack item is 32-bits, and this is set to 100,
 then 400 bytes (100 * 32-bits) will be allocated. */
-#define STACK_SIZE_I_ROW 200
+#define STACK_SIZE_I_ROW 150
+
 
 //#define REFERENCE 
 
@@ -126,23 +127,28 @@ void task_i_row(void *parameter) {
     if (i == 0) {
         task0start = time_us();
     }
-    //tick();
+    tick();
     for (int j = 0; j < RESULT_MATRIX_COLUMNS; j++) {
         double tmp = 0.0;
         for (int k = 0; k < A_MATRIX_COLUMNS; k++) {
-            //tick();
+            tick();
             tmp = tmp + (a_matrix[(i * A_MATRIX_COLUMNS) + k] * b_matrix[(k * B_MATRIX_COLUMNS) + j]);
         }
         result_matrix[(i * RESULT_MATRIX_COLUMNS) + j] = tmp;
     }
 
-    //tick();
+    tick();
 
     capacity_task_i_row = capacity_task_i_row - 1;
     if (capacity_task_i_row == 0) {
         uint32_t end_time = time_us();
-        //printf_("%08x\n", largest_stack);
-        printf_("%u\n", end_time - task0start);
+        UBaseType_t watermark = uxTaskGetStackHighWaterMark(i_handle);
+        
+        UBaseType_t total = (STACK_SIZE_I_ROW - watermark) * 4 * RESULT_MATRIX_ROWS;
+
+        printf_("%u, %08x\n", total, largest_stack);
+
+        //printf_("%u\n", end_time - task0start);
         vTaskEndScheduler();
     }
 
@@ -176,9 +182,9 @@ int main() {
         // Convert 123 to string [buf]
         capacity_task_i_row++;
         sprintf_(buf,"%i", i);
-        xTaskCreateStatic(task_i_row,
+        i_handle = xTaskCreateStatic(task_i_row,
                         buf,
-                        128,
+                        STACK_SIZE_I_ROW,
                         (void *) i,
                         1,
                         stack_i_row[i],
@@ -218,33 +224,6 @@ int main() {
 * PRINTS
 */
 
-void print_result_matrix(double matrix[RESULT_MATRIX_ROWS * RESULT_MATRIX_COLUMNS]) {
-    printf_("Matrix: \n\r");
-
-    for (int i = 0; i < RESULT_MATRIX_ROWS; i++) {
-        printf_("[");
-        for (int j = 0; j < RESULT_MATRIX_COLUMNS; j++) {
-            if (j == (RESULT_MATRIX_COLUMNS - 1)) {
-                printf_("%f", matrix[(i * RESULT_MATRIX_COLUMNS) + j]);
-            } else {
-                printf_("%f, ", matrix[(i * RESULT_MATRIX_COLUMNS) + j]);
-            }
-        }
-        printf_("]\n\r");
-    }
-}
-
-void print_a_matrix(double matrix[A_MATRIX_ROWS * A_MATRIX_COLUMNS]) {
-    printf_("Matrix A: \n\r");
-
-    for (int i = 0; i < A_MATRIX_ROWS; i++) {
-        printf_("[");
-        for (int j = 0; j < A_MATRIX_COLUMNS; j++) {
-            printf_("%f , ", matrix[(i * A_MATRIX_COLUMNS) + j]);
-        }
-        printf_("]\n\r");
-    }
-}
 
 void print_b_matrix(double matrix[B_MATRIX_ROWS * B_MATRIX_COLUMNS]) {
     printf_("Matrix B: \n\r");

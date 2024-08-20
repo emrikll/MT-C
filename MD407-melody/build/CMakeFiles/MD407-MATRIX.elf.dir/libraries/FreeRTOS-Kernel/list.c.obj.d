@@ -6,7 +6,7 @@ CMakeFiles/MD407-MATRIX.elf.dir/libraries/FreeRTOS-Kernel/list.c.obj: \
  /usr/arm-none-eabi/include/_newlib_version.h \
  /usr/arm-none-eabi/include/sys/config.h \
  /usr/arm-none-eabi/include/sys/features.h \
- /usr/lib/gcc/arm-none-eabi/13.2.0/include/stddef.h \
+ /usr/lib/gcc/arm-none-eabi/14.1.0/include/stddef.h \
  /usr/arm-none-eabi/include/sys/reent.h \
  /usr/arm-none-eabi/include/_ansi.h \
  /usr/arm-none-eabi/include/sys/cdefs.h \
@@ -17,7 +17,7 @@ CMakeFiles/MD407-MATRIX.elf.dir/libraries/FreeRTOS-Kernel/list.c.obj: \
  /usr/arm-none-eabi/include/machine/stdlib.h \
  /usr/arm-none-eabi/include/alloca.h \
  /home/simon/MT-C/MD407-melody/libraries/FreeRTOS-Kernel/include/FreeRTOS.h \
- /usr/lib/gcc/arm-none-eabi/13.2.0/include/stdint.h \
+ /usr/lib/gcc/arm-none-eabi/14.1.0/include/stdint.h \
  /usr/arm-none-eabi/include/stdint.h \
  /usr/arm-none-eabi/include/sys/_intsup.h \
  /usr/arm-none-eabi/include/sys/_stdint.h \
